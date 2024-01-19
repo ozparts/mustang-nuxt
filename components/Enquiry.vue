@@ -1,0 +1,79 @@
+<template>
+  <div class="flex items-center justify-center">
+    <button
+      @click="toggleForm"
+      class="flex items-center p-2 font-bold uppercase cursor-pointer btn-blue"
+    >
+      <p class="mx-2 text-sm sm:text-base">Send an enquiry</p>
+    </button>
+  </div>
+  <div
+    class="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50"
+    v-if="state.formVisible"
+  >
+    <div
+      class="w-[90%] rounded bg-white p-6 text-center shadow-md sm:w-[450px]"
+    >
+      <form @submit.prevent="sendEnquiry">
+        <h2 class="py-1 my-2 text-xl sm:text-2xl">Send an enquiry</h2>
+        <p class="py-1 my-2 font-light sm:text-lg">
+          Hello, I'm very interested in
+          <span class="text-base font-bold">{{ props.product }}</span
+          >. Could you please let me know when it will be available in your
+          offer again?
+        </p>
+
+        <input
+          type="email"
+          class="w-full p-2 my-4 border rounded"
+          v-model="state.email"
+          required
+          placeholder="Your emial"
+        />
+        <div class="flex justify-between">
+          <button
+            type="submit"
+            class="px-2 py-1 text-sm text-white rounded bg-mustangBlue sm:px-4 sm:py-2 sm:text-base"
+          >
+            SEND
+          </button>
+          <button
+            @click="toggleForm"
+            class="px-2 py-1 text-sm text-white rounded bg-mustangBlue sm:px-4 sm:py-2 sm:text-base"
+          >
+            CANCEL
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<script setup>
+const props = defineProps(["product"]);
+const state = reactive({
+  enquiry: false,
+  formVisible: false,
+  email: "",
+});
+
+const sendEnquiry = async () => {
+  state.formVisible = !state.formVisible;
+  try {
+    await useSubmitEnquiry(state.email, props.product);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const toggleForm = () => {
+  state.formVisible = !state.formVisible;
+  if (state.formVisible) {
+    document.body.classList.add("overflow-hidden");
+    document.body.style.height = "100vh";
+  } else {
+    document.body.classList.remove("overflow-hidden");
+    document.body.style.height = "auto";
+  }
+};
+</script>
