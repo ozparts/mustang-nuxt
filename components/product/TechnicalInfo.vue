@@ -1,7 +1,10 @@
 <template>
   <section class="px-2 py-5">
     <table
-      v-if="!kitItem.isKitItem"
+      v-if="
+        !kitItem.isKitItem ||
+        product.manufacturergroup === Manufacturers.XFORCE.id
+      "
       class="daisy-table daisy-table-xs sm:daisy-table"
     >
       <thead>
@@ -12,10 +15,8 @@
         </tr>
       </thead>
       <tbody class="text-xs font-nunito-sans">
-        <tr v-for="detail in technicalInfo">
-          <td class="text-xs sm:text-sm">
-            {{ detail.name }}
-          </td>
+        <tr v-for="detail in product.technicaldetails">
+          <td class="text-xs sm:text-sm">{{ detail.name }}</td>
           <td
             v-if="detail.name === 'Tech Bulletins'"
             class="text-xs text-red-500 border-gray-200 sm:text-sm"
@@ -84,7 +85,9 @@
 </template>
 
 <script setup>
-const props = defineProps(["technicalInfo", "weight", "kitItem"]);
+import { Manufacturers } from "../../vars/index";
+
+const props = defineProps(["product", "weight", "kitItem"]);
 
 const state = reactive({
   kitComponents: [],

@@ -155,7 +155,6 @@
         <div>
           <ProductOverviewApplicationsTechInfo
             :product="product"
-            :technicalInfo="state.product.technicaldetails"
             :weight="state.product.weight"
             :kitItem="state.kitItem"
           />

@@ -31,14 +31,14 @@
   <ProductApplications v-else-if="state.applications" :id="props.product.id" />
   <ProductTechnicalInfo
     v-else
-    :technicalInfo="technicalInfo"
+    :product="product"
     :weight="weight"
     :kitItem="kitItem"
   />
 </template>
 
 <script setup>
-const props = defineProps(["product", "weight", "technicalInfo", "kitItem"]);
+const props = defineProps(["product", "weight", "kitItem"]);
 const text = ref("technical information");
 
 const state = reactive({
