@@ -41,7 +41,7 @@
               />
             </p>
             <p class="w-full mt-3 text-xs text-center sm:text-sm">
-              {{ method.description || method.displayname }}
+              {{ method.displayname || method.description }}
             </p>
           </div>
         </div>

@@ -88,6 +88,7 @@ export const countriesObjectEU = {
   Slovakia: "SK",
   Slovenia: "SI",
   Spain: "ES",
+  "Spain - Canary Islands": "IC",
   Sweden: "SE",
   Switzerland: "CH",
 };
