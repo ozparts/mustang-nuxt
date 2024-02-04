@@ -45,11 +45,11 @@
     </div>
 
     <div>
-      <nuxt-link
-        :to="`/product/${product.item.number}`"
+      <p
         class="my-2 px-1 block w-full text-center text-[18px] font-medium uppercase text-red-600"
-        >{{ product.item.name }}</nuxt-link
       >
+        {{ product.item.name }}
+      </p>
       <div class="px-1 my-2 text-sm text-center font-poppins">
         {{ product.item.description }}
       </div>

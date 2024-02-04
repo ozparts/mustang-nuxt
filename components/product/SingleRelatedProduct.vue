@@ -7,11 +7,9 @@
     }}
   </p>
   <div class="flex flex-col justify-start w-full gap-1 px-1">
-    <nuxt-link
-      :to="`/product/${product.number}`"
-      class="block text-[15px] font-normal text-center text-red-600 uppercase transition duration-300 ease-in-out hover:underline"
-      >{{ product.name }}</nuxt-link
-    >
+    <p class="block text-[15px] font-normal text-center text-red-600 uppercase">
+      {{ product.name }}
+    </p>
   </div>
   <div class="flex items-center justify-center px-1">
     <img

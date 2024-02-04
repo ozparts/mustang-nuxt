@@ -7,14 +7,16 @@
     </h3>
 
     <div
-      v-if="emptyObjectCheck(relatedItems).length"
+      v-if="filterRelatedItems.length >= 1"
       class="grid gap-1 mt-5 xs:grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-1"
     >
-      <div
-        v-for="product in relatedItems"
-        class="flex flex-col gap-1 overflow-hidden border border-gray-400 rounded-lg font-nunito"
-      >
-        <ProductSingleRelatedProduct :product="product" />
+      <div v-for="product in filterRelatedItems">
+        <NuxtLink
+          :to="`/product/${product.number}`"
+          class="flex flex-col gap-1 overflow-hidden border border-gray-400 rounded-lg font-nunito"
+        >
+          <ProductSingleRelatedProduct :product="product" />
+        </NuxtLink>
       </div>
     </div>
     <p v-else class="px-2 my-5 text-sm font-nunito">
@@ -27,26 +29,41 @@
 </template>
 
 <script setup>
-let relatedItems = ref([]);
 const props = defineProps(["id"]);
 
+const record = ref(useRoute().params.record);
+const state = reactive({
+  relatedItems: [],
+});
+
 onMounted(async () => {
-  let filteredData = [];
+  state.relatedItems = await useGetRelatedItems(props.id);
+});
 
-  const data = await useGetRelatedItems(props.id);
-  data.forEach((item) => {
-    const found = filteredData.find((obj) => obj.id === item.id);
-    if (!found) filteredData.push(item);
-  });
+const filterRelatedItems = computed(() => {
+  const filteredId = [];
+  const properList = [];
 
-  relatedItems.value = filteredData.sort((a, b) => {
-    if (a.available && !b.available) return -1;
-    if (!a.available && b.available) return 1;
-    if (a.available && !b.manufacturerstock) return -1;
-    if (!a.available && b.manufacturerstock) return 1;
-    if (!a.available && !b.manufacturerstock) return -1;
-    return 0;
-  });
+  state.relatedItems
+    .filter((item) => {
+      return item.number !== record.value * 1;
+    })
+    .sort((a, b) => {
+      if (a.available && !b.available) return -1;
+      if (!a.available && b.available) return 1;
+      if (a.available && !b.manufacturerstock) return -1;
+      if (!a.available && b.manufacturerstock) return 1;
+      if (!a.available && !b.manufacturerstock) return -1;
+      return 0;
+    })
+    .forEach((item) => {
+      if (!filteredId.includes(item.id)) {
+        filteredId.push(item.id);
+        properList.push(item);
+      }
+    });
+
+  return properList;
 });
 
 const emptyObjectCheck = (array) => {
