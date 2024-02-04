@@ -125,20 +125,146 @@
               />
             </div>
           </section>
+          <div class="my-5 sm:my-10 h-[1px] w-full mx-auto bg-mustangRed"></div>
 
-          <!-- BILLING ADDRESS -->
+          <!-- SHIPPING DETAILS -->
+
           <section>
-            <div class="flex items-center my-5 font-semibold">
-              <input
-                type="checkbox"
-                @change="billingAddressHandler"
-                class="mr-5 h-[24px] w-[24px] cursor-pointer accent-mustangRed"
+            <div class="flex items-center mb-5">
+              <Icon
+                name="mdi:truck-cargo-container"
+                size="24px"
+                color="#c22025"
               />
-              <label class="text-sm align-middle sm:text-base"
-                >Billing address different than shipping</label
+              <p
+                class="ml-4 text-lg italic font-bold tracking-tighter sm:text-2xl"
               >
+                Shipping Details
+              </p>
             </div>
 
+            <div class="flex flex-col mb-3 basis-full">
+              <label for="streetAddress" class="mb-2 text-sm sm:text-base"
+                >Street address<span class="text-sm text-red-700 sm:text-lg"
+                  >*</span
+                ></label
+              >
+              <v-text-field
+                v-model="shippingForm.addressStreet"
+                :error-messages="
+                  v$.addressStreet.$errors.map((e) => e.$message)
+                "
+                @input="v$.addressStreet.$touch"
+                @blur="v$.addressStreet.$touch"
+                type="text"
+                density="compact"
+                variant="outlined"
+                id="streetAddress"
+              />
+            </div>
+
+            <div class="flex flex-col mb-3 basis-full">
+              <label for="streetNumber" class="mb-2 text-sm sm:text-base"
+                >Street number<span class="text-sm text-red-700 sm:text-lg"
+                  >*</span
+                ></label
+              >
+              <v-text-field
+                v-model="shippingForm.addressNumber"
+                :error-messages="
+                  v$.addressNumber.$errors.map((e) => e.$message)
+                "
+                @input="v$.addressNumber.$touch"
+                @blur="v$.addressNumber.$touch"
+                type="text"
+                density="compact"
+                variant="outlined"
+                id="streetNumber"
+              />
+            </div>
+
+            <div class="flex flex-col mb-3">
+              <label for="apartament" class="mb-2 text-sm sm:text-base"
+                >Apartament (optional)</label
+              >
+              <v-text-field
+                v-model="shippingForm.address2"
+                type="text"
+                density="compact"
+                variant="outlined"
+                id="apartament"
+              />
+            </div>
+
+            <div class="flex flex-col mb-3 basis-full">
+              <label for="city" class="mb-2 text-sm sm:text-base"
+                >City<span class="text-sm text-red-700 sm:text-lg"
+                  >*</span
+                ></label
+              >
+              <v-text-field
+                v-model="shippingForm.city"
+                :error-messages="v$.city.$errors.map((e) => e.$message)"
+                @input="v$.city.$touch"
+                @blur="v$.city.$touch"
+                type="text"
+                density="compact"
+                variant="outlined"
+                id="city"
+              />
+            </div>
+
+            <div class="flex flex-col mb-3 basis-full">
+              <label for="postalCode" class="mb-2 text-sm sm:text-base"
+                >Postal code<span class="text-sm text-red-700 sm:text-lg"
+                  >*</span
+                ></label
+              >
+              <v-text-field
+                v-model="shippingForm.zip"
+                :error-messages="v$.zip.$errors.map((e) => e.$message)"
+                @input="v$.zip.$touch"
+                @blur="v$.zip.$touch"
+                type="text"
+                density="compact"
+                variant="outlined"
+                id="postalCode"
+              />
+            </div>
+
+            <div class="mb-3 deep">
+              <label for="country" class="mb-2 text-sm sm:text-base"
+                >Country<span class="text-sm text-red-700 sm:text-lg"
+                  >*</span
+                ></label
+              >
+              <v-select
+                v-model="shippingForm.country"
+                :items="countries"
+                :error-messages="v$.country.$errors.map((e) => e.$message)"
+                @input="v$.country.$touch"
+                @blur="v$.country.$touch"
+                density="compact"
+                variant="outlined"
+                id="country"
+              ></v-select>
+            </div>
+          </section>
+
+          <div class="flex items-center my-5 font-semibold">
+            <input
+              type="checkbox"
+              @change="billingAddressHandler"
+              class="mr-5 h-[24px] w-[24px] cursor-pointer accent-mustangRed"
+            />
+            <label class="text-sm align-middle sm:text-base"
+              >Billing details different than Shipping and VAT</label
+            >
+          </div>
+
+          <!-- BILLING ADDRESS -->
+
+          <section>
             <div
               class="my-5 sm:my-10 h-[1px] w-full mx-auto bg-mustangRed"
             ></div>
@@ -271,8 +397,8 @@
               >
                 <template v-slot:label>
                   <p class="text-sm font-bold lg:text-base">
-                    Please, do not add VAT to my invoice (For the European VAT
-                    registered companies only)
+                    I want to purchase as a B2B customer with an active VAT
+                    number
                   </p>
                 </template>
               </v-checkbox>
@@ -303,130 +429,6 @@
               class="mb-10 h-[1px] w-full bg-mustangRed"
             ></div>
           </section>
-
-          <section>
-            <div class="flex items-center mb-5">
-              <Icon
-                name="mdi:truck-cargo-container"
-                size="24px"
-                color="#c22025"
-              />
-              <p
-                class="ml-4 text-lg italic font-bold tracking-tighter sm:text-2xl"
-              >
-                Shipping Details
-              </p>
-            </div>
-
-            <div class="flex flex-col mb-3 basis-full">
-              <label for="streetAddress" class="mb-2 text-sm sm:text-base"
-                >Street address<span class="text-sm text-red-700 sm:text-lg"
-                  >*</span
-                ></label
-              >
-              <v-text-field
-                v-model="shippingForm.addressStreet"
-                :error-messages="
-                  v$.addressStreet.$errors.map((e) => e.$message)
-                "
-                @input="v$.addressStreet.$touch"
-                @blur="v$.addressStreet.$touch"
-                type="text"
-                density="compact"
-                variant="outlined"
-                id="streetAddress"
-              />
-            </div>
-
-            <div class="flex flex-col mb-3 basis-full">
-              <label for="streetNumber" class="mb-2 text-sm sm:text-base"
-                >Street number<span class="text-sm text-red-700 sm:text-lg"
-                  >*</span
-                ></label
-              >
-              <v-text-field
-                v-model="shippingForm.addressNumber"
-                :error-messages="
-                  v$.addressNumber.$errors.map((e) => e.$message)
-                "
-                @input="v$.addressNumber.$touch"
-                @blur="v$.addressNumber.$touch"
-                type="text"
-                density="compact"
-                variant="outlined"
-                id="streetNumber"
-              />
-            </div>
-
-            <div class="flex flex-col mb-3">
-              <label for="apartament" class="mb-2 text-sm sm:text-base"
-                >Apartament (optional)</label
-              >
-              <v-text-field
-                v-model="shippingForm.address2"
-                type="text"
-                density="compact"
-                variant="outlined"
-                id="apartament"
-              />
-            </div>
-
-            <div class="flex flex-col mb-3 basis-full">
-              <label for="city" class="mb-2 text-sm sm:text-base"
-                >City<span class="text-sm text-red-700 sm:text-lg"
-                  >*</span
-                ></label
-              >
-              <v-text-field
-                v-model="shippingForm.city"
-                :error-messages="v$.city.$errors.map((e) => e.$message)"
-                @input="v$.city.$touch"
-                @blur="v$.city.$touch"
-                type="text"
-                density="compact"
-                variant="outlined"
-                id="city"
-              />
-            </div>
-
-            <div class="flex flex-col mb-3 basis-full">
-              <label for="postalCode" class="mb-2 text-sm sm:text-base"
-                >Postal code<span class="text-sm text-red-700 sm:text-lg"
-                  >*</span
-                ></label
-              >
-              <v-text-field
-                v-model="shippingForm.zip"
-                :error-messages="v$.zip.$errors.map((e) => e.$message)"
-                @input="v$.zip.$touch"
-                @blur="v$.zip.$touch"
-                type="text"
-                density="compact"
-                variant="outlined"
-                id="postalCode"
-              />
-            </div>
-
-            <div class="mb-3 deep">
-              <label for="country" class="mb-2 text-sm sm:text-base"
-                >Country<span class="text-sm text-red-700 sm:text-lg"
-                  >*</span
-                ></label
-              >
-              <v-select
-                v-model="shippingForm.country"
-                :items="countries"
-                :error-messages="v$.country.$errors.map((e) => e.$message)"
-                @input="v$.country.$touch"
-                @blur="v$.country.$touch"
-                density="compact"
-                variant="outlined"
-                id="country"
-              ></v-select>
-            </div>
-          </section>
-
-          <div class="my-5 sm:my-10 h-[1px] w-full mx-auto bg-mustangRed"></div>
 
           <CheckoutShippingOptions
             :methods="state.shippingMethods"
