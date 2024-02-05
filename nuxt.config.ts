@@ -1,13 +1,29 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  app: {
+    head: {
+      charset: "utf-8",
+      htmlAttrs: {
+        lang: "en",
+      },
+      title: "Mustang Performance",
+      meta: [
+        {
+          name: "description",
+          content: "",
+        },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          name: "keywords",
+          content: "",
+        },
+      ],
+    },
+  },
   devtools: { enabled: true },
   ssr: true,
   image: {
-    domains: [
-      "res.cloudinary.com",
-      "3cerp.eu",
-      "orange-mud-0ff3f1810.3.azurestaticapps.net",
-    ],
+    domains: ["res.cloudinary.com", "3cerp.eu"],
     cloudinary: {
       baseURL: "https://res.cloudinary.com/dxrwmbpxl/image/upload/",
     },
