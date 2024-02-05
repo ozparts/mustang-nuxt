@@ -35,7 +35,13 @@
         </p>
 
         <div
-          v-for="groupedProducts in masterCategory.subCategories"
+          v-for="groupedProducts in masterCategory.subCategories.sort(
+            (a, b) => {
+              if (a.category.includes('Varex')) return -1;
+              if (b.category.includes('Varex')) return 1;
+              return a.category.localeCompare(b.category);
+            }
+          )"
           class="my-1 flex items-center gap-0.5 border border-gray-300 bg-gray-200 pr-0.5"
         >
           <div>
