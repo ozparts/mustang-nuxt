@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center font-nunito-sans">
+  <div class="flex flex-col h-full font-nunito-sans">
     <div class="flex justify-center">
       <div
         v-if="product.item.photos.length"
@@ -33,6 +33,18 @@
         class="w-[170px] h-[170px] object-contain"
       />
     </div>
+    <div
+      class="flex flex-col mb-auto text-sm font-semibold text-center"
+      v-if="
+        product.item.manufacturergroup === Manufacturers.DBA.id &&
+        product.categorydescription
+      "
+    >
+      <p>{{ product.note }}</p>
+      <p>{{ product.parameter }}</p>
+      <p>{{ product.description }}</p>
+    </div>
+
     <div class="w-full mt-4 mb-2">
       <InStock v-if="product.item.available" size="26px" />
       <ToOrder
@@ -44,7 +56,7 @@
       <OutOfStock v-else size="26px" />
     </div>
 
-    <div>
+    <div class="flex flex-col">
       <p
         class="my-2 px-1 block w-full text-center text-[18px] font-medium uppercase text-red-600"
       >
@@ -58,6 +70,7 @@
 </template>
 
 <script setup>
+import { Manufacturers } from "../../vars/index";
 const { product } = defineProps({
   product: Object,
 });

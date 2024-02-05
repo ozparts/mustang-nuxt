@@ -22,12 +22,12 @@
                 {{ groupedProducts.category.toLowerCase() }}
               </h4>
               <div
-                class="mb-5 grid min-h-[250px] grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-2 md:grid-cols-3 min-[1100px]:grid-cols-4"
+                class="mb-5 grid min-h-[250px] grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-2 md:grid-cols-3"
               >
                 <nuxt-link
                   :to="`/product/${product.item.number}`"
                   v-for="product in groupedProducts.products"
-                  class="border border-gray-400"
+                  class="flex flex-col h-full border border-gray-400"
                 >
                   <ProductSingleProduct :product="product" :key="product._id" />
                 </nuxt-link>
