@@ -8,8 +8,6 @@
 </template>
 
 <script setup>
-// Merge
-
 const state = reactive({
   variantsWithHorsepower: [],
   categories: [],
