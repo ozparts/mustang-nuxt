@@ -223,7 +223,12 @@
               <v-text-field
                 v-model="shippingForm.zip"
                 :error-messages="v$.zip.$errors.map((e) => e.$message)"
-                @input="v$.zip.$touch"
+                @input="
+                  (e) => {
+                    v$.zip.$touch;
+                    updateZipCode(e.target.value);
+                  }
+                "
                 @blur="v$.zip.$touch"
                 type="text"
                 density="compact"
@@ -578,6 +583,7 @@
 <script setup>
 import { TAX, countriesObjectEU, countriesObjectUK } from "../../vars/index";
 import { useVuelidate } from "@vuelidate/core";
+import debounce from "lodash.debounce";
 import {
   email,
   required,
@@ -667,6 +673,17 @@ const promoCodeHandler = async (code) => {
     assignBasket(basket);
   }
 };
+
+const updateZipCode = debounce(async (zip) => {
+  if (zip.length <= 4) return;
+  const changes = [
+    { field: "shippingmethod", value: "" },
+    { field: "shipzip", value: zip },
+  ];
+  const basket = await useUpdateCartFields(cart_id, changes);
+  assignBasket(basket);
+  shippingForm.shippingMethod._id = "";
+}, 700);
 
 const isValid = async () => {
   if (billingForm.billCountryName && state.taxnumber.length > 8) {
@@ -973,6 +990,7 @@ watch(
     const changes = [{ field: "shippingmethod", value: "" }];
     await handleChange(changes);
     updateTax();
+    shippingForm.shippingMethod._id = "";
   }
 );
 
