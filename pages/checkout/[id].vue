@@ -223,7 +223,12 @@
               <v-text-field
                 v-model="shippingForm.zip"
                 :error-messages="v$.zip.$errors.map((e) => e.$message)"
-                @input="v$.zip.$touch"
+                @input="
+                  (e) => {
+                    v$.zip.$touch;
+                    updateZipCode(e.target.value);
+                  }
+                "
                 @blur="v$.zip.$touch"
                 type="text"
                 density="compact"
@@ -578,6 +583,7 @@
 <script setup>
 import { TAX, countriesObjectEU, countriesObjectUK } from "../../vars/index";
 import { useVuelidate } from "@vuelidate/core";
+import debounce from "lodash.debounce";
 import {
   email,
   required,
@@ -667,6 +673,17 @@ const promoCodeHandler = async (code) => {
     assignBasket(basket);
   }
 };
+
+const updateZipCode = debounce(async (zip) => {
+  if (zip.length <= 4) return;
+  const changes = [
+    { field: "shippingmethod", value: "" },
+    { field: "shipzip", value: zip },
+  ];
+  const basket = await useUpdateCartFields(cart_id, changes);
+  assignBasket(basket);
+  shippingForm.shippingMethod._id = "";
+}, 700);
 
 const isValid = async () => {
   if (billingForm.billCountryName && state.taxnumber.length > 8) {
@@ -925,32 +942,31 @@ watch(
   () => [state, shippingForm, billingForm],
   async () => {
     if (
+      shippingForm.paymentMethod._id &&
+      shippingForm.shippingMethod._id &&
       (cookieConsent.value || state.agreedToCookies) &&
-      state.agreedToTerms &&
-      (await v$.value.$validate()) &&
-      !state.billingAddress &&
-      !state.vat
+      state.agreedToTerms
     ) {
-      state.orderButton = true;
-    } else if (
-      (cookieConsent.value || state.agreedToCookies) &&
-      state.agreedToTerms &&
-      (await v$.value.$validate()) &&
-      state.billingAddress &&
-      (await x$.value.$validate()) &&
-      !state.vat
-    ) {
-      state.orderButton = true;
-    } else if (
-      (cookieConsent.value || state.agreedToCookies) &&
-      state.agreedToTerms &&
-      (await v$.value.$validate()) &&
-      state.billingAddress &&
-      (await x$.value.$validate()) &&
-      state.vat &&
-      (await t$.value.$validate())
-    ) {
-      state.orderButton = true;
+      if ((await v$.value.$validate()) && !state.billingAddress && !state.vat) {
+        state.orderButton = true;
+      } else if (
+        (await v$.value.$validate()) &&
+        state.billingAddress &&
+        (await x$.value.$validate()) &&
+        !state.vat
+      ) {
+        state.orderButton = true;
+      } else if (
+        (await v$.value.$validate()) &&
+        state.billingAddress &&
+        (await x$.value.$validate()) &&
+        state.vat &&
+        (await t$.value.$validate())
+      ) {
+        state.orderButton = true;
+      } else {
+        state.orderButton = false;
+      }
     } else {
       state.orderButton = false;
     }
@@ -964,15 +980,11 @@ watch(
     const country = shippingForm.country
       ? countriesArray.find((obj) => obj.name === shippingForm.country)
       : store.getCountry();
-    const data = await useUpdateCartField(
-      cart_id,
-      null,
-      "shipcountry",
-      country.code
-    );
+    await useUpdateCartField(cart_id, null, "shipcountry", country.code);
     const changes = [{ field: "shippingmethod", value: "" }];
     await handleChange(changes);
     updateTax();
+    if (shippingForm.shippingMethod._id) shippingForm.shippingMethod._id = "";
   }
 );
 

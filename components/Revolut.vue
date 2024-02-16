@@ -1,13 +1,12 @@
 <template>
-  <div class="max-w-[600px] w-[90%] text-[#131313] m-auto">
+  <div class="text-[#131313] m-auto">
     <h2 class="m-4 text-center sm:text-2xl">Pay by credit card</h2>
-    <div
-      class="flex justify-center items-center bg-[white] border mx-0 my-5 rounded-[20px]"
-    >
-      <div
-        class="bg-[url('~/assets/revolut-logo.jpg')] bg-no-repeat h-[100px] rounded-[20px] w-full bg-contain bg-center p-5 hover:cursor-pointer shadow-2xl"
+    <div class="flex items-center justify-center mx-0 my-5">
+      <img
+        class="h-[100px] lg:h-[150px] cursor-pointer hover:brightness-75"
+        src="../assets/revolut.png"
         @click="handleRevolutPayment"
-      ></div>
+      />
     </div>
   </div>
 </template>
