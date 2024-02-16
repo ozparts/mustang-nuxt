@@ -942,32 +942,31 @@ watch(
   () => [state, shippingForm, billingForm],
   async () => {
     if (
+      shippingForm.paymentMethod._id &&
+      shippingForm.shippingMethod._id &&
       (cookieConsent.value || state.agreedToCookies) &&
-      state.agreedToTerms &&
-      (await v$.value.$validate()) &&
-      !state.billingAddress &&
-      !state.vat
+      state.agreedToTerms
     ) {
-      state.orderButton = true;
-    } else if (
-      (cookieConsent.value || state.agreedToCookies) &&
-      state.agreedToTerms &&
-      (await v$.value.$validate()) &&
-      state.billingAddress &&
-      (await x$.value.$validate()) &&
-      !state.vat
-    ) {
-      state.orderButton = true;
-    } else if (
-      (cookieConsent.value || state.agreedToCookies) &&
-      state.agreedToTerms &&
-      (await v$.value.$validate()) &&
-      state.billingAddress &&
-      (await x$.value.$validate()) &&
-      state.vat &&
-      (await t$.value.$validate())
-    ) {
-      state.orderButton = true;
+      if ((await v$.value.$validate()) && !state.billingAddress && !state.vat) {
+        state.orderButton = true;
+      } else if (
+        (await v$.value.$validate()) &&
+        state.billingAddress &&
+        (await x$.value.$validate()) &&
+        !state.vat
+      ) {
+        state.orderButton = true;
+      } else if (
+        (await v$.value.$validate()) &&
+        state.billingAddress &&
+        (await x$.value.$validate()) &&
+        state.vat &&
+        (await t$.value.$validate())
+      ) {
+        state.orderButton = true;
+      } else {
+        state.orderButton = false;
+      }
     } else {
       state.orderButton = false;
     }
@@ -981,16 +980,11 @@ watch(
     const country = shippingForm.country
       ? countriesArray.find((obj) => obj.name === shippingForm.country)
       : store.getCountry();
-    const data = await useUpdateCartField(
-      cart_id,
-      null,
-      "shipcountry",
-      country.code
-    );
+    await useUpdateCartField(cart_id, null, "shipcountry", country.code);
     const changes = [{ field: "shippingmethod", value: "" }];
     await handleChange(changes);
     updateTax();
-    shippingForm.shippingMethod._id = "";
+    if (shippingForm.shippingMethod._id) shippingForm.shippingMethod._id = "";
   }
 );
 
