@@ -11,7 +11,7 @@ module.exports = {
   ],
 
   darkMode: "media", // or 'media' or 'class'
-  plugins: [require("tailwindcss-debug-screens"), require("daisyui")],
+  plugins: [require("daisyui")],
   theme: {
     screens: {
       xs: "412px",
@@ -29,9 +29,6 @@ module.exports = {
 
       "2xl": "1536px",
       // => @media (min-width: 1536px) { ... }
-    },
-    debugScreens: {
-      prefix: "screen: ",
     },
     extend: {
       fontFamily: {

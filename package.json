@@ -31,8 +31,7 @@
     "@vuelidate/validators": "^2.0.4",
     "lodash.debounce": "^4.0.8",
     "nuxt-swiper": "^1.2.0",
-    "pinia": "^2.1.6",
-    "tailwindcss-debug-screens": "^2.2.1"
+    "pinia": "^2.1.6"
   },
   "overrides": {
     "vue": "latest"
