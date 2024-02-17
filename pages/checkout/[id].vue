@@ -675,18 +675,17 @@ const promoCodeHandler = async (code) => {
 };
 
 const updateZipCode = debounce(async (zip) => {
-  if (zip.length <= 4) return;
   const changes = [
     { field: "shippingmethod", value: "" },
     { field: "shipzip", value: zip },
   ];
   const basket = await useUpdateCartFields(cart_id, changes);
   assignBasket(basket);
-  shippingForm.shippingMethod._id = "";
+  if (shippingForm.shippingMethod._id) shippingForm.shippingMethod._id = "";
 }, 700);
 
-const isValid = async () => {
-  if (billingForm.billCountryName && state.taxnumber.length > 8) {
+const isValid = debounce(async () => {
+  if (billingForm.billCountryName && state.taxnumber.length > 6) {
     const prefix = Object.entries(countriesObjectEU).find(
       (obj) => obj[0] === billingForm.billCountryName
     )[1];
@@ -702,7 +701,7 @@ const isValid = async () => {
   } else {
     state.isValid = false;
   }
-};
+}, 700);
 
 const assignBasket = (basket) => {
   state.summary = basket.summary;
