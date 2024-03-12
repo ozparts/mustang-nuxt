@@ -514,7 +514,7 @@
 
         <!-- MINI BASKET -->
 
-        <div class="w-auto sm:!w-[400px] mx-auto">
+        <div class="w-full xs:!w-[400px] mx-auto">
           <div class="sticky flex flex-col gap-8 top-2">
             <div
               class="border-[1px] border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito"
