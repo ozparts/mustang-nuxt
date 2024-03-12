@@ -536,6 +536,7 @@
               <CheckoutPaymentSummary
                 :summary="state.summary"
                 :currency="state.currency"
+                :discount="state.discount"
                 :backOrderInfo="state.backOrderInfo"
               />
             </div>
@@ -623,6 +624,7 @@ const state = reactive({
   agreedToCookies: false,
   loading: false,
   backOrderInfo: false,
+  discount: null,
 });
 
 onMounted(async () => {
@@ -717,6 +719,8 @@ const assignBasket = (basket) => {
     ? basket.shoppingcarts[0].shoppingcart.promocode
     : "";
   state.backOrderInfo = basket.shoppingcarts[0].shoppingcart.backorderquantity;
+  state.discount =
+    basket.shoppingcarts[0].shoppingcart.transactionlines[0].discountrate;
 };
 
 const billingAddressHandler = () => {

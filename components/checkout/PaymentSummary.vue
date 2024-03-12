@@ -23,12 +23,20 @@
       will be delivered when completed.
     </p>
   </div>
-  <div class="flex justify-between p-5 text-lg font-bold uppercase sm:text-xl">
+  <div
+    class="flex flex-wrap justify-between p-5 text-lg font-bold uppercase sm:text-xl"
+  >
     <p>total</p>
     <p>{{ currency }} {{ summary.grossamount }}</p>
+    <small
+      v-if="discount"
+      class="text-sm text-right text-[#ff0000] basis-full normal-case"
+    >
+      Incl. {{ Math.abs(Number(discount)) * 100 }}% discount</small
+    >
   </div>
 </template>
 
 <script setup>
-const props = defineProps(["summary", "currency", "backOrderInfo"]);
+const props = defineProps(["summary", "currency", "backOrderInfo", "discount"]);
 </script>
