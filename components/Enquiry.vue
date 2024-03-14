@@ -8,7 +8,7 @@
     </button>
   </div>
   <div
-    class="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50"
+    class="fixed inset-0 z-10 flex items-center justify-center bg-black/90"
     v-if="state.formVisible"
   >
     <div
@@ -17,7 +17,7 @@
       <form @submit.prevent="sendEnquiry">
         <h2 class="py-1 my-2 text-xl sm:text-2xl">Send an enquiry</h2>
         <p class="py-1 my-2 font-light sm:text-lg">
-          Hello, I'm very interested in
+          Hello, I'm interested in
           <span class="text-base font-bold">{{ props.product }}</span
           >. Could you please let me know when it will be available in your
           offer again?
@@ -33,13 +33,13 @@
         <div class="flex justify-between">
           <button
             type="submit"
-            class="px-2 py-1 text-sm text-white rounded bg-mustangBlue sm:px-4 sm:py-2 sm:text-base"
+            class="text-white daisy-btn w-[80px] md:w-[90px] text-sm sm:text-base bg-mustangBlue hover:bg-[#0052a5]/90"
           >
             SEND
           </button>
           <button
             @click="toggleForm"
-            class="px-2 py-1 text-sm text-white rounded bg-mustangBlue sm:px-4 sm:py-2 sm:text-base"
+            class="text-white daisy-btn w-[80px] md:w-[90px] text-sm sm:text-base bg-mustangBlue hover:bg-[#0052a5]/90"
           >
             CANCEL
           </button>

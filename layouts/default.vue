@@ -1,6 +1,6 @@
 <template class="debug-screens">
   <header>
-    <Header class="relative z-20 max-w-[1140px] px-[15px] pt-3" />
+    <Header class="relative z-2 max-w-[1140px] px-[15px] pt-3" />
   </header>
   <cookie-consent />
   <main>
