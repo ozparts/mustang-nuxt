@@ -34,8 +34,9 @@ const styleClass = computed(() => {
       product.manufacturergroup === Manufacturers.DBA.id,
     xtreme: product.manufacturergroup === Manufacturers.ACS.id,
     "xtreme-230mm-organic":
-      product.manufacturergroup === Manufacturers.ACS.id &&
-      product.description.includes("230mm Organic Twin"),
+      (product.manufacturergroup === Manufacturers.ACS.id &&
+        product.description.includes("230mm Organic Twin")) ||
+      product.description.includes("230mm Sprung hub"),
     "xtreme-230mm-carbon":
       product.manufacturergroup === Manufacturers.ACS.id &&
       product.description.includes("230mm Carbon Blade"),
@@ -46,9 +47,8 @@ const styleClass = computed(() => {
       product.manufacturergroup === Manufacturers.ACS.id &&
       product.description.includes("270mm Organic Twin"),
     "xtreme-230mm-sprung":
-      (product.manufacturergroup === Manufacturers.ACS.id &&
-        product.description.includes("230mm Sprung Ceramic")) ||
-      product.description.includes("230mm Sprung hub"),
+      product.manufacturergroup === Manufacturers.ACS.id &&
+      product.description.includes("230mm Sprung Ceramic"),
     xforce: `${product.manufacturergroup}` === `${Manufacturers.XFORCE.id}`,
     whiteline:
       `${product.manufacturergroup}` === `${Manufacturers.WHITELINE.id}`,
