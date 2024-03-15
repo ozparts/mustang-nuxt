@@ -46,8 +46,9 @@ const styleClass = computed(() => {
       product.manufacturergroup === Manufacturers.ACS.id &&
       product.description.includes("270mm Organic Twin"),
     "xtreme-230mm-sprung":
-      product.manufacturergroup === Manufacturers.ACS.id &&
-      product.description.includes("230mm Sprung Ceramic"),
+      (product.manufacturergroup === Manufacturers.ACS.id &&
+        product.description.includes("230mm Sprung Ceramic")) ||
+      product.description.includes("230mm Sprung hub"),
     xforce: `${product.manufacturergroup}` === `${Manufacturers.XFORCE.id}`,
     whiteline:
       `${product.manufacturergroup}` === `${Manufacturers.WHITELINE.id}`,
