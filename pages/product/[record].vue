@@ -20,9 +20,14 @@
               <img :src="picUrl.url" class="p-1" />
             </div>
           </div>
-
+          <UiImageModal
+            :url="state.selectedFoto"
+            :checked="state.dialog"
+            @close="state.dialog = false"
+          />
           <div
-            class="flex items-center justify-center overflow-hidden !border border-black p-2 sm:h-full sm:w-full"
+            class="flex items-center justify-center overflow-hidden !border border-black p-2 sm:h-full sm:w-full cursor-pointer"
+            @click="openModal(state.selectedFoto)"
             v-if="state.selectedFoto"
           >
             <div
@@ -198,9 +203,13 @@ const state = reactive({
     outOfStock: false,
     enquiry: false,
   },
+  dialog: false,
 });
 const addToCartPopUp = ref(false);
 
+const openModal = () => {
+  state.dialog = !state.dialog;
+};
 // dodawanie do state il produktu z koszyka
 
 if (shoppingCart.shoppingcarts.length > 0) {
