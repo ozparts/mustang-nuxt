@@ -34,12 +34,14 @@ const styleClass = computed(() => {
       product.manufacturergroup === Manufacturers.DBA.id,
     xtreme: product.manufacturergroup === Manufacturers.ACS.id,
     "xtreme-230mm-organic":
-      (product.manufacturergroup === Manufacturers.ACS.id &&
-        product.description.includes("230mm Organic Twin")) ||
-      product.description.includes("230mm Sprung hub"),
-    "xtreme-230mm-carbon":
       product.manufacturergroup === Manufacturers.ACS.id &&
-      product.description.includes("230mm Carbon Blade"),
+      (product.description.includes("230mm Organic Twin") ||
+        product.description.includes("230mm Sprung hub")),
+    "xtreme-230mm-carbon":
+      (product.manufacturergroup === Manufacturers.ACS.id &&
+        product.description.includes("230mm Carbon Blade")) ||
+      (product.manufacturergroup === Manufacturers.ACS.id &&
+        product.description.includes("230mm Carbon Twin Plate")),
     "xtreme-230mm-rigid":
       product.manufacturergroup === Manufacturers.ACS.id &&
       product.description.includes("230mm Rigid Ceramic"),

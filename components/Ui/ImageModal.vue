@@ -5,7 +5,7 @@
       <nuxt-img
         :src="url"
         fit="contain"
-        class="w-[90vw] md:max-w-[70vw] max-h-[80vh]"
+        class="w-[90vw] md:max-w-[70vw] max-h-[85vh]"
       />
       <div class="absolute -top-5 right-2 daisy-modal-action">
         <button
