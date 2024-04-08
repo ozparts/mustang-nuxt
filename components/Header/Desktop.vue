@@ -16,6 +16,7 @@
                   <div class="overflow-hidden md:w-[200px] lg:w-[200px]">
                     <nuxt-img
                       format="webp"
+                      width="200px"
                       src="/mustang/mustang_logo.png"
                       provider="cloudinary"
                       alt="Mustang Performance logo"
