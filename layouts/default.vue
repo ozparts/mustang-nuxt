@@ -1,10 +1,10 @@
-<template class="debug-screens">
+<template>
   <header>
     <Header class="relative z-2 max-w-[1140px] px-[15px] pt-3" />
   </header>
   <cookie-consent />
   <main>
-    <div class="z-11 mx-auto max-w-[1140px] px-[15px] debug-screens">
+    <div class="z-11 mx-auto max-w-[1140px] px-[15px]">
       <slot />
     </div>
   </main>
