@@ -1,15 +1,34 @@
 <template>
-  <div v-if="loader" class="w-[calc(100%_-_64px)]">
-    <v-progress-linear
-      color="red"
-      indeterminate
-      rounded
-      height="4"
-    ></v-progress-linear>
+  <div class="loader-wrapper">
+    <img
+      src="./../assets/loader.png"
+      alt="Mustang Performance"
+      class="p-1 loader"
+    />
   </div>
 </template>
 
-<script setup>
-const props = defineProps(["loader"]);
-const loader = computed(() => props.loader);
-</script>
+<style lang="scss" scoped>
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+
+  .loader {
+    width: 65px;
+    height: 65px;
+    animation: preload 2s linear;
+  }
+
+  @keyframes preload {
+    0% {
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+</style>
