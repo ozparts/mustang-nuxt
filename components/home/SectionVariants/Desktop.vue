@@ -58,6 +58,7 @@
                   fit="contain"
                   format="webp"
                   provider="cloudinary"
+                  loading="lazy"
                   :alt="`Mustang variant ${variant.variant
                     .replace(' ', '-')
                     .replace(' ', '-')}`"

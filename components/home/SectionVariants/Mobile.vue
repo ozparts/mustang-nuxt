@@ -11,6 +11,7 @@
             height="150px"
             fit="contain"
             format="webp"
+            loading="lazy"
             provider="cloudinary"
             :alt="`Mustang variant ${data.variant
               .replace(' ', '-')

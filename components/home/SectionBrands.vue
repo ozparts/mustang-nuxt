@@ -56,6 +56,7 @@
                   :alt="brand.name"
                   height="100px"
                   fit="contain"
+                  loading="lazy"
                   background="white"
                   provider="cloudinary"
                 />
