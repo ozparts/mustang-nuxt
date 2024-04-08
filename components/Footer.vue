@@ -27,26 +27,26 @@
             >
               Our Policies
             </h2>
-            <nav class="mb-10 text-[15px] list-none font-nunito">
+            <nav class="mb-10 text-[15px] list-none font-nunito h-full">
               <ul>
                 <li>
                   <nuxt-link
                     to="/privacy-policy"
-                    class="py-2 md:!py-0 daisy-link-hover daisy-link"
+                    class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
                     >Privacy Policy</nuxt-link
                   >
                 </li>
                 <li>
                   <nuxt-link
                     to="/cookie-policy"
-                    class="py-2 md:!py-0 daisy-link-hover daisy-link"
+                    class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
                     >Cookie Policy</nuxt-link
                   >
                 </li>
                 <li>
                   <nuxt-link
                     to="/terms"
-                    class="py-2 md:!py-0 daisy-link-hover daisy-link"
+                    class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
                     >Terms&Conditions</nuxt-link
                   >
                 </li>
@@ -64,21 +64,21 @@
                 <li>
                   <nuxt-link
                     to="/contact"
-                    class="py-2 md:!py-0 daisy-link-hover daisy-link"
+                    class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
                     >Contact</nuxt-link
                   >
                 </li>
                 <li>
                   <nuxt-link
                     to="/shipping"
-                    class="py-2 md:!py-0 daisy-link-hover daisy-link"
+                    class="py-2.5 block md:!py-0 daisy-link-hover daisy-link"
                     >Shipping options</nuxt-link
                   >
                 </li>
                 <li>
                   <nuxt-link
                     to="/warrianties"
-                    class="py-2 md:!py-0 daisy-link-hover"
+                    class="py-2.5 block md:!py-0 daisy-link-hover"
                     >Warranties</nuxt-link
                   >
                 </li>
