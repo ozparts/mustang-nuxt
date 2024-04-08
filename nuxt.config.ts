@@ -10,12 +10,14 @@ export default defineNuxtConfig({
       meta: [
         {
           name: "description",
-          content: "",
+          content:
+            "Get the best deals on car parts for Mustangs. Shop from our wide selection of Disc Brakes, Clutches, Exhaust systems, Suspensions, and Engines. We stock top brands like DBA, Pedders, Whiteline, ACL, XForce, Hawk, Xtreme and Turbosmart. Upgrade your ride today",
         },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           name: "keywords",
-          content: "",
+          content:
+            "Mustang car parts, Disc Brakes, Clutches, Exhaust systems, Suspension parts, Engines, DBA, Pedders, Whiteline, ACL, XForce, Xtreme, Hawk, Turbosmart, Car parts online, Quality auto parts",
         },
       ],
     },
