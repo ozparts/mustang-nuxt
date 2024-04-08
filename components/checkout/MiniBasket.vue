@@ -8,9 +8,12 @@
         `${item.item.recordtype}` === 'service' ? 'bg-[#F6F6F6]' : 'bg-[white]'
       "
     >
-      <img
+      <nuxt-img
         v-if="item.item.photos[0]"
+        :alt="item.item.urlcomponent"
         :src="`${item.item.photos[0].url}`"
+        format="webp"
+        width="125px"
         class="w-[100px] sm:!w-[120px] object-contain h-[100px]"
         :class="item.item.recordtype === 'service' ? '#F6F6F6' : 'white'"
       />

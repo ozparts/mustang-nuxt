@@ -5,27 +5,15 @@
         v-if="product.item.photos.length"
         class="w-[170px] h-[170px] bg-white flex justify-center overflow-hidden items-center"
       >
-        <!-- <nuxt-img
-          :src="`${product.item.photos[0].url}`"
-          alt=""
-          fit="contain"
-          width="180"
-          height="180"
-          background:true
-          background="white"
-          class="w-[180px] h-[180px] object-contain"
-          loading="lazy"
-        /> -->
         <nuxt-img
           format="webp"
           loading="lazy"
-          width="200px"
+          width="180px"
           :src="`${product.item.photos[0].url}`"
           class="block bg-white h-[170px] w-[170px] object-contain"
           :alt="product.item.urlcomponent"
         />
       </div>
-
       <nuxt-img
         v-else
         format="webp"

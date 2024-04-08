@@ -12,9 +12,11 @@
     </p>
   </div>
   <div class="flex items-center justify-center px-1">
-    <img
+    <nuxt-img
       v-if="product.photos.length"
+      :alt="product.urlcomponent"
       :src="`${product.photos[0].url}`"
+      widt="125px"
       width="120px"
       height="120px"
       background="white"
@@ -24,6 +26,7 @@
     <nuxt-img
       v-else
       src="/mustang/no_image.jpg"
+      width="125px"
       format="webp"
       alt="No image"
       provider="cloudinary"

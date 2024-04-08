@@ -36,7 +36,7 @@
                 <div class="flex items-start justify-center sm:!p-0">
                   <NuxtLink :to="`/product/${product.item.number}`">
                     <div v-if="product.item.photos[0]">
-                      <img
+                      <nuxt-img
                         :src="product.item.photos[0].url"
                         :alt="product.item.photos[0].name"
                         width="120px"
@@ -118,15 +118,16 @@
                 />
               </div>
               <div
-                class="bg-[#F6F6F6] w-[80px] h-[80px] border-l border-b aspect-square"
+                class="bg-[#F6F6F6] w-[80px] h-[80px] border-l aspect-square"
               >
-                <img
+                <nuxt-img
+                  format="webp"
                   :src="product.item.photos[0].url"
                   :alt="product.item.photos[0].name"
                   width="80px"
                   height="80px"
                   fit="contain"
-                  class="w-[80px] h-[80px] object-contain"
+                  class="w-[80px] h-[80px] object-contain border-b"
                   background="#F6F6F6"
                 />
               </div>

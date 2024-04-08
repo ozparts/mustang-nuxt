@@ -17,7 +17,13 @@
               class="flex h-[80px] w-[80px] cursor-pointer items-center justify-center overflow-hidden border-[1px] border-black p-1 md:h-[100px] md:w-[100px]"
               v-for="picUrl in state.product.photos"
             >
-              <img :src="picUrl.url" class="p-1" />
+              <nuxt-img
+                :src="picUrl.url"
+                width="90px"
+                class="p-1"
+                format="webp"
+                :alt="state.product.urlcomponent"
+              />
             </div>
           </div>
           <UiImageModal
@@ -35,25 +41,14 @@
             <div
               class="flex h-[250px] items-center justify-center overflow-hidden sm:h-[300px]"
             >
-              <!-- <div class="object-contain w-[200px] sm:w-[250px] md:w-[300px]">
-                <nuxt-img
-                  :src="state.selectedFoto"
-                  fit="cover"
-                  sizes="xs:200px sm:250px md:300px"
-                  alt=""
-                />
-              </div> -->
-              <!-- <div class="object-contain w-[200px] sm:w-[250px] md:w-[300px]">
-                <img :src="state.selectedFoto" />
-              </div> -->
               <div
                 class="object-contain w-[200px] sm:w-[250px] md:w-[300px] justify-center items-center flex"
               >
-                <img
+                <nuxt-img
                   :src="state.selectedFoto"
                   fit="contain"
                   sizes="xs:200px sm:250px md:300px"
-                  alt=""
+                  :alt="state.product.urlcomponent"
                   class="w-[200px] sm:w-[250px] md:w-[300px]"
                 />
               </div>

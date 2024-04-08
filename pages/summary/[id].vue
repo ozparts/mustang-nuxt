@@ -29,13 +29,15 @@
               : 'bg-[white]'
           "
         >
-          <img
+          <nuxt-img
             v-if="item.item.photos[0]"
+            format="webp"
             :src="`${
               item.item?.photos[1]?.url
                 ? item.item.photos[1].url
                 : item.item.photos[0].url
             }`"
+            width="125px"
             class="h-[100px] object-contain w-[100px] sm:!w-[120px]"
             :class="
               item.item.recordtype === 'service' ? 'bg-[#F6F6F6]' : 'bg-white'
