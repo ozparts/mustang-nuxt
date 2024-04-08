@@ -1,4 +1,4 @@
-<template class="debug-screens">
+<template>
   <HomeMainBanner />
   <HomeSectionVariantsDesktop
     :variantsWithHorsepower="state.variantsWithHorsepower"
@@ -8,14 +8,20 @@
 </template>
 
 <script setup>
+const store = useStore();
+
 const state = reactive({
   variantsWithHorsepower: [],
   categories: [],
   variants: [],
+  years: [],
 });
 
-const { options } = await useGetApplications(true);
+const { options } = await useGetApplications(false);
+
 state.variantsWithHorsepower = parseVariantsAndHorsepower(options.variant);
 state.categories = options.categorymaster;
 state.variants = options.variant;
+state.years = options.peryear;
+store.setProductYears(options.peryear);
 </script>
