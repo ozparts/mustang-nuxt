@@ -21,6 +21,7 @@
             </div>
           </div>
           <UiImageModal
+            v-if="state.selectedFoto"
             :name="product.name"
             :url="state.selectedFoto"
             :checked="state.dialog"
