@@ -28,25 +28,27 @@
               Our Policies
             </h2>
             <nav class="mb-10 text-[15px] list-none font-nunito">
-              <li>
-                <nuxt-link
-                  to="/privacy-policy"
-                  class="daisy-link-hover daisy-link"
-                  >Privacy Policy</nuxt-link
-                >
-              </li>
-              <li>
-                <nuxt-link
-                  to="/cookie-policy"
-                  class="daisy-link-hover daisy-link"
-                  >Cookie Policy</nuxt-link
-                >
-              </li>
-              <li>
-                <nuxt-link to="/terms" class="daisy-link-hover daisy-link"
-                  >Terms&Conditions</nuxt-link
-                >
-              </li>
+              <ul>
+                <li>
+                  <nuxt-link
+                    to="/privacy-policy"
+                    class="daisy-link-hover daisy-link"
+                    >Privacy Policy</nuxt-link
+                  >
+                </li>
+                <li>
+                  <nuxt-link
+                    to="/cookie-policy"
+                    class="daisy-link-hover daisy-link"
+                    >Cookie Policy</nuxt-link
+                  >
+                </li>
+                <li>
+                  <nuxt-link to="/terms" class="daisy-link-hover daisy-link"
+                    >Terms&Conditions</nuxt-link
+                  >
+                </li>
+              </ul>
             </nav>
           </div>
           <div class="w-full px-4 lg:w-1/3 md:w-1/2">
@@ -56,21 +58,23 @@
               useful links
             </h2>
             <nav class="mb-10 text-[15px] list-none font-nunito">
-              <li>
-                <nuxt-link to="/contact" class="daisy-link-hover daisy-link"
-                  >Contact</nuxt-link
-                >
-              </li>
-              <li>
-                <nuxt-link to="/shipping" class="daisy-link-hover daisy-link"
-                  >Shipping options</nuxt-link
-                >
-              </li>
-              <li>
-                <nuxt-link to="/warrianties" class="daisy-link-hover"
-                  >Warranties</nuxt-link
-                >
-              </li>
+              <ul>
+                <li>
+                  <nuxt-link to="/contact" class="daisy-link-hover daisy-link"
+                    >Contact</nuxt-link
+                  >
+                </li>
+                <li>
+                  <nuxt-link to="/shipping" class="daisy-link-hover daisy-link"
+                    >Shipping options</nuxt-link
+                  >
+                </li>
+                <li>
+                  <nuxt-link to="/warrianties" class="daisy-link-hover"
+                    >Warranties</nuxt-link
+                  >
+                </li>
+              </ul>
             </nav>
           </div>
           <div class="w-full px-4 lg:w-1/3 md:w-1/2">
@@ -80,15 +84,17 @@
               contact
             </h2>
             <nav class="mb-10 text-[15px] list-none font-nunito">
-              <li>
-                <p>OZPARTS PL sp. z o.o.</p>
-              </li>
-              <li>
-                <p>ul. Mazowiecka 46-48, 87-100, Torun, Poland</p>
-              </li>
-              <li>
-                <a href="mailto:info@ozparts.eu">info@ozparts.eu</a>
-              </li>
+              <ul>
+                <li>
+                  <p>OZPARTS PL sp. z o.o.</p>
+                </li>
+                <li>
+                  <p>ul. Mazowiecka 46-48, 87-100, Torun, Poland</p>
+                </li>
+                <li>
+                  <a href="mailto:info@ozparts.eu">info@ozparts.eu</a>
+                </li>
+              </ul>
             </nav>
           </div>
         </div>
