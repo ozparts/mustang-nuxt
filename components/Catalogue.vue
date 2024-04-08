@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto py-5 sm:!py-10 md:!py-20 px-3">
+  <div class="container mx-auto py-5 sm:!py-10 md:!py-20 px-3 h-max">
     <div class="grid gap-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3">
       <div class="flex flex-col flex-grow mb-2 font-nunito">
         <label class="text-xs sm:!text-sm">Make:</label>
@@ -22,41 +22,32 @@
         />
       </div>
       <div class="flex flex-col flex-grow mb-2 font-nunito">
-        <label class="text-xs sm:!text-sm">Category:</label>
+        <label class="text-xs sm:!text-sm">Year:</label>
         <v-select
           type="text"
-          @update:modelValue="(cat) => getVariants(cat)"
+          @update:modelValue="(year) => getVariants(year)"
           density="compact"
           variant="outlined"
-          v-model="state.search.category"
-          :items="categories"
+          :items="state.years"
+          v-model="state.search.year"
         />
       </div>
       <div class="flex flex-col flex-grow mb-2 font-nunito">
         <label class="text-xs sm:!text-sm">Variant:</label>
         <v-select
           type="text"
-          :disabled="!state.search.category"
-          @update:modelValue="(variant) => getEngines(variant)"
+          :disabled="!state.search.year"
+          @update:modelValue="(variant) => getProducts(variant)"
           v-model="state.search.variant"
           density="compact"
           variant="outlined"
+          :loading="state.loading.variants"
           :items="state.variants"
         />
       </div>
-      <div class="flex flex-col flex-grow mb-2 font-nunito">
-        <label class="text-xs sm:!text-sm">Engine:</label>
-        <v-select
-          type="text"
-          :disabled="!state.search.variant"
-          @update:modelValue="(engine) => getProducts(engine)"
-          v-model="state.search.engine"
-          density="compact"
-          variant="outlined"
-          :items="state.engines"
-        />
-      </div>
     </div>
+    <Loader v-if="state.loader" />
+
     <ProductList
       v-if="state.products.length > 0"
       :products="filter"
@@ -66,67 +57,59 @@
 </template>
 
 <script setup>
-import { categories } from "../vars/index";
-const { category, variant, engine } = useRoute().query;
+const store = useStore();
+const { variant, year } = useRoute().query;
 const state = reactive({
   search: {
-    category: "",
     variant: "",
-    engine: "",
+    year: "",
+  },
+  loading: {
+    variants: false,
   },
   variants: [],
-  engines: [],
-  products: "",
+  products: [],
+  years: [],
+  loader: false,
 });
 
-const getVariants = async (category) => {
+const getVariants = async (year) => {
+  state.products = [];
   state.search.variant = "";
-  state.search.engine = "";
-  const { options } = await useGetProductsToCatalogue(category, false);
+  state.loading.variants = true;
+  const { options } = await useGetProductsToCatalogue(year, false);
   state.variants = options.variant.sort();
-  navigateTo(`/catalogue/?category=${state.search.category}`);
+  state.loading.variants = false;
+
+  navigateTo(`/catalogue/?year=${state.search.year}`);
 };
 
-const getEngines = async (variant) => {
-  state.search.engine = "";
-  const { options } = await useGetProductsToCatalogue(
-    state.search.category,
-    false,
+const getProducts = async (variant) => {
+  state.products = [];
+  state.loader = true;
+
+  const { results } = await useGetProductsToCatalogue(
+    state.search.year,
+    true,
     variant
   );
-  navigateTo(
-    `/catalogue/?category=${state.search.category}&variant=${state.search.variant}`
-  );
-  state.engines = options.engine.sort();
-};
 
-const getProducts = async (engine) => {
-  state.products = [];
-  const { options, results } = await useGetProductsToCatalogue(
-    state.search.category,
-    true,
-    state.search.variant,
-    engine
-  );
   state.products = results;
+  state.loader = false;
+
   navigateTo(
-    `/catalogue/?category=${state.search.category}&variant=${state.search.variant}&engine=${state.search.engine}`
+    `/catalogue/?year=${state.search.year}&variant=${state.search.variant}`
   );
 };
 
 onMounted(async () => {
-  if (category && !variant && !engine) {
-    state.search.category = category;
-    await getVariants(category);
-  } else if (category && variant && !engine) {
-    state.search.category = category;
+  state.years = store.getProductYears();
+  if (year && !variant) {
+    await getVariants(year);
+  } else if (year && variant) {
+    state.search.year = year;
     state.search.variant = variant;
-    await getEngines(variant);
-  } else if (category && variant && engine) {
-    state.search.category = category;
-    state.search.variant = variant;
-    state.search.engine = engine;
-    await getProducts(engine);
+    await getProducts(variant);
   }
 });
 
