@@ -49,7 +49,9 @@
                     </div>
                     <div class="min-w-[65px]" v-else>
                       <nuxt-img
-                        src="/mustang/no-image_k6aigy.jpg"
+                        src="/mustang/no_image.jpg"
+                        format="webp"
+                        alt="No image"
                         provider="cloudinary"
                         width="120px"
                         height="120px"

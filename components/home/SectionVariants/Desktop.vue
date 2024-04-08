@@ -57,8 +57,10 @@
                   height="130px"
                   fit="contain"
                   format="webp"
-                  loading="lazy"
                   provider="cloudinary"
+                  :alt="`Mustang variant ${variant.variant
+                    .replace(' ', '-')
+                    .replace(' ', '-')}`"
                 />
                 <div
                   class="absolute bottom-0 left-0 right-0 top-[55%] flex overflow-hidden font-roboto"

@@ -43,7 +43,9 @@
           />
           <nuxt-img
             v-else
-            src="/mustang/no-image_k6aigy.jpg"
+            format="webp"
+            src="/mustang/no_image.jpg"
+            alt="No image"
             provider="cloudinary"
             width="120px"
             height="100px"

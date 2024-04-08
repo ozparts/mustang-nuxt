@@ -11,6 +11,8 @@
           >
             <div class="flex items-center justify-start">
               <NuxtImg
+                format="webp"
+                :alt="brand.name"
                 :src="`/mustang/brands/${brand.linkKey}.webp`"
                 width="200px"
                 provider="cloudinary"

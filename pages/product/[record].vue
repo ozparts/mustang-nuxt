@@ -21,6 +21,7 @@
             </div>
           </div>
           <UiImageModal
+            :name="product.name"
             :url="state.selectedFoto"
             :checked="state.dialog"
             @close="state.dialog = false"
@@ -63,7 +64,9 @@
             class="flex items-center justify-center p-2 overflow-hidden border-[1px] border-black sm:h-full sm:w-full"
           >
             <nuxt-img
-              src="/mustang/no-image_k6aigy.jpg"
+              src="/mustang/no_image.jpg"
+              format="webp"
+              alt="No image"
               provider="cloudinary"
               fit="contain"
               sizes="xs:200px sm:250px md:300px"

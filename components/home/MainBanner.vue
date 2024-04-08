@@ -9,7 +9,8 @@
       >
         <nuxt-img
           format="webp"
-          src="/mustang/test.jpg"
+          alt="Mustang Performance"
+          src="/mustang/mustang_banner.jpg"
           provider="cloudinary"
           sizes="xs:320px sm:640px md:768px lg:1024px xl:1280px xxl:1536px 2xl:100vw"
           fit="contain"

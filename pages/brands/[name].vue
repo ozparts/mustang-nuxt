@@ -30,9 +30,12 @@
 
       <div class="w-5/6 mx-auto lg:max-w-lg lg:w-full md:w-1/2">
         <NuxtImg
+          format="webp"
+          width="550px"
           provider="cloudinary"
           class="object-cover object-center"
           fit="contain"
+          :alt="state.brand.name"
           :src="`/mustang/brands/${state.brand.linkKey}.webp`"
         />
       </div>

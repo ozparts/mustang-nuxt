@@ -9,7 +9,9 @@
           <nuxt-link to="/">
             <div class="md:w-[200px] lg:w-[300px]">
               <nuxt-img
-                src="/mustang/Mustang_logo.png"
+                format="webp"
+                alt="Mustang Performance logo"
+                src="/mustang/mustang_logo.png"
                 provider="cloudinary"
                 height="80px"
               />

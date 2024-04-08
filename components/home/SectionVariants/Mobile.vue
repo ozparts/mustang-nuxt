@@ -12,6 +12,9 @@
             fit="contain"
             format="webp"
             provider="cloudinary"
+            :alt="`Mustang variant ${data.variant
+              .replace(' ', '-')
+              .replace(' ', '-')}`"
           />
           <div
             class="absolute bottom-0 left-0 right-0 top-[55%] flex overflow-hidden font-roboto"

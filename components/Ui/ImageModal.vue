@@ -3,6 +3,8 @@
   <div class="daisy-modal" role="dialog">
     <div class="relative bg-white border-2 border-black">
       <nuxt-img
+        format="webp"
+        :alt="name"
         :src="url"
         fit="contain"
         class="w-[90vw] md:max-w-[70vw] max-h-[85vh]"
@@ -33,7 +35,7 @@
 </template>
 
 <script setup>
-const props = defineProps(["url", "checked"]);
+const props = defineProps(["url", "checked", "name"]);
 const emit = defineEmits(["close"]);
 const url = computed(() => {
   return props.url;

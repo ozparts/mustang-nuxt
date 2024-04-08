@@ -51,8 +51,9 @@
             >
               <nuxt-link :to="`brands/${brand.linkKey}`">
                 <nuxt-img
+                  format="webp"
                   :src="`/mustang/brands/${brand.linkKey}.webp`"
-                  alt=""
+                  :alt="brand.name"
                   height="100px"
                   fit="contain"
                   background="white"

@@ -10,7 +10,9 @@
         >
           <nuxt-link to="/">
             <nuxt-img
-              src="/mustang/Mustang_logo.png"
+              format="webp"
+              alt="Mustang Performance logo"
+              src="/mustang/mustang_logo.png"
               provider="cloudinary"
               width="200px"
             />

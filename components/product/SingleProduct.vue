@@ -25,7 +25,9 @@
 
       <nuxt-img
         v-else
-        src="/mustang/no-image_k6aigy.jpg"
+        format="webp"
+        alt="No image"
+        src="/mustang/no_image.jpg"
         provider="cloudinary"
         width="170"
         height="170"

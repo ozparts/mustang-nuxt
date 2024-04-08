@@ -47,7 +47,7 @@ export const BRANDS: Brand = {
     },
   },
   HAWK: {
-    name: "Hawk Performance ",
+    name: "Hawk Performance",
     title: "Brake pads",
     linkKey: "hawk",
     description: {
