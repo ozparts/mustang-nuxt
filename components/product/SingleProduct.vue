@@ -16,10 +16,13 @@
           class="w-[180px] h-[180px] object-contain"
           loading="lazy"
         /> -->
-        <img
+        <nuxt-img
+          format="webp"
+          loading="lazy"
+          width="200px"
           :src="`${product.item.photos[0].url}`"
           class="block bg-white h-[170px] w-[170px] object-contain"
-          alt=""
+          :alt="product.item.urlcomponent"
         />
       </div>
 
