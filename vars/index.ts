@@ -100,34 +100,63 @@ export const countriesObjectUK = {
   Guernsey: "GG",
 };
 
+export const manufacturersList = [
+  "ALL",
+  "ACS",
+  "XFORCE",
+  "DBA",
+  "ACL",
+  "PEDDERS",
+  "HAWK",
+  "WHITELINE",
+];
+
 export const Manufacturers: ManufacturersType = {
+  ALL: {
+    id: [
+      "5f9bda55dcdf6b0c04f18789",
+      "5f9bda56dcdf6b0c04f1878e",
+      "5f9bda56dcdf6b0c04f18790",
+      "5f9bda55dcdf6b0c04f1878d",
+      "5f9bda55dcdf6b0c04f1878c",
+      "5f9bda55dcdf6b0c04f1878b",
+      "5f9bda55dcdf6b0c04f1878a",
+    ],
+  },
   ACS: {
     id: "5f9bda55dcdf6b0c04f18789",
     name: "AUSTRALIAN CLUTCH SERVICES PTY LTD",
+    shortName: "ACS",
   },
   XFORCE: {
     id: "5f9bda55dcdf6b0c04f1878d",
     name: "Xforce AU",
+    shortName: "XFORCE",
   },
   DBA: {
     id: "5f9bda55dcdf6b0c04f1878c",
     name: "DBA",
+    shortName: "DBA",
   },
   PEDDERS: {
     id: "5f9bda55dcdf6b0c04f1878b",
     name: "PEDDERS SHOCK ABSORBER SERVICE PTY. LTD.",
+    shortName: "PEDDERS",
   },
   WHITELINE: {
     id: "5f9bda55dcdf6b0c04f1878a",
     name: "Whiteline/Nolathane",
+    shortName: "WHITELINE",
   },
   ACL: {
     id: "5f9bda56dcdf6b0c04f1878e",
     name: "ACL Bearing Company",
+    shortName: "ACL",
   },
   HAWK: {
     id: "5f9bda56dcdf6b0c04f18790",
     name: "Carlisle Brake & Friction (Hawk)",
+    shortName: "HAWK",
   },
 };
 

@@ -10,6 +10,7 @@ import {
   MANUFACTURER,
   EXCLUDED,
   categories,
+  Manufacturers,
 } from "../vars/index";
 
 const baseBodyEU = {
@@ -19,7 +20,6 @@ const baseBodyEU = {
   currency: CURRENCY.EUR,
   customer: "guest",
   mastercatalogue: true,
-  manufacturergroup: "",
 };
 
 const baseBodyUK = {
@@ -29,7 +29,6 @@ const baseBodyUK = {
   currency: CURRENCY.GBP,
   customer: "guest",
   mastercatalogue: true,
-  // manufacturergroup: MANUFACTURER,
 };
 
 const searchBody = {
@@ -58,7 +57,7 @@ export const useGetApplications = async (
       body: JSON.stringify({
         // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
-        manufacturergroup: "",
+        manufacturergroup: Manufacturers.ALL.id,
         action: ACTION.GET_APPLICATIONS,
         item,
         show,
@@ -101,7 +100,10 @@ export const useGetEngines = async (show: boolean, variant: string) => {
   }
 };
 
-export const useGetProducts = async (variant: string, engine: string) => {
+export const useGetProducts = async (
+  variant: string,
+  manufacturer?: string
+) => {
   const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/applications`, {
@@ -112,9 +114,8 @@ export const useGetProducts = async (variant: string, engine: string) => {
         ...baseBodyEU,
         show: true,
         action: ACTION.GET_APPLICATIONS,
-        manufacturergroup: "",
         variant,
-        engine,
+        manufacturergroup: manufacturer ? Manufacturers[manufacturer].id : "",
       }),
     });
     if (data.status === 200) {
@@ -606,10 +607,9 @@ export const useSearch = async (keyword: string) => {
 // };
 
 export const useGetProductsToCatalogue = async (
-  category: string,
+  peryear: string,
   show: boolean,
-  variant?: string,
-  engine?: string
+  variant?: string
 ) => {
   const host = useStoreState();
 
@@ -621,10 +621,9 @@ export const useGetProductsToCatalogue = async (
         // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         show,
+        peryear,
         action: ACTION.GET_APPLICATIONS,
-        categorymaster: category,
         variant,
-        engine,
       }),
     });
     if (data.status === 200) {
