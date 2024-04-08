@@ -626,13 +626,13 @@
         <li class="ml-5 text-sm sm:text-base">
           Safari:
           <nuxt-link
-            to="https://support.apple.com/kb/ph21411?locale=pl_PL"
+            to="https://support.apple.com/pl-pl/guide/deployment/depf7d5714d4/web"
             target="_blank"
           >
             <a
               class="text-xs break-words daisy-link-hover daisy-link-error daisy-link sm:text-base"
             >
-              https://support.apple.com/kb/ph21411?locale=pl_PL</a
+              https://support.apple.com/pl-pl/guide/deployment/depf7d5714d4/web</a
             >
           </nuxt-link>
         </li>
