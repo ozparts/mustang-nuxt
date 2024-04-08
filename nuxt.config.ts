@@ -94,9 +94,9 @@ export default defineNuxtConfig({
       {
         families: {
           "Open Sans": [400, 600, 700],
-          Roboto: [100, 400, 600],
-          Nunito: [100, 200, 300, 400, 500, 600, 700, 800, 900],
-          "Nunito Sans": [100, 200, 300, 400, 500, 600, 700, 800, 900],
+          Roboto: [400, 600],
+          Nunito: [400, 600, 700],
+          "Nunito Sans": [400],
         },
       },
     ],
