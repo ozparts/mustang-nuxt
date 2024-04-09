@@ -2,19 +2,20 @@
   <section class="container mx-auto">
     <Banner title="catalogue" />
 
-    <div class="mt-5 mb-5 lg:!mb-28">
+    <div class="mt-5 mb-5 sm:!mb-10">
       <h2
         class="bg-mustangLightGrey my-2 w-full py-2 text-center font-nunito font-bold sm:!my-4 sm:!py-4 sm:text-xl"
       >
         Selected variant: {{ state.selectedVariantFromParam }}
       </h2>
-      <div class="grid grid-cols-3 gap-5 pt-16">
+      <div class="grid grid-cols-1 gap-5 py-8 sm:grid-cols-2 md:grid-cols-3">
         <div v-for="variant in state.fullListOfVariants" :id="variant">
           <v-btn
             :id="variant"
             rounded="xl"
             size="large"
             block
+            :color="`rgba(220, 225, 222, 0.4)`"
             @click="select"
             class="font-semibold font-nunito"
             prepend-icon="mdi-check-circle"
@@ -30,21 +31,6 @@
           </v-btn>
         </div>
       </div>
-      <!-- <div
-        class="flex flex-col flex-wrap justify-around gap-1 my-10 sm:items-center sm:flex-row"
-      >
-        <div class="mb-2 font-nunito sm:basis-[40%]">
-          <label class="text-xs sm:text-sm">Select a specific variant:</label>
-          <v-select
-            type="text"
-            density="compact"
-            variant="outlined"
-            hideDetails="true"
-            v-model="state.search.variant"
-            :items="state.fullListOfVariants.sort()"
-          />
-        </div>
-      </div> -->
     </div>
     <Loader v-if="state.loader" />
     <p id="start"></p>
@@ -53,8 +39,6 @@
 </template>
 
 <script setup>
-import { manufacturersList } from "../../vars/index";
-
 const state = reactive({
   selectedVariantFromParam: "",
   fullListOfVariants: [],
@@ -62,12 +46,6 @@ const state = reactive({
   availableEnginesForSelectedVariant: [],
   productList: [],
   filteredList: [],
-  search: {
-    variant: "",
-    engine: "",
-    brand: "",
-  },
-  queryString: "",
   loader: false,
 });
 
@@ -82,42 +60,10 @@ const select = async (e) => {
   document.getElementById("start").scrollIntoView({
     behavior: "smooth",
   });
-};
-const getEngines = async (value) => {
-  state.search.variant = value;
-  // state.search.brand = "";
-  state.productList = [];
-  // if (state.search.variant !== "") {
-  //   state.availableEnginesForSelectedVariant = (
-  //     await useGetEngines(true, state.search.variant)
-  //   ).options.engine;
-  // }
-  // state.availableEnginesForSelectedVariant =
-  //   state.availableEnginesForSelectedVariant.map((engine) =>
-  //     engine === "" ? "none" : engine
-  //   );
   navigateTo(
-    `/catalogue/${state.selectedVariantFromParam}/?${state.search.variant}`
+    `/catalogue/${state.selectedVariantFromParam}/?variant=${e.target.id}`
   );
-};
-
-const getProducts = async (val) => {
-  state.productList = [];
-  // state.search.engine = val;
-  state.loader = true;
-  const res = (
-    await useGetProducts(
-      state.search.variant,
-      val
-      // state.search.engine === "none" ? "" : state.search.engine
-    )
-  ).results;
-  // state.search.brand = state.search.brand === "" ? "ALL" : state.search.brand;
-  state.productList = res;
-  state.loader = false;
-  navigateTo(
-    `/catalogue/${state.selectedVariantFromParam}/?${state.queryString}`
-  );
+  console.log(e.target.id, state.selectedVariant);
 };
 
 onMounted(async () => {
@@ -128,19 +74,13 @@ onMounted(async () => {
     state.selectedVariantFromParam
   ).sort();
 
-  if (useRoute().query.variant && useRoute().query.brand) {
+  if (useRoute().query.variant) {
     state.loader = true;
-    state.search.variant = useRoute().query.variant;
-    // state.search.engine = useRoute().query.engine;
-    state.search.brand = useRoute().query.brand.toUpperCase();
-    // state.availableEnginesForSelectedVariant = (
-    //   await useGetEngines(true, state.search.variant)
-    // ).options.engine.map((engine) => (engine === "" ? "none" : engine));
     state.productList = [];
-    // state.productList = (
-    //   await useGetProducts(state.search.variant, state.search.brand)
-    // ).results;
-    // state.loader = false;
+    const { results } = await useGetEngines(true, useRoute().query.variant);
+    state.productList = results;
+    state.selectedVariant = useRoute().query.variant;
+    state.loader = false;
   }
 });
 
@@ -157,26 +97,6 @@ const filter = computed(() => {
   }
   return properList;
 });
-
-// watch(
-//   () => state.search.variant,
-//   async () => {
-//     await getEngines(state.search.variant);
-//   }
-// );
-
-// watch(
-//   () => state.search.brand,
-//   async () => {
-//     await getProducts(state.search.brand);
-//   }
-// );
-
-// watchEffect(() => {
-//   const qs = new URLSearchParams(state.search);
-//   state.queryString = qs.toString();
-//   return qs.toString();
-// });
 </script>
 
 <style scoped>
