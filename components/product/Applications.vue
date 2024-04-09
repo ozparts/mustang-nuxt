@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full overflow-x-auto px-2 py-5">
+  <div class="h-full px-2 py-5 overflow-x-auto">
     <table class="daisy-table font-nunito">
       <thead class="text-xs text-black sm:text-sm">
         <tr>
@@ -19,9 +19,9 @@
           @click="
             () =>
               navigateTo(
-                `/catalogue/${application.variant.split(' | ')[0]}/?variant=${
+                `/catalogue/${application.variant.split(' |')[0]}/?variant=${
                   application.variant
-                }&engine=${application.engine ? application.engine : 'none'}`,
+                }`
               )
           "
         >
