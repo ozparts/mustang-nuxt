@@ -33,30 +33,29 @@
           value="MUSTANG VI"
         />
       </div>
-
+      <div class="font-open-sans">
+        <label class="mb-1 ml-1 text-[10px] font-bold uppercase tracking-widest"
+          >Year</label
+        >
+        <v-select
+          type="text"
+          density="compact"
+          variant="outlined"
+          v-model="state.selectedYear"
+          :items="store.getProductYears()"
+        />
+      </div>
       <div class="font-open-sans">
         <label class="mb-1 ml-1 text-[10px] font-bold uppercase tracking-widest"
           >Variant</label
         >
         <v-select
           type="text"
+          :disabled="!state.selectedYear"
           density="compact"
           variant="outlined"
           v-model="state.selectedVariant"
           :items="state.variants"
-        />
-      </div>
-      <div class="font-open-sans">
-        <label class="mb-1 ml-1 text-[10px] font-bold uppercase tracking-widest"
-          >Engine</label
-        >
-        <v-select
-          :disabled="!state.selectedVariant"
-          type="text"
-          density="compact"
-          variant="outlined"
-          v-model="state.selectedEngine"
-          :items="state.engineVariants"
         />
       </div>
       <div class="flex items-end font-open-sans">
@@ -66,7 +65,7 @@
           block
           variant="flat"
           density="default"
-          :disabled="!state.selectedEngine"
+          :disabled="!state.selectedVariant"
           @click="search"
           >Search</v-btn
         >
@@ -76,45 +75,30 @@
 </template>
 
 <script setup>
-const props = defineProps(["variants"]);
+const store = useStore();
 
 const state = reactive({
   selectedVariant: "",
-  selectedEngine: "",
-  variants: props.variants.sort(),
-  engineVariants: [],
-  searchButton: false,
+  selectedYear: "",
+  variants: [],
 });
 
 watch(
-  () => state.selectedVariant,
-  async () => {
-    state.selectedEngine = "";
-    const res = await useGetProducts(state.selectedVariant);
+  () => state.selectedYear,
 
-    state.engineVariants = res.options.engine.map((obj) =>
-      obj === "" ? "none" : obj
+  async () => {
+    state.selectedVariant = "";
+    const { options } = await useGetProductsToCatalogue(
+      state.selectedYear,
+      false
     );
-  }
-);
-
-watch(
-  () => state.selectedEngine,
-  async () => {
-    if (state.selectedEngine) {
-      const res = await useGetProducts(
-        state.selectedVariant,
-        state.selectedEngine
-      );
-      state.searchButton = true;
-    }
+    state.variants = options.variant.sort();
   }
 );
 
 const search = () => {
-  const variant = state.selectedVariant.split(" ")[0];
   navigateTo(
-    `/catalogue/${variant}/?variant=${state.selectedVariant}&engine=${state.selectedEngine}`
+    `/catalogue/?year=${state.selectedYear}&variant=${state.selectedVariant}`
   );
 };
 </script>
