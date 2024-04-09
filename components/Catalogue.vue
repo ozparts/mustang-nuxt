@@ -47,7 +47,7 @@
       </div>
     </div>
     <Loader v-if="state.loader" />
-
+    <p id="start"></p>
     <ProductList
       v-if="state.products.length > 0"
       :products="filter"
@@ -111,7 +111,23 @@ onMounted(async () => {
     state.search.variant = variant;
     await getProducts(variant);
   }
+  if (state.products) {
+    document.getElementById("start").scrollIntoView({
+      behavior: "smooth",
+    });
+  }
 });
+
+watch(
+  () => state.products,
+  async () => {
+    if (state.products.length !== 0) {
+      document.getElementById("start").scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }
+);
 
 const filter = computed(() => {
   const filteredId = [];
