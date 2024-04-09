@@ -43,9 +43,9 @@
                 >Contact Us</nuxt-link
               >
             </li>
-            <li>
+            <!-- <li>
               <nuxt-link class="hover:text-mustangBlue" to="#">EU/UK</nuxt-link>
-            </li>
+            </li> -->
             <li>
               <nuxt-link :to="`/basket/${cart_id ? cart_id : 'null'}`">
                 <div class="relative mr-3.5 flex items-center gap-2">
