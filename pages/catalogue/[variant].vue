@@ -87,7 +87,6 @@ const getEngines = async (value) => {
   state.search.variant = value;
   // state.search.brand = "";
   state.productList = [];
-  console.log(value);
   // if (state.search.variant !== "") {
   //   state.availableEnginesForSelectedVariant = (
   //     await useGetEngines(true, state.search.variant)
@@ -104,7 +103,6 @@ const getEngines = async (value) => {
 
 const getProducts = async (val) => {
   state.productList = [];
-  console.log(state.search.brand, "1!");
   // state.search.engine = val;
   state.loader = true;
   const res = (
@@ -114,7 +112,6 @@ const getProducts = async (val) => {
       // state.search.engine === "none" ? "" : state.search.engine
     )
   ).results;
-  console.log(state.search.brand, "12");
   // state.search.brand = state.search.brand === "" ? "ALL" : state.search.brand;
   state.productList = res;
   state.loader = false;
@@ -126,7 +123,6 @@ const getProducts = async (val) => {
 onMounted(async () => {
   const { options } = await useGetApplications(false);
   state.selectedVariantFromParam = useRoute().params.variant;
-  console.log(options.variant, state.selectedVariantFromParam);
   state.fullListOfVariants = getAllSpecificVariants(
     options.variant,
     state.selectedVariantFromParam
@@ -145,7 +141,6 @@ onMounted(async () => {
     //   await useGetProducts(state.search.variant, state.search.brand)
     // ).results;
     // state.loader = false;
-    console.log(state.search.brand, state.search.variant, "!!!!111rtaz");
   }
 });
 
