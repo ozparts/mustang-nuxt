@@ -50,7 +50,7 @@
           ></p>
           <icon
             name="mingcute:arrows-right-line"
-            :size="iconSize"
+            :size="width"
             class="skew-x-[-31deg]"
           />
         </div>
@@ -60,11 +60,13 @@
 </template>
 
 <script setup>
-const width = ref("18px");
+const width = ref();
 
 onMounted(() => {
+  width.value = window.innerWidth > 500 ? "28px" : "14px";
   onScreenResize();
 });
+
 const onScreenResize = () => {
   window.addEventListener("resize", () => {
     updateScreenWidth();
@@ -72,13 +74,6 @@ const onScreenResize = () => {
 };
 
 const updateScreenWidth = () => {
-  width.value = window.innerWidth;
+  width.value = window.innerWidth > 500 ? "28px" : "14px";
 };
-
-const iconSize = computed(() => {
-  if (width.value <= 500) {
-    return "14px";
-  }
-  return "28px";
-});
 </script>
