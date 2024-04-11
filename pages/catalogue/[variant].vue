@@ -63,7 +63,6 @@ const select = async (e) => {
   navigateTo(
     `/catalogue/${state.selectedVariantFromParam}/?variant=${e.target.id}`
   );
-  console.log(e.target.id, state.selectedVariant);
 };
 
 onMounted(async () => {
