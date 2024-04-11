@@ -2,8 +2,7 @@
   <div class="text-[#131313] m-auto">
     <h2 class="m-4 text-center sm:text-2xl">Pay by credit card</h2>
     <div class="flex items-center justify-center mx-0 my-5">
-      <nuxt-img
-        format="webp"
+      <img
         class="h-[100px] lg:h-[150px] cursor-pointer hover:brightness-75"
         src="../assets/revolut.png"
         @click="handleRevolutPayment"
