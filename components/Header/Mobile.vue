@@ -19,29 +19,19 @@
           </nuxt-link>
         </div>
         <div class="flex items-end justify-center">
-          <Icon
-            name="ic:round-search"
-            size="24px"
-            @click="state.search = true"
-          />
+          <nuxt-link to="/catalogue">
+            <Icon name="ic:round-search" size="24px" />
+          </nuxt-link>
         </div>
         <div class="flex items-end justify-center">
           <BasketMobile />
         </div>
-
         <div class="flex items-end justify-center">
           <SideBar />
         </div>
       </div>
     </div>
-    <Transition>
-      <Search v-show="state.search" @close="state.search = false" />
-    </Transition>
   </ClientOnly>
 </template>
 
-<script setup>
-const state = reactive({
-  search: false,
-});
-</script>
+<script setup></script>
