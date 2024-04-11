@@ -77,7 +77,7 @@
                 </li>
                 <li>
                   <nuxt-link
-                    to="/warrianties"
+                    to="/warranties"
                     class="py-2.5 block md:!py-0 daisy-link-hover"
                     >Warranties</nuxt-link
                   >
