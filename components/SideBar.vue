@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center">
-    <div class="daisy-drawer">
+    <div class="z-10 daisy-drawer">
       <input
         id="my-drawer"
         type="checkbox"
@@ -21,7 +21,7 @@
           class="daisy-drawer-overlay"
         ></label>
         <ul
-          class="daisy-menu absolute z-50 min-h-full w-[70%] bg-base-200 p-4 font-nunito uppercase text-base-content"
+          class="daisy-menu absolute min-h-full w-[70%] bg-base-200 p-4 font-nunito uppercase text-base-content"
         >
           <li @click="toogleBar">
             <nuxt-link to="/">Home</nuxt-link>

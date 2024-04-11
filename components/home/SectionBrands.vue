@@ -65,7 +65,7 @@
           </SwiperSlide>
         </Swiper>
         <div
-          class="control-prev sm:size-[3em] absolute bottom-0 left-[35%] z-10 pb-3"
+          class="control-prev sm:size-[3em] absolute bottom-0 left-[35%] z-1 pb-3"
         >
           <Icon
             name="solar:map-arrow-left-outline"
@@ -74,7 +74,7 @@
             size="2em"
           />
         </div>
-        <div class="control-next absolute bottom-0 right-[35%] z-10 pb-3">
+        <div class="control-next absolute bottom-0 right-[35%] z-1 pb-3">
           <Icon
             name="solar:map-arrow-right-outline"
             class="cursor-pointer slide-next-brands"

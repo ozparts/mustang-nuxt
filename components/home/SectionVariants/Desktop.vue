@@ -124,7 +124,7 @@
         </SwiperSlide>
       </Swiper>
       <div
-        class="control-prev sm:size-[3em] absolute bottom-0 left-[35%] z-10 hidden pb-3 xs:block lg:hidden"
+        class="control-prev sm:size-[3em] absolute bottom-0 left-[35%] z-1 hidden pb-3 xs:block lg:hidden"
       >
         <Icon
           name="solar:map-arrow-left-outline"
@@ -134,7 +134,7 @@
         />
       </div>
       <div
-        class="control-next absolute bottom-0 right-[35%] z-10 hidden pb-3 xs:block lg:hidden"
+        class="control-next absolute bottom-0 right-[35%] z-1 hidden pb-3 xs:block lg:hidden"
       >
         <Icon
           name="solar:map-arrow-right-outline"
