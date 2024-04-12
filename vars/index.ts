@@ -84,6 +84,8 @@ export const countriesObjectEU = {
   Norway: "NO",
   Poland: "PL",
   Portugal: "PT",
+  "Portugal - Azores": "A2",
+  "Portugal - Madeira": "M3",
   Romania: "RO",
   Slovakia: "SK",
   Slovenia: "SI",
