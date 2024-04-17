@@ -42,10 +42,16 @@ const state = reactive({
 onMounted(() => {
   const consent = store.getCookieConsent();
   state.showDialog = !consent;
+  if (consent) {
+    window.consentGrantedAdStorage();
+  }
 });
 
 const handleCookieDecision = (value) => {
   store.setCookieConsent(value);
+  if (value) {
+    window.consentGrantedAdStorage();
+  }
   state.showDialog = false;
 };
 </script>

@@ -528,7 +528,8 @@
               </div>
 
               <div
-                v-for="item in state.cart"
+                v-for="(item, index) in state.cart"
+                :key="index"
                 class="border-b-[1px] border-mustangRed"
               >
                 <CheckoutMiniBasket :item="item" :currency="state.currency" />
@@ -795,23 +796,23 @@ const createAddress = async () => {
     const order = await useGetOrder(cart_id, country.code);
 
     if (transaction && order) {
-      //   window.dataLayer?.push({
-      //     event: 'purchase',
-      //     ecommerce: {
-      //       items: order.transactionlines.map((line) => ({
-      //         id: line._id,
-      //         name: line.displayname,
-      //         quantity: line.quantity,
-      //         price: line.grosamount,
-      //       })),
-      //       transaction_id: order.name,
-      //       value: order.grossamount,
-      //       tax: order.taxamount,
-      //       shipping: order.grossshippingcost,
-      //       currency: order.currency.name,
-      //       coupon: '',
-      //     },
-      //   })
+      window.dataLayer?.push({
+        event: "purchase",
+        ecommerce: {
+          items: order.transactionlines.map((line) => ({
+            id: line._id,
+            name: line.displayname,
+            quantity: line.quantity,
+            price: line.grosamount,
+          })),
+          transaction_id: order.name,
+          value: order.grossamount,
+          tax: order.taxamount,
+          shipping: order.grossshippingcost,
+          currency: order.currency.name,
+          coupon: "",
+        },
+      });
       store.setBasketQuantity(0);
       store.setCartId("");
       store.clearBillingForm();

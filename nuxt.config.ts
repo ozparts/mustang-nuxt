@@ -20,6 +20,11 @@ export default defineNuxtConfig({
             "Mustang car parts, Disc Brakes, Clutches, Exhaust systems, Suspension parts, Engines, DBA, Pedders, Whiteline, ACL, XForce, Xtreme, Hawk, Turbosmart, Car parts online, Quality auto parts",
         },
       ],
+      script: [
+        {
+          src: "gtm.js",
+        },
+      ],
     },
   },
   devtools: { enabled: true },
