@@ -6,18 +6,18 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "en",
       },
-      title: "Mustang Performance",
+      title: "Quality parts for Ford Mustang | Mustang Performance",
       meta: [
         {
           name: "description",
           content:
-            "Get the best deals on car parts for Mustangs. Shop from our wide selection of Disc Brakes, Clutches, Exhaust systems, Suspensions, and Engines. We stock top brands like DBA, Pedders, Whiteline, ACL, XForce, Hawk, Xtreme and Turbosmart. Upgrade your ride today",
+            "Get the best deals on car parts for Ford Mustang. Shop from our easy to order selection of Disc Brakes, Clutches, Exhaust systems, Suspensions and Engine bearings",
         },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           name: "keywords",
           content:
-            "Mustang car parts, Disc Brakes, Clutches, Exhaust systems, Suspension parts, Engines, DBA, Pedders, Whiteline, ACL, XForce, Xtreme, Hawk, Turbosmart, Car parts online, Quality auto parts",
+            "Mustang Performance, Ford Mustang, car parts, Disc Brakes, Clutches, Exhaust systems, Suspension parts, Engine bearings, DBA, Pedders, Whiteline, ACL, XForce, Xtreme, Hawk, Turbosmart, Car parts online, Quality auto parts",
         },
       ],
     },
