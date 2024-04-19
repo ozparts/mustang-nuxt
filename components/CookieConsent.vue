@@ -42,15 +42,29 @@ const state = reactive({
 onMounted(() => {
   const consent = store.getCookieConsent();
   state.showDialog = !consent;
-  if (consent) {
-    window.consentGrantedAdStorage();
-  }
 });
+
+setTimeout(function () {
+  const consent = store.getCookieConsent();
+  if (consent) {
+    window.gtag("consent", "update", {
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+      analytics_storage: "granted",
+    });
+  }
+}, 10000);
 
 const handleCookieDecision = (value) => {
   store.setCookieConsent(value);
   if (value) {
-    window.consentGrantedAdStorage();
+    window.gtag("consent", "update", {
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+      analytics_storage: "granted",
+    });
   }
   state.showDialog = false;
 };

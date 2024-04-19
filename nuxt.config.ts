@@ -22,7 +22,9 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          src: "gtm.js",
+          src: `gtm.js`,
+          type: "text/javascript",
+          async: true,
         },
       ],
     },
