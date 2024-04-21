@@ -38,33 +38,20 @@ const store = useStore();
 const state = reactive({
   showDialog: "",
 });
+const mustangConsent = useCookie("mustang-consent");
 
 onMounted(() => {
-  const consent = store.getCookieConsent();
-  state.showDialog = !consent;
-});
-
-setTimeout(function () {
-  const consent = store.getCookieConsent();
-  if (consent) {
-    window.gtag("consent", "update", {
-      ad_storage: "granted",
-      ad_user_data: "granted",
-      ad_personalization: "granted",
-      analytics_storage: "granted",
-    });
+  if (!mustangConsent.value || !store.cookiesConsent) {
+    state.showDialog = true;
   }
-}, 10000);
+});
 
 const handleCookieDecision = (value) => {
   store.setCookieConsent(value);
+
   if (value) {
-    window.gtag("consent", "update", {
-      ad_storage: "granted",
-      ad_user_data: "granted",
-      ad_personalization: "granted",
-      analytics_storage: "granted",
-    });
+    mustangConsent.value = value;
+    window.consentGrantedAdStorage();
   }
   state.showDialog = false;
 };

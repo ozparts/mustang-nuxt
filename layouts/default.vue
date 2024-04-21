@@ -15,14 +15,20 @@
 
 <script setup>
 const store = useStore();
+const mustangConsent = useCookie("mustang-consent");
 const country = await useCountry();
 store.setCountry(country);
+
 onMounted(() => {
   if (process.client) {
     window.location.host === "localhost:3000" ||
     window.location.host === "mustangperformance.eu"
       ? store.setHost("EU")
       : store.setHost("UK");
+
+    if (mustangConsent.value) {
+      window.consentGrantedAdStorage();
+    }
   }
 });
 </script>
