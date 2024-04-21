@@ -22,9 +22,13 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          src: `gtm.js`,
-          type: "text/javascript",
-          async: true,
+          src: `/gtm.js`,
+        },
+      ],
+      noscript: [
+        {
+          children: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWZSWWQV"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
         },
       ],
     },
