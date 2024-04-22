@@ -47,7 +47,7 @@
         >
           <SwiperSlide v-for="brand in BRANDS">
             <div
-              class="flex h-[100px] items-center justify-center overflow-hidden bg-white"
+              class="flex h-[100px] w-[140px] md:w-[160px] lg:w-[200px] items-center justify-center overflow-hidden bg-white"
             >
               <nuxt-link :to="`brands/${brand.linkKey}`">
                 <nuxt-img
@@ -55,6 +55,7 @@
                   :src="`/mustang/brands/${brand.linkKey}.webp`"
                   :alt="brand.name"
                   height="100px"
+                  width="100%"
                   fit="contain"
                   loading="lazy"
                   background="white"
