@@ -19,7 +19,7 @@
           </nuxt-link>
         </div>
         <div class="flex items-end justify-center">
-          <nuxt-link to="/catalogue">
+          <nuxt-link to="/catalogue" aria-label="Catalogue">
             <Icon name="ic:round-search" size="24px" />
           </nuxt-link>
         </div>

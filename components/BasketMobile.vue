@@ -1,7 +1,10 @@
 <template>
   <div class="pb-0.5">
-    <nuxt-link :to="`/basket/${cart_id ? cart_id : 'null'}`">
-      <div class="b-1 relative">
+    <nuxt-link
+      :to="`/basket/${cart_id ? cart_id : 'null'}`"
+      aria-label="Basket"
+    >
+      <div class="relative b-1">
         <Icon name="ph:shopping-cart" size="24px" />
         <div
           class="absolute right-[-10px] top-[-6px] flex h-5 w-5 items-center justify-center rounded-[50%] bg-red-600 text-[12px] text-white"
