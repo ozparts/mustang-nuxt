@@ -35,7 +35,6 @@ module.exports = {
         nunito: ["Nunito", "sans-serif"],
         "nunito-sans": ["Nunito Sans", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
-        "open-sans": ["Open Sans", "sans-serif"],
       },
       colors: {
         mustangSilver: "#c0c0c0",

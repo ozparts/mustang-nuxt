@@ -104,7 +104,6 @@ export default defineNuxtConfig({
       "@nuxtjs/google-fonts",
       {
         families: {
-          "Open Sans": [400, 600, 700],
           Roboto: [400, 600],
           Nunito: [400, 600, 700],
           "Nunito Sans": [400],
