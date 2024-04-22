@@ -48,9 +48,9 @@ onMounted(() => {
 
 const handleCookieDecision = (value) => {
   store.setCookieConsent(value);
+  mustangConsent.value = value;
 
   if (value) {
-    mustangConsent.value = value;
     window.consentGrantedAdStorage();
   }
   state.showDialog = false;
