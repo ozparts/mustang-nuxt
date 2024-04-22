@@ -19,7 +19,12 @@ const mustangConsent = useCookie("mustang-consent");
 const country = await useCountry();
 store.setCountry(country);
 
-onMounted(() => {
+onMounted(async () => {
+  const years = store.getProductYears();
+  if (!years.length) {
+    const { options } = await useGetApplications(false);
+    store.setProductYears(options.peryear);
+  }
   if (process.client) {
     window.location.host === "localhost:3000" ||
     window.location.host === "mustangperformance.eu"
