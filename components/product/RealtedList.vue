@@ -51,10 +51,17 @@ const filterRelatedItems = computed(() => {
     .sort((a, b) => {
       if (a.available && !b.available) return -1;
       if (!a.available && b.available) return 1;
-      if (a.available && !b.manufacturerstock) return -1;
-      if (!a.available && b.manufacturerstock) return 1;
-      if (!a.available && !b.manufacturerstock) return -1;
-      return 0;
+
+      let [prefixA, suffixA] = a.urlcomponent.split("-");
+      let [prefixB, suffixB] = b.urlcomponent.split("-");
+
+      if (prefixA !== prefixB) {
+        return prefixA.localeCompare(prefixB);
+      }
+
+      if (suffixA === "STD") return -1;
+      if (suffixB === "STD") return 1;
+      return a.urlcomponent.localeCompare(b.urlcomponent);
     })
     .forEach((item) => {
       if (!filteredId.includes(item.id)) {

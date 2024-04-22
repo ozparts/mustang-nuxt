@@ -80,10 +80,16 @@ onMounted(async () => {
       state.products.sort((a, b) => {
         if (a.item.available && !b.item.available) return -1;
         if (!a.item.available && b.item.available) return 1;
-        if (a.item.available && !b.item.manufacturerstock) return -1;
-        if (!a.item.available && b.item.manufacturerstock) return 1;
-        if (!a.item.available && !b.item.manufacturerstock) return -1;
-        return 0;
+
+        let [prefixA, suffixA] = a.item.urlcomponent.split("-");
+        let [prefixB, suffixB] = b.item.urlcomponent.split("-");
+
+        if (prefixA !== prefixB) {
+          return prefixA.localeCompare(prefixB);
+        }
+        if (suffixA === "STD") return -1;
+        if (suffixB === "STD") return 1;
+        return a.item.urlcomponent.localeCompare(b.item.urlcomponent);
       })
     )
   );
