@@ -1,4 +1,25 @@
 <template>
+  <Head>
+    <Title>
+      {{ product.name }} |
+      {{
+        `${
+          product.groupdescription ||
+          product.description ||
+          product.categorydescription
+        }`
+      }}
+      |
+      {{
+        getStockQuantity(product.available)
+          ? "2-4 days delivery"
+          : metaInfo.find((obj) => obj.id === product.manufacturergroup)
+              .shortName
+      }}
+      | Mustang Performance
+    </Title>
+    <!-- <Meta name="description" content="title is the best" /> -->
+  </Head>
   <ClientOnly>
     <Banner :title="getBannerDescription" />
     <UiAddToCartPopUp :name="product.name" v-if="addToCartPopUp" />
@@ -131,18 +152,27 @@
                 ></Icon>
               </button>
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center h-[40px]">
               <div v-if="state.productAvailability.outOfStock">
                 <Enquiry :product="state.product.name" />
               </div>
               <div v-else>
-                <AddToCartBtn
-                  @click="() => addToCartPopUpHandler()"
-                  :product="product"
-                  :availability="state.productAvailability"
-                  :quantity="state.quantityOrder"
-                  :productStatus="state.productStatus"
-                />
+                <div v-if="mustangConsent">
+                  <AddToCartBtn
+                    @click="() => addToCartPopUpHandler()"
+                    :product="product"
+                    :availability="state.productAvailability"
+                    :quantity="state.quantityOrder"
+                    :productStatus="state.productStatus"
+                  />
+                </div>
+                <div
+                  v-else
+                  class="px-2.5 py-2 max-w-[350px] text-xs font-bold border-2 border-red-600 rounded-md sm:text-sm"
+                >
+                  In order to purchase, please refresh the page and accept the
+                  cookie policy
+                </div>
               </div>
             </div>
           </div>
@@ -171,11 +201,12 @@
 </template>
 
 <script setup>
-import { LOCATION, Manufacturers } from "../../vars/index";
+import { LOCATION, Manufacturers, metaInfo } from "../../vars/index";
 
 const { record } = useRoute().params;
 const store = useStore();
 const country = store.getCountry();
+const mustangConsent = useCookie("mustang-consent");
 
 const shoppingCart = await useGetCart(country.code, store.cartId);
 const product = await useGetItem(record, country.code);
@@ -184,6 +215,9 @@ const productType = getProductType(product.name);
 
 const state = reactive({
   product: {},
+  pageTitle: "",
+  pageDescription: "",
+  shortName: "",
   quantityOrder: productType === "discbrake" ? 2 : 1,
   quantityInBasket: 0,
   selectedFoto: "",
@@ -203,7 +237,20 @@ const state = reactive({
     enquiry: false,
   },
   dialog: false,
+  cookieConsent: "",
 });
+
+onMounted(() => {
+  checkQuantityInBasket();
+  if (mustangConsent.value) {
+    state.cookieConsent = true;
+    store.setCookieConsent(true);
+  } else {
+    state.cookieConsent = false;
+    store.setCookieConsent(false);
+  }
+});
+
 const addToCartPopUp = ref(false);
 
 const openModal = () => {
@@ -211,16 +258,19 @@ const openModal = () => {
 };
 // dodawanie do state il produktu z koszyka
 
-if (shoppingCart.shoppingcarts.length > 0) {
-  const quantityInBasket =
-    shoppingCart.shoppingcarts[0].shoppingcart.transactionlines
-      .filter((obj) => obj.item._id === product.id)
-      .reduce((prev, curr) => prev + curr.quantity, 0);
+const checkQuantityInBasket = () => {
+  if (shoppingCart.shoppingcarts.length > 0) {
+    const quantityInBasket =
+      shoppingCart.shoppingcarts[0].shoppingcart.transactionlines
+        .filter((obj) => obj.item._id === product.id)
+        .reduce((prev, curr) => prev + curr.quantity, 0);
 
-  if (quantityInBasket) {
-    state.quantityInBasket = quantityInBasket;
+    if (quantityInBasket) {
+      state.quantityInBasket = quantityInBasket;
+    }
   }
-}
+};
+
 state.product = product;
 
 if (state.product.photos.length > 0) {
@@ -394,13 +444,13 @@ const availabilityStatusInfo = computed(() => {
       state.productStatus = "air";
 
       return productType === "discbrake"
-        ? "Available in 3 weeks with extra cost."
-        : "Available in 3 weeks.";
+        ? "Available in 3 weeks with extra cost"
+        : "Available in 3 weeks";
     } else {
       state.productAvailability.outOfStock = true;
       state.productStatus = "outOfStock";
 
-      return "Temporarily out of stock!";
+      return "Temporarily out of stock";
     }
   } else {
     if (
@@ -415,7 +465,7 @@ const availabilityStatusInfo = computed(() => {
       state.productAvailability.outOfStock = true;
       state.productStatus = "outOfStock";
 
-      return "Temporarily out of stock!";
+      return "Temporarily out of stock";
     }
   }
 });

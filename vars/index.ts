@@ -162,6 +162,16 @@ export const Manufacturers: ManufacturersType = {
   },
 };
 
+export const metaInfo = [
+  { id: "5f9bda55dcdf6b0c04f18789", shortName: "ACS", description: "" },
+  { id: "5f9bda56dcdf6b0c04f1878e", shortName: "ACL", description: "" },
+  { id: "5f9bda55dcdf6b0c04f1878c", shortName: "DBA", description: "" },
+  { id: "5f9bda56dcdf6b0c04f18790", shortName: "HAWK", description: "" },
+  { id: "5f9bda55dcdf6b0c04f1878d", shortName: "XFORCE", description: "" },
+  { id: "5f9bda55dcdf6b0c04f1878b", shortName: "PEDDERS", description: "" },
+  { id: "5f9bda55dcdf6b0c04f1878a", shortName: "WHITELINE", description: "" },
+];
+
 // export const categories = [
 //   {
 //     title: "clutch",
