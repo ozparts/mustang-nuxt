@@ -38,15 +38,15 @@
         <p>{{ product.parameter }}</p>
         <p>{{ product.description || "Brake Pads:" }}</p>
       </div>
+      <div
+        v-else-if="product.item.manufacturergroup === Manufacturers.PEDDERS.id"
+        class="flex flex-col pt-4 text-sm font-semibold text-center"
+      >
+        <p>Parameter: {{ product.parameter }}</p>
+      </div>
       <div class="w-full mt-4 mb-2">
         <InStock v-if="product.item.available" size="26px" />
-        <ToOrder
-          size="26px"
-          v-else-if="
-            product.item.manufacturerstock || product.item.manufacturerstock2
-          "
-        />
-        <OutOfStock v-else size="26px" />
+        <CheckAvailability size="26px" v-else />
       </div>
     </div>
 
