@@ -1,4 +1,11 @@
 <template>
+  <Head>
+    <Title> Our brands | Mustang Performance </Title>
+    <Meta
+      name="description"
+      content="Discover top brands for Ford Mustang. Quality Disc Brakes, Clutches, Exhaust systems, Engine bearings from DBA, Pedders, ACL, Hawk, and more."
+    />
+  </Head>
   <section class="font-nunito">
     <Banner title="Our brands" />
     <div class="container py-10 mx-auto">

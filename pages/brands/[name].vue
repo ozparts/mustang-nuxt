@@ -1,4 +1,12 @@
 <template>
+  <Head>
+    <Title>
+      Our brands |
+      {{ state.brand.name }}
+      | Mustang Performance
+    </Title>
+    <Meta name="description" :content="state.brand.metaDescription" />
+  </Head>
   <section class="text-gray-600 font-nunito">
     <Banner :title="state.brand.name" />
     <div
@@ -8,9 +16,12 @@
       <div
         class="flex flex-col items-center mb-10 text-left lg:flex-grow md:w-1/2 lg:pr-10 md:!pr-16 md:items-start md:!text-left md:!mb-0"
       >
-        <h1 class="mb-4 font-medium text-black sm:text-lg">
+        <h2 class="mb-4 text-lg font-semibold text-black sm:text-2xl">
+          {{ state.brand.title }}
+        </h2>
+        <p class="mb-4 sm:text-base">
           {{ state.brand.description.header }}
-        </h1>
+        </p>
         <p class="text-sm leading-relaxed sm:text-base">
           {{ state.brand.description.body }}
         </p>
