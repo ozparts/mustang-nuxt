@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <Title> Cookie policy | Mustang Performance </Title>
+    <Meta name="description" content="Cookie policy" />
+  </Head>
   <Banner title="Cookie policy" />
   <section
     class="container mx-auto px-4 sm:px-0 py-5 sm:py-10 font-nunito sm:max-w-[540px] md:max-w-[720px] lg:max-w-[980px] xl:max-w-[1140px] 2xl:max-w-[1440px]"

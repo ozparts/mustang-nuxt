@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <Title> Contact Us | Mustang Performance </Title>
+    <Meta name="description" content="Contact Us" />
+  </Head>
   <Banner title="GENERAL ENQUIRIES" />
   <FormGeneralEnquiry />
   <Banner title="dealer/distributor enquiry form" />

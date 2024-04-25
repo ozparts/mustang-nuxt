@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <Title> Shipping options | Mustang Performance </Title>
+    <Meta name="description" content="Shipping options" />
+  </Head>
   <Banner title="Shipping options" />
 
   <section

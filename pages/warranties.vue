@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <Title> Warranties | Mustang Performance </Title>
+    <Meta name="description" content="Warranties" />
+  </Head>
   <Banner title="Warranties" />
 
   <section
