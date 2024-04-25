@@ -21,13 +21,13 @@
       <div
         class="absolute bottom-[16%] ml-2 w-[30%] text-white min-[500px]:bottom-[20%] min-[500px]:left-[2.5%]"
       >
-        <div
+        <h1
           class="font-nunito-sans text-[10px] min-[374px]:text-xs min-[550px]:text-base sm:text-xl font-medium uppercase italic tracking-wider min-[450px]:text-sm md:text-2xl min-[900px]:text-3xl lg:text-[34px]"
         >
           <p class="md:mb-1">sharing</p>
           <p class="md:mb-3">our passion</p>
           <p class="md:mb-2">for mustangs</p>
-        </div>
+        </h1>
       </div>
 
       <div

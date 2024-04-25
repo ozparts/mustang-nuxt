@@ -22,11 +22,11 @@
           class="flex flex-wrap flex-grow mt-10 -mb-10 text-center md:!pl-20 md:!mt-0 md:!text-left"
         >
           <div class="w-full px-4 lg:w-1/3 md:w-1/2">
-            <h2
+            <div
               class="mb-3 text-sm font-bold tracking-wide uppercase font-nunito-sans"
             >
               Our Policies
-            </h2>
+            </div>
             <nav class="mb-10 text-[15px] list-none font-nunito h-full">
               <ul>
                 <li>
@@ -54,11 +54,11 @@
             </nav>
           </div>
           <div class="w-full px-4 lg:w-1/3 md:w-1/2">
-            <h2
+            <div
               class="mb-3 text-sm font-bold tracking-wide uppercase font-nunito-sans"
             >
               useful links
-            </h2>
+            </div>
             <nav class="mb-10 text-[15px] list-none font-nunito">
               <ul>
                 <li>
@@ -86,11 +86,11 @@
             </nav>
           </div>
           <div class="w-full px-4 lg:w-1/3 md:w-1/2">
-            <h2
+            <div
               class="mb-3 text-sm font-bold tracking-wide uppercase font-nunito-sans"
             >
               contact
-            </h2>
+            </div>
             <nav class="mb-10 text-[15px] list-none font-nunito">
               <ul>
                 <li>
