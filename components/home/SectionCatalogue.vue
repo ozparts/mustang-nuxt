@@ -1,10 +1,10 @@
 <template>
   <section class="pb-10">
-    <h3
+    <h2
       class="py-4 text-center font-open-sans text-lg font-bold uppercase text-[#040503] sm:!py-10 sm:text-[32px]"
     >
       catalogue
-    </h3>
+    </h2>
     <div
       class="grid grid-cols-1 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-3"
     >

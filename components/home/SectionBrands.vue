@@ -1,11 +1,11 @@
 <template>
   <section class="relative pb-8 text-center bg-white">
     <div>
-      <h3
+      <h2
         class="bg-[#ededed] py-4 font-open-sans text-lg font-bold uppercase text-[#040503] sm:!py-11 sm:text-[32px]"
       >
         Our brands
-      </h3>
+      </h2>
 
       <div class="my-3">
         <Swiper

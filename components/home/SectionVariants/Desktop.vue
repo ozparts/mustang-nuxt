@@ -1,10 +1,10 @@
 <template>
   <section class="relative mx-auto text-center">
-    <p
+    <h2
       class="py-3 font-open-sans text-lg font-bold uppercase text-[#040503] sm:!py-11 sm:text-[32px]"
     >
       Variants
-    </p>
+    </h2>
     <!-- <div class="grid grid-cols-1 grid-rows-none min-[540px]:hidden">
       <HomeSectionVariantsMobile
         :data="variant"
