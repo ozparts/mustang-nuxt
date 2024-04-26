@@ -176,7 +176,10 @@
     </p>
     <p class="mb-3 text-sm sm:text-base">
       You can download our return
-      <a href="http://dba4x4.home.pl/warranty/return/" target="_blank"
+      <a
+        href="http://dba4x4.home.pl/warranty/return/"
+        target="_blank"
+        title="Return form to download"
         ><span class="border-b border-black">form here</span></a
       >. Please, fill it out completely and send in the box with your return.
       Please include your details, part number and explain the reason of the
