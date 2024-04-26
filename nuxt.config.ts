@@ -25,14 +25,15 @@ export default defineNuxtConfig({
           src: `/gtm.js`,
         },
       ],
-      noscript: [
-        {
-          children: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWZSWWQV"
-          height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
-        },
-      ],
+      // noscript: [
+      //   {
+      //     children: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWZSWWQV"
+      //     height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
+      //   },
+      // ],
     },
   },
+
   devtools: { enabled: true },
   ssr: true,
   image: {
