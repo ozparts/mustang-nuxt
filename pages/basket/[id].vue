@@ -1,4 +1,11 @@
 <template>
+  <Head>
+    <Title> Your basket | Mustang Performance </Title>
+    <Meta
+      name="description"
+      content="Your basket. Ford Mustang auto parts. Easy to order, 2-4 days to deliver"
+    />
+  </Head>
   <UiOutOfStockPopUp />
   <Banner title="shopping cart" />
   <div class="container p-3 mx-auto overflow-hidden">

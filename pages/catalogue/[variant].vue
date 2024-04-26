@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <Title> Catalogue | {{ metaTitle }} | Mustang Performance </Title>
+    <Meta name="description" :content="metaDescription" />
+  </Head>
   <section class="container mx-auto">
     <Banner title="catalogue" />
 
@@ -80,6 +84,23 @@ onMounted(async () => {
     state.productList = results;
     state.selectedVariant = useRoute().query.variant;
     state.loader = false;
+  }
+});
+
+const metaTitle = computed(() => {
+  if (useRoute().query.variant) {
+    return useRoute().query.variant.split(" | ").join(", ");
+  } else {
+    return `Variant: ${state.selectedVariantFromParam}`;
+  }
+});
+
+const metaDescription = computed(() => {
+  const variant = useRoute().query.variant;
+  if (variant) {
+    return `Upgrade your Ford Mustang ${variant} with top-grade car parts. Find high-quality disc brakes, engine bearings, and more from leading brands like DBA, ACL or Pedders`;
+  } else {
+    return `Empower your Ford Mustang version ${state.selectedVariantFromParam} with our high-quality car parts. Impeccable disc brakes, durable clutches & more from trusted brands like ACS, Pedders or Xforce`;
   }
 });
 

@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <Title> Catalogue | {{ metaTitle }} | Mustang Performance </Title>
+    <Meta name="description" :content="metaDescription" />
+  </Head>
   <div class="container mx-auto py-5 sm:!py-10 md:!py-20 px-3 h-max">
     <div class="grid gap-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3">
       <div class="flex flex-col flex-grow mb-2 font-nunito">
@@ -115,6 +119,29 @@ onMounted(async () => {
     document.getElementById("start").scrollIntoView({
       behavior: "smooth",
     });
+  }
+});
+
+const metaTitle = computed(() => {
+  if (useRoute().query.variant) {
+    return useRoute().query.variant.split(" | ").join(", ");
+  } else if (useRoute().query.year) {
+    return `Ford Mustang year: ${useRoute().query.year}, 6th generation`;
+  } else {
+    return `Ford Mustang, 6th Generation`;
+  }
+});
+
+const metaDescription = computed(() => {
+  const variant = useRoute().query.variant;
+  if (variant) {
+    return `Unlock your Mustang ${variant
+      .split(" | ")
+      .join(
+        ", "
+      )}'s potential with our high-quality car parts. From DBA disc brakes to Pedders suspension parts, we've got you covered. Experience peak performance now`;
+  } else {
+    return `Boost your Ford Mustang performance with our exclusive range of parts. Shop Pedders springs and shocks, ACL engine bearings and more from top manufacturers`;
   }
 });
 
