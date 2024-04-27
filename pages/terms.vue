@@ -151,20 +151,12 @@
       (without any signs of opening) and include all original manufacturer's
       packaging and/or tags.
     </p>
-    <p v-if="host === 'UK'">
-      Please email us at
-      <a
-        href="mailto:support@mustangperformance.uk"
-        class="border-b border-black"
-        >support@mustangperformance.uk</a
-      >
-      before returning any products.
-    </p>
-    <p v-else>
+    <p>
       Please email us at
       <a
         href="mailto:support@mustangperformance.eu"
         class="border-b border-black"
+        title="Email to support"
         >support@mustangperformance.eu</a
       >
       before returning any products.
@@ -205,53 +197,7 @@
       will be rejected and sent back at the customer's cost.
     </p>
     <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">11. Shipping Options</h3>
-
-    <div v-if="host === 'UK'" class="flex px-2 mb-10 flex-column align-start">
-      <h4 class="mb-4">We use following companies to deliver your goods:</h4>
-      <h4 class="mb-4">1. Deliveries across the UK</h4>
-      <table class="mb-10">
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Estimated lead time (working days)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>UPS Standard service</td>
-            <td>1-2 days</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h4 class="mb-4">2. Deliveries from EU warehouse to the UK</h4>
-      <table class="mb-10">
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Estimated lead time (working days)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Raben</td>
-            <td>Approx 2-3 weeks*</td>
-          </tr>
-          <tr>
-            <td>DHL</td>
-            <td>Approx 2-3 weeks*</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <p class="mb-3 text-sm sm:text-base">
-        *Those deliveries are arranged every Monday, Wednesday, Friday.
-      </p>
-      <p class="mb-3 text-sm sm:text-base">
-        Given number of days does not include the day of the dispatch.
-      </p>
-    </div>
-    <div v-else>
+    <div>
       <div class="container mx-auto max-w-[1200px]">
         <div class="flex flex-col my-2">
           <h4 class="mb-4 text-sm sm:text-base">
@@ -366,7 +312,7 @@
         </div>
       </div>
     </div>
-    <div v-if="host === 'EU'">
+    <div>
       <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">
         12. LUCID Packaging Register number ( EPR )
       </h3>
@@ -378,8 +324,3 @@
     </div>
   </section>
 </template>
-
-<script setup>
-const store = useStore();
-const host = store.getHost();
-</script>

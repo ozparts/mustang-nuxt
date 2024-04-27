@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
-  @apply bg-red-900;
-} */
-
 @layer utilities {
   .text-wrap-balance {
     text-wrap: balance;
@@ -13,14 +9,10 @@
 }
 
 @layer components {
-  .btn {
+  /* .btn {
     @apply rounded-md bg-[#12b488] px-3 py-2 text-sm text-white;
-  }
+  } */
 
-  .btn2 {
-    @apply cursor-pointer tw-rounded-md bg-blue-500 px-4 py-2 text-white shadow-md;
-    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-  }
   .btn:hover {
     background-color: #3182ce;
     transform: scale(1.05);
@@ -33,20 +25,4 @@
   .btn-blue {
     @apply rounded-lg bg-[#0052a5] px-4 py-2 font-nunito text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-[#0052a5] focus:ring-opacity-50;
   }
-
-  /* .btnOptions {
-    @apply mx-1 scale-100 transform rounded-md bg-gray-700 px-6 py-2 text-white shadow-md transition-transform hover:scale-105 hover:shadow-lg active:shadow-sm;
-  }
-
-  .btnOptions-active {
-    @apply mx-1 scale-100 transform rounded-md bg-gray-700 px-6 py-2 text-white shadow-md outline-none ring-2 ring-gray-600 ring-offset-2 transition-transform hover:scale-105 hover:shadow-lg  active:shadow-sm;
-  } */
-
-  /* .btnOptions {
-    @apply mx-1 w-[90%] scale-100 transform rounded-md bg-gray-700 p-1 text-white shadow-md transition-transform hover:scale-105 hover:shadow-lg active:shadow-sm sm:w-auto sm:px-6 sm:py-2;
-  }
-
-  .btnOptions-active {
-    @apply mx-1 w-[90%] scale-100 transform rounded-md bg-gray-700 p-1 text-white shadow-md outline-none ring-2 ring-gray-600 ring-offset-2 transition-transform hover:scale-105 hover:shadow-lg active:shadow-sm sm:w-auto sm:px-6  sm:py-2;
-  } */
 }
