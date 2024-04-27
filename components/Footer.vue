@@ -15,6 +15,7 @@
               src="/mustang/mustang_logo.png"
               provider="cloudinary"
               width="200px"
+              loading="lazy"
             />
           </nuxt-link>
         </div>
