@@ -325,7 +325,9 @@ const getStockQuantity = (arr) => {
   return arr.find((obj) => obj.location === LOCATION.EU).quantityavailable;
 };
 const getManfacturerQuantity = (arr) => {
-  return arr.find((obj) => obj.location === "manufacturer").quantityavailable;
+  const manufacturer = arr.find((obj) => obj.location === "manufacturer");
+
+  return manufacturer ? manufacturer.quantityavailable : 0;
 };
 
 const calculateInitialProductPrice = (price, productType) => {
@@ -446,6 +448,33 @@ const availabilityStatusInfo = computed(() => {
       return productType === "discbrake"
         ? "Available in 3 weeks with extra cost"
         : "Available in 3 weeks";
+    } else {
+      state.productAvailability.outOfStock = true;
+      state.productStatus = "outOfStock";
+
+      return "Temporarily out of stock";
+    }
+  } else if (product.manufacturergroup === Manufacturers.PEDDERS.id) {
+    const backOrder = state.product.available.find(
+      (obj) => obj.location === LOCATION.EU
+    ).specialbackorder;
+
+    if (
+      state.quantityOrder + state.quantityInBasket <=
+      state.productAvailability.inStock
+    ) {
+      state.productAvailability.outOfStock = false;
+      state.productStatus = "inStock";
+      return "Available and ready to ship (2-4 days delivery)";
+    } else if (
+      backOrder &&
+      state.quantityOrder + state.quantityInBasket <=
+        state.productAvailability.inStock +
+          state.productAvailability.manufacturer
+    ) {
+      state.productAvailability.outOfStock = false;
+      state.productStatus = "air";
+      return "Delivery within 3 weeks";
     } else {
       state.productAvailability.outOfStock = true;
       state.productStatus = "outOfStock";
