@@ -19,7 +19,7 @@ const props = defineProps([
 
 const store = useStore();
 const country = store.getCountry();
-const cart_id = store.getCartId();
+const cartId = store.getCartId();
 
 const local = useAvlInLocation(props.product, LOCATION);
 const stock = useAvlInManstock(props.product);
@@ -30,21 +30,34 @@ const serviceCode =
     : "5e0dbaba9e33df43f0b3a4f3";
 const additionalservice = local === 0 && stock > 0 ? [serviceCode] : [];
 
+const state = {
+  cartId: null,
+};
+
+onMounted(() => {
+  state.cartId = cartId ? cartId : state.cartId;
+});
+
 const addToBasket = async () => {
   const resp = await useAddToBasket(
     props.quantity,
     props.product.id,
     country.code,
-    cart_id,
+    state.cartId,
     props.productStatus === "air" && productType === "discbrake"
       ? [serviceCode]
       : []
   );
 
+  if (!state.cartId) {
+    store.setCartId(resp.cart_id);
+    state.cartId = resp.cart_id;
+  } else {
+    state.cartId = resp.cart_id;
+  }
   const data = await useGetCart(country.code, resp.cart_id);
   store.setBasketQuantity(
     countBasketQuantity(data.shoppingcarts[0].shoppingcart.transactionlines)
   );
-  store.setCartId(resp.cart_id);
 };
 </script>
