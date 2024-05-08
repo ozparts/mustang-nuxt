@@ -38,17 +38,17 @@ const store = useStore();
 const state = reactive({
   showDialog: "",
 });
-const mustangConsent = useCookie("mustang-consent");
+const mustangCookieConsent = useCookie("mustang-consent");
 
 onMounted(() => {
-  if (!mustangConsent.value || !store.cookiesConsent) {
+  if (!mustangCookieConsent.value || !store.cookiesConsent) {
     state.showDialog = true;
   }
 });
 
 const handleCookieDecision = (value) => {
   store.setCookieConsent(value);
-  mustangConsent.value = value;
+  mustangCookieConsent.value = value;
 
   if (value) {
     window.consentGrantedAdStorage();

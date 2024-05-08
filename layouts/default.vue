@@ -15,12 +15,13 @@
 
 <script setup>
 const store = useStore();
-const mustangConsent = useCookie("mustang-consent");
-const country = await useCountry();
-store.setCountry(country);
+const years = store.getProductYears();
+const mustangCookieConsent = useCookie("mustang-consent");
+const mustangCookieCountry = useCookie("mustang-country");
 
 onMounted(async () => {
-  const years = store.getProductYears();
+  await cookieHandler();
+
   if (!years.length) {
     const { options } = await useGetApplications(false);
     store.setProductYears(options.peryear);
@@ -30,10 +31,19 @@ onMounted(async () => {
     window.location.host === "mustangperformance.eu"
       ? store.setHost("EU")
       : store.setHost("UK");
-
-    if (mustangConsent.value) {
-      window.consentGrantedAdStorage();
-    }
   }
 });
+
+const cookieHandler = async () => {
+  if (!mustangCookieCountry.value) {
+    const country = await useCountry();
+    store.setCountry(country);
+    mustangCookieCountry.value = country;
+  } else {
+    store.setCountry(mustangCookieCountry.value);
+  }
+  if (mustangCookieConsent.value) {
+    window.consentGrantedAdStorage();
+  }
+};
 </script>
