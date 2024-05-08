@@ -157,7 +157,7 @@
                 <Enquiry :product="state.product.name" />
               </div>
               <div v-else>
-                <div v-if="mustangConsent">
+                <div v-if="mustangCookieConsent">
                   <AddToCartBtn
                     @click="() => addToCartPopUpHandler()"
                     :product="product"
@@ -206,7 +206,7 @@ import { LOCATION, Manufacturers, metaInfo } from "../../vars/index";
 const { record } = useRoute().params;
 const store = useStore();
 const country = store.getCountry();
-const mustangConsent = useCookie("mustang-consent");
+const mustangCookieConsent = useCookie("mustang-consent");
 
 const shoppingCart = await useGetCart(country.code, store.cartId);
 const product = await useGetItem(record, country.code);
@@ -215,9 +215,6 @@ const productType = getProductType(product.name);
 
 const state = reactive({
   product: {},
-  pageTitle: "",
-  pageDescription: "",
-  shortName: "",
   quantityOrder: productType === "discbrake" ? 2 : 1,
   quantityInBasket: 0,
   selectedFoto: "",
@@ -241,8 +238,9 @@ const state = reactive({
 });
 
 onMounted(() => {
-  checkQuantityInBasket();
-  if (mustangConsent.value) {
+  state.product = product;
+  init();
+  if (mustangCookieConsent.value) {
     state.cookieConsent = true;
     store.setCookieConsent(true);
   } else {
@@ -252,7 +250,18 @@ onMounted(() => {
 });
 
 const addToCartPopUp = ref(false);
+const init = () => {
+  checkQuantityInBasket();
+  kitItemCheck();
+  assignProductAvailability(state.product);
+  checkAvailabilityStatus();
 
+  if (state.product.photos.length > 0) {
+    state.selectedFoto = state.product.photos[0].url;
+  } else {
+    state.selectedFoto = "";
+  }
+};
 const openModal = () => {
   state.dialog = !state.dialog;
 };
@@ -270,14 +279,6 @@ const checkQuantityInBasket = () => {
     }
   }
 };
-
-state.product = product;
-
-if (state.product.photos.length > 0) {
-  state.selectedFoto = state.product.photos[0].url;
-} else {
-  state.selectedFoto = "";
-}
 
 // FUNKCJE
 
@@ -322,12 +323,16 @@ const checkAvailabilityStatus = () => {
 };
 
 const getStockQuantity = (arr) => {
-  return arr.find((obj) => obj.location === LOCATION.EU).quantityavailable;
+  const stock = arr.find((obj) => obj.location === LOCATION.EU);
+  return stock ? stock.quantityavailable : 0;
 };
-const getManfacturerQuantity = (arr) => {
-  const manufacturer = arr.find((obj) => obj.location === "manufacturer");
 
-  return manufacturer ? manufacturer.quantityavailable : 0;
+const getManfacturerQuantity = (arr) => {
+  const manufacturer = arr.find(
+    (obj) => obj.location === "manufacturer"
+  ).quantityavailable;
+
+  return manufacturer ? manufacturer : 0;
 };
 
 const calculateInitialProductPrice = (price, productType) => {
@@ -409,93 +414,54 @@ const kitItemCheck = () => {
     state.kitItem.components = product.components.map((obj) => obj.number);
   }
 };
-kitItemCheck();
-assignProductAvailability(product);
-checkAvailabilityStatus();
 
 const availabilityStatusInfo = computed(() => {
-  if (product.manufacturergroup === Manufacturers.DBA.id) {
-    if (
-      state.quantityOrder + state.quantityInBasket <=
-      state.productAvailability.inStock
-    ) {
-      state.productAvailability.outOfStock = false;
-      state.productStatus = "inStock";
+  const backOrder = !!state.product.available.find(
+    (obj) => obj.location === LOCATION.EU
+  ).specialbackorder;
 
-      return "Available and ready to ship (2-4 days delivery)";
-    } else if (
-      state.quantityOrder + state.quantityInBasket >
-        state.productAvailability.inStock &&
-      state.quantityOrder + state.quantityInBasket <=
-        state.productAvailability.intransit.quantity +
-          state.productAvailability.inStock
-    ) {
-      state.productAvailability.outOfStock = false;
-      state.productStatus = "inTransit";
+  if (
+    state.quantityOrder + state.quantityInBasket <=
+    state.productAvailability.inStock
+  ) {
+    state.productAvailability.outOfStock = false;
+    state.productStatus = "inStock";
 
-      return "Product in transit - delivery within 3 weeks";
-    } else if (
-      state.productAvailability.inStock <
-        state.quantityOrder + state.quantityInBasket &&
-      state.productAvailability.inStock +
-        state.productAvailability.manufacturer +
-        state.productAvailability.intransit.quantity >=
-        state.quantityOrder + state.quantityInBasket
-    ) {
-      state.productAvailability.outOfStock = false;
-      state.productStatus = "air";
-
-      return productType === "discbrake"
-        ? "Available in 3 weeks with extra cost"
-        : "Available in 3 weeks";
-    } else {
-      state.productAvailability.outOfStock = true;
-      state.productStatus = "outOfStock";
-
-      return "Temporarily out of stock";
-    }
-  } else if (product.manufacturergroup === Manufacturers.PEDDERS.id) {
-    const backOrder = state.product.available.find(
-      (obj) => obj.location === LOCATION.EU
-    ).specialbackorder;
-
-    if (
-      state.quantityOrder + state.quantityInBasket <=
-      state.productAvailability.inStock
-    ) {
-      state.productAvailability.outOfStock = false;
-      state.productStatus = "inStock";
-      return "Available and ready to ship (2-4 days delivery)";
-    } else if (
-      backOrder &&
-      state.quantityOrder + state.quantityInBasket <=
-        state.productAvailability.inStock +
-          state.productAvailability.manufacturer
-    ) {
-      state.productAvailability.outOfStock = false;
-      state.productStatus = "air";
-      return "Delivery within 3 weeks";
-    } else {
-      state.productAvailability.outOfStock = true;
-      state.productStatus = "outOfStock";
-
-      return "Temporarily out of stock";
-    }
+    return "Available and ready to ship (2-4 days delivery)";
   } else {
     if (
-      state.quantityOrder + state.quantityInBasket <=
-      state.productAvailability.inStock
+      product.manufacturergroup === Manufacturers.DBA.id ||
+      (product.manufacturergroup === Manufacturers.PEDDERS.id && backOrder)
     ) {
-      state.productAvailability.outOfStock = false;
-      state.productStatus = "inStock";
+      if (
+        state.quantityOrder + state.quantityInBasket >
+          state.productAvailability.inStock &&
+        state.quantityOrder + state.quantityInBasket <=
+          state.productAvailability.intransit.quantity +
+            state.productAvailability.inStock
+      ) {
+        state.productAvailability.outOfStock = false;
+        state.productStatus = "inTransit";
+        return "Product in transit - delivery within 3 weeks";
+      } else if (
+        state.productAvailability.inStock <
+          state.quantityOrder + state.quantityInBasket &&
+        state.productAvailability.inStock +
+          state.productAvailability.manufacturer +
+          state.productAvailability.intransit.quantity >=
+          state.quantityOrder + state.quantityInBasket
+      ) {
+        state.productAvailability.outOfStock = false;
+        state.productStatus = "air";
 
-      return "Available and ready to ship (2-4 days delivery)";
-    } else {
-      state.productAvailability.outOfStock = true;
-      state.productStatus = "outOfStock";
-
-      return "Temporarily out of stock";
+        return productType === "discbrake"
+          ? "Available in 3 weeks with extra cost"
+          : "Available in 3 weeks";
+      }
     }
+    state.productAvailability.outOfStock = true;
+    state.productStatus = "outOfStock";
+    return "Temporarily out of stock";
   }
 });
 

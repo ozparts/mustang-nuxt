@@ -10,7 +10,7 @@
     <p class="mx-1 sm:mx-2">{{ availabilityStatusInfo }}</p>
     <div
       class="daisy-tooltip daisy-tooltip-left flex cursor-pointer items-center text-xs sm:daisy-tooltip-top before:text-xs before:content-[attr(data-tip)] before:sm:!text-sm"
-      :data-tip="`Product in stock: ${arrivalDate}. Delivery: ~ 2-4 days.`"
+      :data-tip="`Expected in stock: ${arrivalDate}.`"
       v-if="props.productStatus === 'inTransit'"
     >
       <Icon name="radix-icons:question-mark-circled" :size="iconSize" />
