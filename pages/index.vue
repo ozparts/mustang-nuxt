@@ -24,6 +24,4 @@ state.categories = options.categorymaster;
 state.variants = options.variant;
 state.years = options.peryear;
 store.setProductYears(options.peryear);
-
-console.log(config);
 </script>
