@@ -73,7 +73,7 @@ export default defineNuxtConfig({
     public: {
       paypal_EU: process.env.NUXT_ENV_PAYPAL_TOKEN_EU,
       paypal_PL: process.env.NUXT_ENV_PAYPAL_TOKEN_PL,
-      paypal_UK: process.env.VUE_APP_PAYPAL_TOKEN_UK,
+      paypal_UK: process.env.NUXT_ENV_PAYPAL_TOKEN_UK,
     },
   },
   tailwindcss: {

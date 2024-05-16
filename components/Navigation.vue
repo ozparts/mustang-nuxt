@@ -26,9 +26,9 @@
         </li>
         <li class="w-full">
           <a
-            @click="goTo(`/summary/${state.id}`)"
+            @click="goTo(`/order/${state.id}`)"
             :class="[
-              props.route.name === 'summary-id' ? 'underline' : '',
+              props.route.name === 'order-id' ? 'underline' : '',
               isSummaryDisabled() ? 'pointer-events-none' : '',
             ]"
             >Summary
@@ -36,9 +36,9 @@
         </li>
         <li class="w-full">
           <a
-            @click="goTo(`/order/${state.id}`)"
+            @click="goTo(`/order/payment/${state.id}`)"
             :class="[
-              props.route.name === 'order-id' ? 'underline' : '',
+              props.route.name === 'order-payment-id' ? 'underline' : '',
               isSummaryDisabled() ? 'pointer-events-none' : '',
             ]"
             >Payment
@@ -72,8 +72,8 @@ const goTo = (link) => {
 };
 
 function isCartDisabled() {
-  return props.route.name === "summary-id" ||
-    props.route.name === "order-id" ||
+  return props.route.name === "order-id" ||
+    props.route.name === "order-payment-id" ||
     props.route.name === "status-payment"
     ? true
     : false;

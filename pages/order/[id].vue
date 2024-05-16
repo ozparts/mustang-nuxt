@@ -1,86 +1,138 @@
 <template>
   <Navigation :route="name" />
-  <div
-    class="my-10 text-xl font-bold text-center uppercase sm:my-20 sm:text-3xl font-nunito"
-  >
-    <h1
-      v-if="
-        state.order &&
-        state.order.status._id === 'pendingapproval' &&
-        state.order.status._id !== 'closed' &&
-        !state.order.paymentstatus
-      "
-      class="mt-4 text-center uppercase"
-    >
-      Pay for the order<br /><span class="text-red-600">{{
-        state.order.name
-      }}</span>
-    </h1>
 
+  <div v-if="state.order" class="my-6 sm:!my-10">
+    <h2
+      class="my-6 text-xl font-bold text-center uppercase sm:!my-8 sm:text-2xl font-nunito"
+    >
+      Your order <span class="text-red-600">{{ state.order.name }}</span
+      ><br />
+      has been received.
+    </h2>
     <div
-      v-if="
-        state.order &&
-        state.order.paymentstatus &&
-        state.order.paymentstatus === 'fullypaid'
-      "
-      class="flex flex-col lg:my-16"
+      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mx-auto mb-5"
     >
-      <h1 class="mt-4 text-center uppercase">
-        Your order has been paid<br /><span class="text-red-600">{{
-          state.order.name
-        }}</span>
-      </h1>
-      <NuxtLink to="/" class="mx-auto my-6">
-        <button
-          class="font-semibold uppercase btn-red sm:btn-red daisy-btn daisy-btn-block daisy-btn-sm sm:daisy-btn hover:bg-red-800"
+      <h3
+        class="py-3 text-xl italic font-bold tracking-tighter text-center border-b-[1px] sm:text-2xl border-mustangRed"
+      >
+        ORDER SUMMARY
+      </h3>
+      <div
+        v-for="item in filterOrderList"
+        class="grid grid-cols-[100px_auto] sm:!grid-cols-[120px_auto] gap-2 border-b-[1px] border-mustangRed p-4 font-nunito"
+      >
+        <div
+          class="self-start p-1 border-[1px] border-mustangRed"
+          :class="
+            `${item.item.recordtype}` === 'service'
+              ? 'bg-[#F6F6F6]'
+              : 'bg-[white]'
+          "
         >
-          Home Page
-        </button>
-      </NuxtLink>
-    </div>
+          <nuxt-img
+            v-if="item.item.photos[0]"
+            format="webp"
+            :src="`${
+              item.item?.photos[1]?.url
+                ? item.item.photos[1].url
+                : item.item.photos[0].url
+            }`"
+            width="125px"
+            class="h-[100px] object-contain w-[100px] sm:!w-[120px]"
+            :class="
+              item.item.recordtype === 'service' ? 'bg-[#F6F6F6]' : 'bg-white'
+            "
+          />
+          <nuxt-img
+            v-else
+            format="webp"
+            src="/mustang/no_image.jpg"
+            alt="No image"
+            provider="cloudinary"
+            width="120px"
+            height="100px"
+            fit="contain"
+            sizes="100px sm:120px"
+            background="white"
+          />
+        </div>
 
+        <div class="flex flex-col justify-between gap-2">
+          <div class="flex flex-col gap-0.5">
+            <span class="text-sm font-bold sm:text-lg">
+              {{ item.item.name }}
+            </span>
+            <span class="text-xs sm:text-sm">
+              {{ item.item.description }}
+            </span>
+          </div>
+
+          <div class="flex gap-4 text-[13px] sm:gap-4 sm:text-base">
+            <div class="flex-col text-center">
+              <p class="font-bold text-mustangRed">Quantity:</p>
+              <p class="font-bold">{{ item.quantity }}</p>
+            </div>
+
+            <div class="flex-col text-center">
+              <p class="font-bold text-mustangRed">Unit price:</p>
+              <p class="font-bold">
+                {{ state.order.currency.symbol }} {{ item.price }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col gap-1 p-4 border-b-[1px] border-mustangRed">
+        <div class="flex justify-between font-bold uppercase">
+          <p>subtotal</p>
+          <p>
+            {{ state.order.currency.symbol }}
+            {{ state.order.grossitemsamount.toFixed(2) }}
+          </p>
+        </div>
+        <div class="flex justify-between font-bold uppercase">
+          <p>shipping</p>
+          <p>
+            {{ state.order.currency.symbol }}
+            {{ state.order.grossshippingcost.toFixed(2) }}
+          </p>
+        </div>
+      </div>
+      <div class="flex justify-between p-4 text-lg">
+        <h3 class="font-bold uppercase">total</h3>
+        <h3 class="font-bold">
+          {{ state.order.currency.symbol }}
+          {{ state.order.grossamount.toFixed(2) }}
+        </h3>
+      </div>
+    </div>
     <div
-      v-if="state.order && state.order.status._id === 'closed'"
-      class="flex flex-col lg:my-16"
+      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mx-auto mb-5"
     >
-      <h1 class="mt-4 text-center uppercase">
-        Your order has been closed<br /><span class="text-red-600">{{
-          state.order.name
-        }}</span>
-      </h1>
-      <NuxtLink to="/" class="mx-auto my-6">
-        <button
-          class="font-semibold text-white uppercase daisy-btn daisy-btn-block daisy-btn-primary"
+      <div v-if="state.order">
+        <h3
+          class="py-3 text-xl italic font-bold tracking-tighter text-center border-b-[1px] sm:text-2xl border-mustangRed uppercase"
         >
-          Home Page
-        </button>
-      </NuxtLink>
+          Shipping details
+        </h3>
+        <div class="flex flex-col gap-1 p-4 text-sm sm:text-base">
+          <p>
+            {{ state.order.shipaddressee || state.order.shipname }}
+          </p>
+          <p>{{ state.order.shipaddress }}</p>
+          <p>{{ state.order.shipzip }} {{ state.order.shipcity }}</p>
+          <p>{{ state.order.shipcountryname }}</p>
+        </div>
+      </div>
     </div>
-
-    <revolut
-      v-if="
-        ((state.order && state.paymentId === 'revolut') ||
-          (state.order && state.paymentId === 'revolutuk')) &&
-        state.order.status._id === 'pendingapproval' &&
-        state.order.status._id !== 'closed' &&
-        !state.order.paymentstatus
-      "
-      :order="state.order"
-      @success="showSuccess({ status: 'COMPLETED' })"
-      @error="(error) => showError(error)"
-    />
-
-    <paypal
-      v-if="
-        state.order &&
-        state.paymentId === '607468324e5b797a767fe87d' &&
-        state.order.status._id === 'pendingapproval' &&
-        state.order.status._id !== 'closed' &&
-        !state.order.paymentstatus
-      "
-      @success="showSuccess({ status: 'COMPLETED' })"
-      @error="(error) => showError(error)"
-    />
+    <div class="max-w-[400px] mx-auto">
+      <button
+        @click="navigateTo(`/order/payment/${route.params.id}`)"
+        class="font-semibold uppercase btn-red sm:btn-red daisy-btn daisy-btn-block daisy-btn-sm sm:daisy-btn"
+      >
+        pay for the order
+      </button>
+    </div>
   </div>
 </template>
 
@@ -89,21 +141,17 @@ const store = useStore();
 const country = store.getCountry();
 const route = useRoute();
 const name = computed(() => route);
+
 const state = reactive({
   order: null,
-  paymentId: "",
 });
 
 onMounted(async () => {
   const order = await useGetOrder(route.params.id, country.code);
   state.order = order;
-  state.paymentId = order.paymentmethod._id;
 });
 
-const showSuccess = async (data) => {
-  if (data.status === "COMPLETED") {
-    await useSetPaymentStatus(route.params.id);
-    navigateTo(`/summary/payment`);
-  }
-};
+const filterOrderList = computed(() => {
+  return state.order.transactionlines.filter((obj) => obj.price !== 0);
+});
 </script>
