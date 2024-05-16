@@ -25,5 +25,5 @@ state.variants = options.variant;
 state.years = options.peryear;
 store.setProductYears(options.peryear);
 
-console.log(config, process, "START>?");
+console.log(config);
 </script>
