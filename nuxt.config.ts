@@ -71,8 +71,9 @@ export default defineNuxtConfig({
     apiSecret: "",
     // Keys within public are also exposed client-side
     public: {
-      apiBase: "",
-      secretKey: "",
+      paypal_EU: process.env.PAYPAL_TOKEN_EU,
+      paypal_PL: process.env.PAYPAL_TOKEN_PL,
+      paypal_UK: process.env.PAYPAL_TOKEN_UK,
     },
   },
   tailwindcss: {
