@@ -9,7 +9,7 @@
 
 <script setup>
 const store = useStore();
-
+const config = useRuntimeConfig();
 const state = reactive({
   variantsWithHorsepower: [],
   categories: [],
@@ -24,4 +24,6 @@ state.categories = options.categorymaster;
 state.variants = options.variant;
 state.years = options.peryear;
 store.setProductYears(options.peryear);
+
+console.log(config, process, "START>?");
 </script>
