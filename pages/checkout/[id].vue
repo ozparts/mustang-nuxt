@@ -579,6 +579,11 @@
         </div>
       </div>
     </section>
+    <ChangeCurrency
+      :changeCurrency="state.changeCurrency"
+      :currency="state.newCurrency"
+      @clicked="updateCurrency"
+    />
   </ClientOnly>
 </template>
 
@@ -610,6 +615,7 @@ const cookieConsent = computed(() => {
 const name = computed(() => route);
 
 const state = reactive({
+  basket: null,
   agreedToTerms: false,
   vat: false,
   taxnumber: "",
@@ -626,11 +632,14 @@ const state = reactive({
   loading: false,
   backOrderInfo: false,
   discount: null,
+  changeCurrency: false,
+  newCurrency: "",
 });
 
 onMounted(async () => {
   const basket = await useGetCart(country.code, cart_id);
   assignBasket(basket);
+  state.basket = basket.shoppingcarts[0].shoppingcart;
 });
 
 const countries =
@@ -660,6 +669,27 @@ const countryPrefix = computed(() => {
     )[1];
   }
 });
+
+const checkCurrency = async (value) => {
+  if (value === "PL" && state.basket.currency._id !== "pln") {
+    state.newCurrency = "pln";
+    state.changeCurrency = true;
+  } else if (value !== "PL" && state.basket.currency._id !== "eur") {
+    state.newCurrency = "eur";
+    state.changeCurrency = true;
+  } else {
+    state.changeCurrency = false;
+  }
+};
+
+const updateCurrency = async (val) => {
+  if (val) {
+    await useUpdateCartField(cart_id, null, "currency", state.newCurrency);
+    const basket = await useGetCart(country.code, cart_id);
+    assignBasket(basket);
+  }
+  state.changeCurrency = false;
+};
 
 const promoCodeHandler = async (code) => {
   state.promoCode = "";
@@ -722,6 +752,7 @@ const assignBasket = (basket) => {
   state.backOrderInfo = basket.shoppingcarts[0].shoppingcart.backorderquantity;
   state.discount =
     basket.shoppingcarts[0].shoppingcart.transactionlines[0].discountrate;
+  state.basket = basket.shoppingcarts[0].shoppingcart;
 };
 
 const billingAddressHandler = () => {
@@ -818,7 +849,7 @@ const createAddress = async () => {
       store.clearBillingForm();
       store.clearShippingForm();
       state.loading = false;
-      navigateTo(`/summary/${transaction._id}`);
+      navigateTo(`/order/${transaction._id}`);
     } else {
       console.log(e);
     }
@@ -988,6 +1019,7 @@ watch(
     const changes = [{ field: "shippingmethod", value: "" }];
     await handleChange(changes);
     updateTax();
+    checkCurrency(country.code);
     if (shippingForm.shippingMethod._id) shippingForm.shippingMethod._id = "";
   }
 );

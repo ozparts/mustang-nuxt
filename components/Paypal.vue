@@ -23,6 +23,7 @@ onMounted(async () => {
   state.order = order;
   const currency = order.currency.name;
   let token = "";
+
   if (currency === "GBP") {
     token = runtimeConfig.public.paypal_UK;
   } else if (currency === "PLN") {
