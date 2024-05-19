@@ -74,6 +74,8 @@ export default defineNuxtConfig({
       paypal_EU: process.env.NUXT_ENV_PAYPAL_TOKEN_EU,
       paypal_PL: process.env.NUXT_ENV_PAYPAL_TOKEN_PL,
       paypal_UK: process.env.NUXT_ENV_PAYPAL_TOKEN_UK,
+      recaptcha_site_key: process.env.NUXT_ENV_RECAPTCHA_SITE_KEY,
+      recaptcha_secret_key: process.env.NUXT_ENV_RECAPTCHA_SECRET_KEY,
     },
   },
   tailwindcss: {

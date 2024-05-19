@@ -600,6 +600,9 @@ import {
   numeric,
 } from "@vuelidate/validators";
 
+import { useReCaptcha } from "vue-recaptcha-v3";
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
 const store = useStore();
 const route = useRoute();
 const cart_id = route.params.id;
@@ -766,8 +769,14 @@ const handleChange = async (changes) => {
   const basket = await useUpdateCartFields(cart_id, changes);
   assignBasket(basket);
 };
-
 const createAddress = async () => {
+  await recaptchaLoaded();
+  const token = await executeRecaptcha("submit");
+  const res = await $fetch(`/api/verify-recaptcha/${token}`);
+
+  console.log(executeRecaptcha, token, { res });
+};
+const createAddress2 = async () => {
   const [shippingCountry] = countriesArray.filter(
     (el) => el.name === shippingForm.country
   );
