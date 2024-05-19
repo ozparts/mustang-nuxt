@@ -774,7 +774,7 @@ const createAddress = async () => {
   const token = await executeRecaptcha("submit");
   const res = await $fetch(`/api/verify-recaptcha/${token}`);
 
-  console.log(executeRecaptcha, token, { res });
+  console.log({ executeRecaptcha }, { token }, { res });
 };
 const createAddress2 = async () => {
   const [shippingCountry] = countriesArray.filter(
