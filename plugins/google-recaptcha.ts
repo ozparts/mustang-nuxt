@@ -1,6 +1,6 @@
 import { VueReCaptcha } from "vue-recaptcha-v3";
-const runtimeConfig = useRuntimeConfig();
 export default defineNuxtPlugin((nuxtApp) => {
+  const runtimeConfig = useRuntimeConfig();
   nuxtApp.vueApp.use(VueReCaptcha, {
     siteKey: runtimeConfig.public.recaptcha_site_key,
     loaderOptions: {
