@@ -549,7 +549,7 @@
             <div class="text-center">
               <button
                 v-if="state.orderButton"
-                @click="createAddress"
+                @click="placeOrder"
                 class="font-semibold text-white uppercase daisy-btn daisy-btn-sm daisy-btn-primary sm:daisy-btn sm:daisy-btn-primary daisy-btn-block"
               >
                 {{ !state.loading ? "place order" : "" }}
@@ -640,6 +640,7 @@ const state = reactive({
 });
 
 onMounted(async () => {
+  await recaptchaLoaded();
   const basket = await useGetCart(country.code, cart_id);
   assignBasket(basket);
   state.basket = basket.shoppingcarts[0].shoppingcart;
@@ -769,18 +770,31 @@ const handleChange = async (changes) => {
   const basket = await useUpdateCartFields(cart_id, changes);
   assignBasket(basket);
 };
-const createAddress = async () => {
-  await recaptchaLoaded();
-  const token = await executeRecaptcha("submit");
-  const res = await $fetch(`/api/verify-recaptcha/${token}`);
 
-  console.log({ executeRecaptcha }, { token }, { res });
+const setBillingAddress = async () => {
+  const [billingCountry] = countriesArray.filter(
+    (el) => el.name === billingForm.billCountryName
+  );
+  return await useCreateAddress(
+    cart_id,
+    {
+      address: `${billingForm.billAddress}`,
+      address2: `${billingForm.billAddress2}`,
+      addressee: `${shippingForm.firstName} ${shippingForm.lastName}`,
+      name: `${shippingForm.firstName} ${shippingForm.lastName}`,
+      city: `${billingForm.billCity}`,
+      zip: `${billingForm.billZip}`,
+    },
+    billingCountry.code
+  );
 };
-const createAddress2 = async () => {
+
+const createAddress = async () => {
   const [shippingCountry] = countriesArray.filter(
     (el) => el.name === shippingForm.country
   );
-  const address = await useCreateAddress(
+
+  const shippingAddress = await useCreateAddress(
     cart_id,
     {
       ...shippingForm,
@@ -794,28 +808,12 @@ const createAddress2 = async () => {
     shippingCountry.code
   );
 
-  const setBillingAddress = async () => {
-    const [billingCountry] = countriesArray.filter(
-      (el) => el.name === billingForm.billCountryName
-    );
+  let billingAddress = "";
 
-    if (state.billingAddress) {
-      return await useCreateAddress(
-        cart_id,
-        {
-          address: `${billingForm.billAddress}`,
-          address2: `${billingForm.billAddress2}`,
-          addressee: `${shippingForm.firstName} ${shippingForm.lastName}`,
-          name: `${shippingForm.firstName} ${shippingForm.lastName}`,
-          city: `${billingForm.billCity}`,
-          zip: `${billingForm.zip}`,
-        },
-        billingCountry.code
-      );
-    }
-  };
+  if (state.billingAddress) {
+    billingAddress = await setBillingAddress();
+  }
 
-  const res = await setBillingAddress();
   const changes = [
     {
       field: "shipaddressee",
@@ -824,14 +822,37 @@ const createAddress2 = async () => {
     { field: "shipemail", value: shippingForm.email },
     { field: "reqpayment", value: true },
   ];
+
   await handleChange(changes);
   await useUpdateCartField(cart_id, null, "sendtogether", true);
-  await useUpdateCartField(cart_id, null, "shippingaddress", address._id);
+  await useUpdateCartField(
+    cart_id,
+    null,
+    "shippingaddress",
+    shippingAddress._id
+  );
+
   if (state.billingAddress) {
-    await useUpdateCartField(cart_id, null, "billingaddress", res._id);
+    await useUpdateCartField(
+      cart_id,
+      null,
+      "billingaddress",
+      billingAddress._id
+    );
   }
+};
+
+const placeOrder = async () => {
+  await recaptchaLoaded();
+  const token = await executeRecaptcha("submitContactForm");
+  const recaptchaStatus = await $fetch(`/api/verify-recaptcha/${token}`);
+
   try {
+    if (!recaptchaStatus.success || recaptchaStatus.score < 0.5) {
+      showError("Something went wrong, try again later");
+    }
     state.loading = true;
+    await createAddress();
     const transaction = await useConfirmOrder(cart_id, country.code);
     const order = await useGetOrder(cart_id, country.code);
 
@@ -853,6 +874,7 @@ const createAddress2 = async () => {
           coupon: "",
         },
       });
+
       store.setBasketQuantity(0);
       store.setCartId("");
       store.clearBillingForm();
@@ -892,7 +914,6 @@ const rules = computed(() => {
     addressStreet: {
       required: helpers.withMessage("Street address is required", required),
     },
-
     addressNumber: {
       required: helpers.withMessage("Street number is required", required),
     },
