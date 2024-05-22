@@ -299,9 +299,11 @@ import {
   requiredIf,
 } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
+import { useReCaptcha } from "vue-recaptcha-v3";
 
 const store = useStore();
 const host = store.getHost();
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
 const state = reactive({
   firstname: "",
@@ -317,6 +319,10 @@ const state = reactive({
 const modalInfo = reactive({
   info: "",
   title: "",
+});
+
+onMounted(async () => {
+  await recaptchaLoaded();
 });
 
 const rules = computed(() => {
@@ -387,12 +393,9 @@ const rules = computed(() => {
 });
 
 const submitForm = async () => {
-  //   await recaptchaLoaded();
-  //   const token = await executeRecaptcha('submitContactForm')
-  //   const res = await $fetch(`/api/verify-recaptcha/${token}`)
-
-  //   if (res.success && res.score > 0.5 && (await v$.value.$validate())) {
-  if (await v$.value.$validate()) {
+  const token = await executeRecaptcha("submitContactForm");
+  const res = await $fetch(`/api/verify-recaptcha/${token}`);
+  if (res.success && res.score > 0.5 && (await v$.value.$validate())) {
     const country = countriesArray.find((el) => el.name === state.country);
     const status = await useSubmitContactForm(
       { ...state, country: country.value },
