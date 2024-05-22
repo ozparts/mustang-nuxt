@@ -1,7 +1,5 @@
 import { RECAPTCHA } from "./../../../vars/index";
 export default defineEventHandler(async (event) => {
-  // const runtimeConfig = useRuntimeConfig();
-  // console.log(runtimeConfig.public, "token");
   const data = event.context.params;
   try {
     const response = await fetch(

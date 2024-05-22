@@ -39,7 +39,6 @@ onMounted(async () => {
   script.addEventListener("load", setLoaded);
   document.body.appendChild(script);
 
-  console.log(src, currency, "!!");
   function setLoaded() {
     const value = state.order.grossamount;
     const object =
