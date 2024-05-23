@@ -1,10 +1,10 @@
-import { RECAPTCHA } from "./../../../vars/index";
 export default defineEventHandler(async (event) => {
+  const cfg = useRuntimeConfig();
   const data = event.context.params;
   try {
     const response = await fetch(
       `https://www.google.com/recaptcha/api/siteverify?secret=${
-        RECAPTCHA.SECRET_KEY
+        cfg.public.recaptcha_secret_key
       }&response=${data !== undefined ? data.token : null}`,
       {
         method: "POST",
