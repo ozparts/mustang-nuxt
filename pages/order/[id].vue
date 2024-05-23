@@ -115,13 +115,23 @@
         >
           Shipping details
         </h3>
-        <div class="flex flex-col gap-1 p-4 text-sm sm:text-base">
+        <div class="flex flex-col gap-1 p-4 text-sm text-center sm:text-base">
           <p>
+            <span class="font-bold">Name:</span>
             {{ state.order.shipaddressee || state.order.shipname }}
           </p>
-          <p>{{ state.order.shipaddress }}</p>
-          <p>{{ state.order.shipzip }} {{ state.order.shipcity }}</p>
-          <p>{{ state.order.shipcountryname }}</p>
+          <p>
+            <span class="font-bold">Street:</span>
+            {{ state.order.shipaddress }}
+          </p>
+          <p>
+            <span class="font-bold">City:</span>
+            {{ state.order.shipzip }} {{ state.order.shipcity }}
+          </p>
+          <p>
+            <span class="font-bold">Country:</span>
+            {{ state.order.shipcountryname }}
+          </p>
         </div>
       </div>
     </div>

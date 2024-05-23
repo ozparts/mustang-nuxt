@@ -32,7 +32,7 @@ const handleRevolutPayment = async () => {
         }
       : {
           amount: props.order.grossamount,
-          currency: "EUR",
+          currency: props.order.currency.name,
           region: "eu",
         };
 

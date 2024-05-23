@@ -30,11 +30,6 @@ export const PAYMENT_METHOD = {
   REVOLUTUK: "revolutuk",
 };
 
-// export const RECAPTCHA = {
-//   SECRET_KEY: '6LdkTZglAAAAAEY0IvLhjVUdOF87QgJBnQAWGkjv',
-//   SITE_KEY: '6LdkTZglAAAAAFgnEvAoCOKLYzcnEXO4xW1AMOdS',
-// }
-
 export const Make = "FORD";
 
 export const Model = "Mustang VI (2015-)";

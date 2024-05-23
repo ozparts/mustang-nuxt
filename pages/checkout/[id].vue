@@ -549,7 +549,7 @@
             <div class="text-center">
               <button
                 v-if="state.orderButton"
-                @click="createAddress"
+                @click="placeOrder"
                 class="font-semibold text-white uppercase daisy-btn daisy-btn-sm daisy-btn-primary sm:daisy-btn sm:daisy-btn-primary daisy-btn-block"
               >
                 {{ !state.loading ? "place order" : "" }}
@@ -579,6 +579,11 @@
         </div>
       </div>
     </section>
+    <ChangeCurrency
+      :changeCurrency="state.changeCurrency"
+      :currency="state.newCurrency"
+      @clicked="updateCurrency"
+    />
   </ClientOnly>
 </template>
 
@@ -595,6 +600,9 @@ import {
   numeric,
 } from "@vuelidate/validators";
 
+import { useReCaptcha } from "vue-recaptcha-v3";
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
+
 const store = useStore();
 const route = useRoute();
 const cart_id = route.params.id;
@@ -610,6 +618,7 @@ const cookieConsent = computed(() => {
 const name = computed(() => route);
 
 const state = reactive({
+  basket: null,
   agreedToTerms: false,
   vat: false,
   taxnumber: "",
@@ -626,11 +635,15 @@ const state = reactive({
   loading: false,
   backOrderInfo: false,
   discount: null,
+  changeCurrency: false,
+  newCurrency: "",
 });
 
 onMounted(async () => {
+  await recaptchaLoaded();
   const basket = await useGetCart(country.code, cart_id);
   assignBasket(basket);
+  state.basket = basket.shoppingcarts[0].shoppingcart;
 });
 
 const countries =
@@ -660,6 +673,27 @@ const countryPrefix = computed(() => {
     )[1];
   }
 });
+
+const checkCurrency = async (value) => {
+  if (value === "PL" && state.basket.currency._id !== "pln") {
+    state.newCurrency = "pln";
+    state.changeCurrency = true;
+  } else if (value !== "PL" && state.basket.currency._id !== "eur") {
+    state.newCurrency = "eur";
+    state.changeCurrency = true;
+  } else {
+    state.changeCurrency = false;
+  }
+};
+
+const updateCurrency = async (val) => {
+  if (val) {
+    await useUpdateCartField(cart_id, null, "currency", state.newCurrency);
+    const basket = await useGetCart(country.code, cart_id);
+    assignBasket(basket);
+  }
+  state.changeCurrency = false;
+};
 
 const promoCodeHandler = async (code) => {
   state.promoCode = "";
@@ -722,6 +756,7 @@ const assignBasket = (basket) => {
   state.backOrderInfo = basket.shoppingcarts[0].shoppingcart.backorderquantity;
   state.discount =
     basket.shoppingcarts[0].shoppingcart.transactionlines[0].discountrate;
+  state.basket = basket.shoppingcarts[0].shoppingcart;
 };
 
 const billingAddressHandler = () => {
@@ -736,11 +771,30 @@ const handleChange = async (changes) => {
   assignBasket(basket);
 };
 
+const setBillingAddress = async () => {
+  const [billingCountry] = countriesArray.filter(
+    (el) => el.name === billingForm.billCountryName
+  );
+  return await useCreateAddress(
+    cart_id,
+    {
+      address: `${billingForm.billAddress}`,
+      address2: `${billingForm.billAddress2}`,
+      addressee: `${shippingForm.firstName} ${shippingForm.lastName}`,
+      name: `${shippingForm.firstName} ${shippingForm.lastName}`,
+      city: `${billingForm.billCity}`,
+      zip: `${billingForm.billZip}`,
+    },
+    billingCountry.code
+  );
+};
+
 const createAddress = async () => {
   const [shippingCountry] = countriesArray.filter(
     (el) => el.name === shippingForm.country
   );
-  const address = await useCreateAddress(
+
+  const shippingAddress = await useCreateAddress(
     cart_id,
     {
       ...shippingForm,
@@ -754,28 +808,12 @@ const createAddress = async () => {
     shippingCountry.code
   );
 
-  const setBillingAddress = async () => {
-    const [billingCountry] = countriesArray.filter(
-      (el) => el.name === billingForm.billCountryName
-    );
+  let billingAddress = "";
 
-    if (state.billingAddress) {
-      return await useCreateAddress(
-        cart_id,
-        {
-          address: `${billingForm.billAddress}`,
-          address2: `${billingForm.billAddress2}`,
-          addressee: `${shippingForm.firstName} ${shippingForm.lastName}`,
-          name: `${shippingForm.firstName} ${shippingForm.lastName}`,
-          city: `${billingForm.billCity}`,
-          zip: `${billingForm.zip}`,
-        },
-        billingCountry.code
-      );
-    }
-  };
+  if (state.billingAddress) {
+    billingAddress = await setBillingAddress();
+  }
 
-  const res = await setBillingAddress();
   const changes = [
     {
       field: "shipaddressee",
@@ -784,14 +822,37 @@ const createAddress = async () => {
     { field: "shipemail", value: shippingForm.email },
     { field: "reqpayment", value: true },
   ];
+
   await handleChange(changes);
   await useUpdateCartField(cart_id, null, "sendtogether", true);
-  await useUpdateCartField(cart_id, null, "shippingaddress", address._id);
+  await useUpdateCartField(
+    cart_id,
+    null,
+    "shippingaddress",
+    shippingAddress._id
+  );
+
   if (state.billingAddress) {
-    await useUpdateCartField(cart_id, null, "billingaddress", res._id);
+    await useUpdateCartField(
+      cart_id,
+      null,
+      "billingaddress",
+      billingAddress._id
+    );
   }
+};
+
+const placeOrder = async () => {
+  await recaptchaLoaded();
+  const token = await executeRecaptcha("submitContactForm");
+  const recaptchaStatus = await $fetch(`/api/verify-recaptcha/${token}`);
+
   try {
+    if (!recaptchaStatus.success || recaptchaStatus.score < 0.5) {
+      showError("Something went wrong, try again later");
+    }
     state.loading = true;
+    await createAddress();
     const transaction = await useConfirmOrder(cart_id, country.code);
     const order = await useGetOrder(cart_id, country.code);
 
@@ -813,12 +874,13 @@ const createAddress = async () => {
           coupon: "",
         },
       });
+
       store.setBasketQuantity(0);
       store.setCartId("");
       store.clearBillingForm();
       store.clearShippingForm();
       state.loading = false;
-      navigateTo(`/summary/${transaction._id}`);
+      navigateTo(`/order/${transaction._id}`);
     } else {
       console.log(e);
     }
@@ -852,7 +914,6 @@ const rules = computed(() => {
     addressStreet: {
       required: helpers.withMessage("Street address is required", required),
     },
-
     addressNumber: {
       required: helpers.withMessage("Street number is required", required),
     },
@@ -988,6 +1049,7 @@ watch(
     const changes = [{ field: "shippingmethod", value: "" }];
     await handleChange(changes);
     updateTax();
+    checkCurrency(country.code);
     if (shippingForm.shippingMethod._id) shippingForm.shippingMethod._id = "";
   }
 );
