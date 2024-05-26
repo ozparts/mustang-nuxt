@@ -44,8 +44,12 @@
 
 <script setup>
 const store = useStore();
-const country = store.getCountry();
-const { results } = await useGetApplications(true, country.code, props.id);
+const customerCountry = store.getCustomerCountry();
+const { results } = await useGetApplications(
+  true,
+  customerCountry.code,
+  props.id
+);
 
 const fixVariant = computed(() => (variant) => {
   return variant.split(" | ").slice(0, 2).join(" | ");

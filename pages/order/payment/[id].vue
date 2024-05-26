@@ -86,8 +86,9 @@
 
 <script setup>
 const store = useStore();
-const country = store.getCountry();
+const customerCountry = store.getCustomerCountry();
 const route = useRoute();
+
 const name = computed(() => route);
 const state = reactive({
   order: null,
@@ -95,7 +96,7 @@ const state = reactive({
 });
 
 onMounted(async () => {
-  const order = await useGetOrder(route.params.id, country.code);
+  const order = await useGetOrder(route.params.id, customerCountry.code);
   state.order = order;
   state.paymentId = order.paymentmethod._id;
 });

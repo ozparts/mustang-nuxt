@@ -50,7 +50,7 @@
 import { LOCATION, Manufacturers } from "../../vars/index";
 
 const store = useStore();
-const country = store.getCountry();
+const customerCountry = store.getCustomerCountry();
 const route = useRoute();
 const cart_id = route.params.id;
 
@@ -62,7 +62,7 @@ const state = reactive({
 
 onMounted(async () => {
   if (cart_id !== "null") {
-    const data = await useGetCart(country.code, cart_id);
+    const data = await useGetCart(customerCountry.code, cart_id);
 
     if (data.shoppingcarts[0]) {
       state.products = data.shoppingcarts[0].shoppingcart.transactionlines;
@@ -99,7 +99,7 @@ const updateData = (data) => {
 };
 
 const deleteProducts = async (product) => {
-  const data = await useDeleteItems(product._id, country.code, cart_id);
+  const data = await useDeleteItems(product._id, customerCountry.code, cart_id);
   updateData(data);
 };
 
@@ -115,7 +115,7 @@ const updateQuantity = async (option, product) => {
     }
     const data = await useDeleteItem(
       product._id,
-      country.code,
+      customerCountry.code,
       product.quantity - value,
       cart_id
     );
@@ -156,7 +156,7 @@ const updateQuantity = async (option, product) => {
     }
     const data = await useDeleteItem(
       product._id,
-      country.code,
+      customerCountry.code,
       product.quantity + value,
       cart_id
     );

@@ -10,7 +10,7 @@
 const emit = defineEmits(["success", "error"]);
 const store = useStore();
 const host = store.getHost();
-const country = store.getCountry();
+const customerCountry = store.getCustomerCountry();
 const route = useRoute();
 const state = reactive({
   order: null,
@@ -19,7 +19,7 @@ const state = reactive({
 const runtimeConfig = useRuntimeConfig();
 
 onMounted(async () => {
-  const order = await useGetOrder(route.params.id, country.code);
+  const order = await useGetOrder(route.params.id, customerCountry.code);
   state.order = order;
   const currency = order.currency.name;
   let token = "";

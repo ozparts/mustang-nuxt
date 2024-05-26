@@ -205,11 +205,11 @@ import { LOCATION, Manufacturers, metaInfo } from "../../vars/index";
 
 const { record } = useRoute().params;
 const store = useStore();
-const country = store.getCountry();
+const customerCountry = store.getCustomerCountry();
 const mustangCookieConsent = useCookie("mustang-consent");
 
-const shoppingCart = await useGetCart(country.code, store.cartId);
-const product = await useGetItem(record, country.code);
+const shoppingCart = await useGetCart(customerCountry.code, store.cartId);
+const product = await useGetItem(record, customerCountry.code);
 
 const productType = getProductType(product.name);
 
@@ -242,10 +242,8 @@ onMounted(() => {
   init();
   if (mustangCookieConsent.value) {
     state.cookieConsent = true;
-    store.setCookieConsent(true);
   } else {
     state.cookieConsent = false;
-    store.setCookieConsent(false);
   }
 });
 

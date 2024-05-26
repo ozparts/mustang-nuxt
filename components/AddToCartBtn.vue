@@ -18,7 +18,7 @@ const props = defineProps([
 ]);
 
 const store = useStore();
-const country = store.getCountry();
+const customerCountry = store.getCustomerCountry();
 const cartId = store.getCartId();
 
 const local = useAvlInLocation(props.product, LOCATION);
@@ -42,7 +42,7 @@ const addToBasket = async () => {
   const resp = await useAddToBasket(
     props.quantity,
     props.product.id,
-    country.code,
+    customerCountry.code,
     state.cartId,
     props.productStatus === "air" && productType === "discbrake"
       ? [serviceCode]
@@ -55,7 +55,7 @@ const addToBasket = async () => {
   } else {
     state.cartId = resp.cart_id;
   }
-  const data = await useGetCart(country.code, resp.cart_id);
+  const data = await useGetCart(customerCountry.code, resp.cart_id);
   store.setBasketQuantity(
     countBasketQuantity(data.shoppingcarts[0].shoppingcart.transactionlines)
   );
