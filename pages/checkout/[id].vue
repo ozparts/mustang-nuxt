@@ -245,7 +245,7 @@
               >
               <v-select
                 v-model="shippingForm.country"
-                :items="countries"
+                :items="countries.map((obj) => obj.name)"
                 :error-messages="v$.country.$errors.map((e) => e.$message)"
                 @input="v$.country.$touch"
                 @blur="v$.country.$touch"
@@ -383,7 +383,7 @@
                 >
                 <v-select
                   v-model="billingForm.billCountryName"
-                  :items="countries"
+                  :items="countries.map((obj) => obj.name)"
                   :error-messages="
                     x$.billCountryName.$errors.map((e) => e.$message)
                   "
@@ -482,13 +482,18 @@
           </v-checkbox>
 
           <v-checkbox
-            v-if="!cookieConsent"
+            v-if="!mustangCookieConsent"
             v-model="state.agreedToCookies"
             required
             color="red-600"
             :error-messages="t$.agreedToCookies.$errors.map((e) => e.$message)"
             :focused="false"
-            @change="t$.agreedToCookies.$touch"
+            @change="
+              () => {
+                t$.agreedToCookies.$touch;
+                updateCookiesConsent();
+              }
+            "
             @blur="t$.agreedToCookies.$touch"
           >
             <template v-slot:label>
@@ -588,7 +593,7 @@
 </template>
 
 <script setup>
-import { TAX, countriesObjectEU, countriesObjectUK } from "../../vars/index";
+import { TAX, isInEuropeanUnion, countries } from "../../vars/index";
 import { useVuelidate } from "@vuelidate/core";
 import debounce from "lodash.debounce";
 import {
@@ -605,16 +610,17 @@ const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
 const store = useStore();
 const route = useRoute();
-const cart_id = route.params.id;
+const mustangCookieConsent = useCookie("mustang-consent");
+const customerCountry = store.getCustomerCountry();
 
-const country = store.getCountry();
 const host = store.getHost();
 const shippingForm = store.getShippingForm();
 const billingForm = store.getBillingForm();
-const cookieConsent = computed(() => {
-  return store.getCookieConsent();
-});
+const cart_id = route.params.id;
 
+const updateCookiesConsent = () => {
+  mustangCookieConsent.value = state.agreedToCookies;
+};
 const name = computed(() => route);
 
 const state = reactive({
@@ -631,7 +637,7 @@ const state = reactive({
   orderButton: false,
   billingAddress: false,
   promoCode: "",
-  agreedToCookies: false,
+  agreedToCookies: !!mustangCookieConsent.value,
   loading: false,
   backOrderInfo: false,
   discount: null,
@@ -641,36 +647,15 @@ const state = reactive({
 
 onMounted(async () => {
   await recaptchaLoaded();
-  const basket = await useGetCart(country.code, cart_id);
+  const basket = await useGetCart(customerCountry.code, cart_id);
   assignBasket(basket);
   state.basket = basket.shoppingcarts[0].shoppingcart;
 });
 
-const countries =
-  host === "UK"
-    ? Object.keys(countriesObjectUK)
-    : Object.keys(countriesObjectEU);
-
-const countriesArray =
-  host === "UK"
-    ? Object.keys(countriesObjectUK).map((key) => {
-        return {
-          name: key,
-          code: countriesObjectUK[key],
-        };
-      })
-    : Object.keys(countriesObjectEU).map((key) => {
-        return {
-          name: key,
-          code: countriesObjectEU[key],
-        };
-      });
-
 const countryPrefix = computed(() => {
   if (billingForm.billCountryName) {
-    return Object.entries(countriesObjectEU).find(
-      (obj) => obj[0] === billingForm.billCountryName
-    )[1];
+    return countries.find((obj) => obj.name === billingForm.billCountryName)
+      .iso;
   }
 });
 
@@ -689,7 +674,7 @@ const checkCurrency = async (value) => {
 const updateCurrency = async (val) => {
   if (val) {
     await useUpdateCartField(cart_id, null, "currency", state.newCurrency);
-    const basket = await useGetCart(country.code, cart_id);
+    const basket = await useGetCart(customerCountry.code, cart_id);
     assignBasket(basket);
   }
   state.changeCurrency = false;
@@ -723,9 +708,9 @@ const updateZipCode = debounce(async (zip) => {
 
 const isValid = debounce(async () => {
   if (billingForm.billCountryName && state.taxnumber.length > 6) {
-    const prefix = Object.entries(countriesObjectEU).find(
-      (obj) => obj[0] === billingForm.billCountryName
-    )[1];
+    const prefix = countries.find(
+      (obj) => obj.name === billingForm.billCountryName
+    ).iso;
 
     const res = await useUpdateCartField(
       cart_id,
@@ -735,8 +720,6 @@ const isValid = debounce(async () => {
     );
 
     state.isValid = res.shoppingcarts[0].shoppingcart.validtaxnumber;
-  } else {
-    state.isValid = false;
   }
 }, 700);
 
@@ -772,7 +755,7 @@ const handleChange = async (changes) => {
 };
 
 const setBillingAddress = async () => {
-  const [billingCountry] = countriesArray.filter(
+  const [billingCountry] = countries.filter(
     (el) => el.name === billingForm.billCountryName
   );
   return await useCreateAddress(
@@ -785,12 +768,12 @@ const setBillingAddress = async () => {
       city: `${billingForm.billCity}`,
       zip: `${billingForm.billZip}`,
     },
-    billingCountry.code
+    billingCountry.iso
   );
 };
 
 const createAddress = async () => {
-  const [shippingCountry] = countriesArray.filter(
+  const [shippingCountry] = countries.filter(
     (el) => el.name === shippingForm.country
   );
 
@@ -805,7 +788,7 @@ const createAddress = async () => {
       name: `${shippingForm.firstName} ${shippingForm.lastName}`,
       _id: "",
     },
-    shippingCountry.code
+    shippingCountry.iso
   );
 
   let billingAddress = "";
@@ -853,8 +836,8 @@ const placeOrder = async () => {
     }
     state.loading = true;
     await createAddress();
-    const transaction = await useConfirmOrder(cart_id, country.code);
-    const order = await useGetOrder(cart_id, country.code);
+    const transaction = await useConfirmOrder(cart_id, customerCountry.code);
+    const order = await useGetOrder(cart_id, customerCountry.code);
 
     if (transaction && order) {
       window.dataLayer?.push({
@@ -980,26 +963,48 @@ const x$ = useVuelidate(billingRules, billingForm);
 const t$ = useVuelidate(taxRules, state);
 
 const updateTax = async () => {
-  const tax = host === "UK" ? TAX.UK : TAX.EU;
-  const basket = await useUpdateCartField(
-    cart_id,
-    null,
-    "tax",
-    state.vat ? TAX.ZERO : tax
-  );
+  const countryIso = countries.find(
+    (obj) => obj.name === shippingForm.country
+  ).iso;
 
-  assignBasket(basket);
+  if (isInEuropeanUnion(countryIso)) {
+    const changes = [
+      { field: "tax", value: state.vat ? TAX.ZERO : TAX.EU },
+      { field: "comment", value: "" },
+    ];
+    await handleChange(changes);
+  } else {
+    const changes = [
+      { field: "tax", value: TAX.ZERO },
+      { field: "comment", value: "OUTSIDE EU" },
+    ];
+    await handleChange(changes);
+  }
 };
 
 watch(
-  () => [shippingForm.shippingMethod, shippingForm.paymentMethod],
+  () => [shippingForm.shippingMethod],
   async () => {
-    const changes = [
-      { field: "shippingmethod", value: shippingForm.shippingMethod._id },
-      { field: "paymentmethod", value: shippingForm.paymentMethod._id },
-    ];
-    await handleChange(changes);
-    updateTax();
+    const basket = await useUpdateCartField(
+      cart_id,
+      null,
+      "shippingmethod",
+      shippingForm.shippingMethod._id
+    );
+    assignBasket(basket);
+  }
+);
+
+watch(
+  () => [shippingForm.paymentMethod],
+  async () => {
+    const basket = await useUpdateCartField(
+      cart_id,
+      null,
+      "paymentmethod",
+      shippingForm.paymentMethod._id
+    );
+    assignBasket(basket);
   }
 );
 
@@ -1009,7 +1014,7 @@ watch(
     if (
       shippingForm.paymentMethod._id &&
       shippingForm.shippingMethod._id &&
-      (cookieConsent.value || state.agreedToCookies) &&
+      (mustangCookieConsent.value || state.agreedToCookies) &&
       state.agreedToTerms
     ) {
       if ((await v$.value.$validate()) && !state.billingAddress && !state.vat) {
@@ -1043,14 +1048,29 @@ watch(
   () => shippingForm.country,
   async () => {
     const country = shippingForm.country
-      ? countriesArray.find((obj) => obj.name === shippingForm.country)
-      : store.getCountry();
-    await useUpdateCartField(cart_id, null, "shipcountry", country.code);
-    const changes = [{ field: "shippingmethod", value: "" }];
+      ? countries.find((obj) => obj.name === shippingForm.country)
+      : customerCountry.code;
+
+    const changes = [
+      {
+        field: "shipcountry",
+        value: country.iso,
+      },
+      { field: "shippingmethod", value: "" },
+    ];
     await handleChange(changes);
     updateTax();
-    checkCurrency(country.code);
+    checkCurrency(country.iso);
     if (shippingForm.shippingMethod._id) shippingForm.shippingMethod._id = "";
+  }
+);
+
+watch(
+  () => billingForm.billCountryName,
+  () => {
+    if (state.vat) {
+      state.taxnumber = "";
+    }
   }
 );
 

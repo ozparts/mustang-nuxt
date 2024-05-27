@@ -55,39 +55,94 @@ export const ACTION = {
   SEARCH: "search",
 };
 
+export const countries = [
+  { name: "Austria", iso: "AT" },
+  { name: "Albania", iso: "AL" },
+  { name: "Andorra", iso: "AD" },
+  { name: "Belgium", iso: "BE" },
+  { name: "Belarus", iso: "BY" },
+  { name: "Bulgaria", iso: "BG" },
+  { name: "Bosnia & Herzegovina", iso: "BA" },
+  { name: "Croatia", iso: "HR" },
+  { name: "Cyprus", iso: "CY" },
+  { name: "Czech Republic", iso: "CZ" },
+  { name: "Denmark", iso: "DK" },
+  { name: "Estonia", iso: "EE" },
+  { name: "Finland", iso: "FI" },
+  { name: "France", iso: "FR" },
+  { name: "Germany", iso: "DE" },
+  { name: "Greece", iso: "GR" },
+  { name: "Hungary", iso: "HU" },
+  { name: "Ireland", iso: "IE" },
+  { name: "Italy", iso: "IT" },
+  { name: "Latvia", iso: "LV" },
+  { name: "Lithuania", iso: "LT" },
+  { name: "Luxembourg", iso: "LU" },
+  { name: "Liechtenstein", iso: "LI" },
+  { name: "Malta", iso: "MT" },
+  { name: "Macedonia", iso: "MK" },
+  { name: "Moldova", iso: "MD" },
+  { name: "Monaco", iso: "MC" },
+  { name: "Montenegro", iso: "ME" },
+  { name: "Netherlands", iso: "NL" },
+  { name: "Norway", iso: "NO" },
+  { name: "Poland", iso: "PL" },
+  { name: "Portugal", iso: "PT" },
+  { name: "Portugal - Azores", iso: "A2" },
+  { name: "Portugal - Madeira", iso: "M3" },
+  { name: "Romania", iso: "RO" },
+  { name: "San Marino", iso: "SM" },
+  { name: "Serbia", iso: "RS" },
+  { name: "Slovakia", iso: "SK" },
+  { name: "Slovenia", iso: "SI" },
+  { name: "Spain", iso: "ES" },
+  { name: "Spain - Canary Islands", iso: "IC" },
+  { name: "Sweden", iso: "SE" },
+  { name: "Switzerland", iso: "CH" },
+  { name: "Turkey", iso: "TR" },
+];
+
 export const countriesObjectEU = {
-  Austria: "AT",
-  Belgium: "BE",
-  Bulgaria: "BG",
-  Croatia: "HR",
-  Cyprus: "CY",
-  "Czech Republic": "CZ",
-  Denmark: "DK",
-  Estonia: "EE",
-  Finland: "FI",
-  France: "FR",
-  Germany: "DE",
-  Greece: "GR",
-  Hungary: "HU",
-  Ireland: "IE",
-  Italy: "IT",
-  Latvia: "LV",
-  Lithuania: "LT",
-  Luxembourg: "LU",
-  Malta: "MT",
-  Netherlands: "NL",
-  Norway: "NO",
-  Poland: "PL",
-  Portugal: "PT",
-  "Portugal - Azores": "A2",
-  "Portugal - Madeira": "M3",
   Romania: "RO",
-  Slovakia: "SK",
-  Slovenia: "SI",
-  Spain: "ES",
-  "Spain - Canary Islands": "IC",
-  Sweden: "SE",
-  Switzerland: "CH",
+  "San Marino": "SM",
+  Serbia: "RS",
+
+  Turkey: "TR",
+};
+
+export const isInEuropeanUnion = (isoCode: string) => {
+  const euCountries = [
+    "AT", // Austria
+    "BE", // Belgium
+    "BG", // Bulgaria
+    "HR", // Croatia
+    "CY", // Cyprus
+    "CZ", // Czech Republic
+    "DK", // Denmark
+    "EE", // Estonia
+    "FI", // Finland
+    "FR", // France
+    "DE", // Germany
+    "GR", // Greece
+    "HU", // Hungary
+    "IE", // Ireland
+    "IT", // Italy
+    "LV", // Latvia
+    "LT", // Lithuania
+    "LU", // Luxembourg
+    "MT", // Malta
+    "NL", // Netherlands
+    "PL", // Poland
+    "PT", // Portugal
+    "A2", // Portugal-Azores
+    "M3", // Portugal-Madeira
+    "RO", // Romania
+    "SK", // Slovakia
+    "SI", // Slovenia
+    "ES", // Spain
+    "SE", // Sweden
+  ];
+  return euCountries.includes(isoCode.toUpperCase());
 };
 
 export const countriesObjectUK = {
