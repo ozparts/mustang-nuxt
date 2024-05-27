@@ -34,25 +34,19 @@
 </template>
 
 <script setup>
-const store = useStore();
+const mustangCookieConsent = useCookie("mustang-consent");
 const state = reactive({
   showDialog: "",
 });
-const mustangCookieConsent = useCookie("mustang-consent");
 
 onMounted(() => {
-  if (!mustangCookieConsent.value || !store.cookiesConsent) {
+  if (!mustangCookieConsent.value) {
     state.showDialog = true;
   }
 });
 
 const handleCookieDecision = (value) => {
-  store.setCookieConsent(value);
   mustangCookieConsent.value = value;
-
-  if (value) {
-    window.consentGrantedAdStorage();
-  }
   state.showDialog = false;
 };
 </script>

@@ -37,13 +37,22 @@ onMounted(async () => {
 const cookieHandler = async () => {
   if (!mustangCookieCountry.value) {
     const country = await useCountry();
-    store.setCountry(country);
+    store.setCustomerCountry(country);
     mustangCookieCountry.value = country;
   } else {
-    store.setCountry(mustangCookieCountry.value);
+    store.setCustomerCountry(mustangCookieCountry.value);
   }
   if (mustangCookieConsent.value) {
     window.consentGrantedAdStorage();
   }
 };
+
+watch(
+  () => mustangCookieConsent.value,
+  () => {
+    if (mustangCookieConsent.value) {
+      window.consentGrantedAdStorage();
+    }
+  }
+);
 </script>

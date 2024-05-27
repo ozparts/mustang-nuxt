@@ -67,8 +67,7 @@ export interface StoreState {
   filter: FilterSchema;
   cartId: string | "";
   basketQuantity: number;
-  country: string;
-  cookiesConsent: boolean;
+  customerCountry: string;
   shippingForm: ShippingForm;
   billingForm: BillingForm;
   host: string | undefined;
@@ -83,8 +82,7 @@ export const useStore = defineStore("store", {
       filter: {},
       basketQuantity: 0,
       cartId: "",
-      country: "",
-      cookiesConsent: false,
+      customerCountry: "",
       shippingForm: emptyShippingForm,
       billingForm: emptyBillingForm,
       host: "EU",
@@ -102,8 +100,8 @@ export const useStore = defineStore("store", {
     getBasketQuantity: (state: StoreState) => () => {
       return state.basketQuantity;
     },
-    getCountry: (state: StoreState) => () => {
-      return state.country;
+    getCustomerCountry: (state: StoreState) => () => {
+      return state.customerCountry;
     },
     getCartId: (state: StoreState) => () => {
       return state.cartId;
@@ -113,9 +111,6 @@ export const useStore = defineStore("store", {
     },
     getBillingForm: (state: StoreState) => () => {
       return state.billingForm;
-    },
-    getCookieConsent: (state: StoreState) => () => {
-      return state.cookiesConsent;
     },
     getHost: (state: StoreState) => () => {
       return state.host;
@@ -176,8 +171,8 @@ export const useStore = defineStore("store", {
     setBasketQuantity(data: number) {
       this.basketQuantity = data;
     },
-    setCountry(data: string) {
-      this.country = data;
+    setCustomerCountry(data: string) {
+      this.customerCountry = data;
     },
     setCartId(data: string) {
       this.cartId = data;
@@ -187,9 +182,6 @@ export const useStore = defineStore("store", {
     },
     setBillingForm(data: BillingForm) {
       this.billingForm = data;
-    },
-    setCookieConsent(data: boolean) {
-      this.cookiesConsent = data;
     },
     setHost(data: string | undefined) {
       this.host = "EU";
