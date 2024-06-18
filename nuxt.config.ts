@@ -23,6 +23,7 @@ export default defineNuxtConfig({
       script: [
         {
           src: `/gtm.js`,
+          defer: true,
         },
       ],
       // noscript: [
