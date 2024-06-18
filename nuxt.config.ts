@@ -71,9 +71,18 @@ export default defineNuxtConfig({
     apiSecret: "",
     // Keys within public are also exposed client-side
     public: {
-      paypal_EU: process.env.NUXT_ENV_PAYPAL_TOKEN_EU,
-      paypal_PL: process.env.NUXT_ENV_PAYPAL_TOKEN_PL,
-      paypal_UK: process.env.NUXT_ENV_PAYPAL_TOKEN_UK,
+      paypal_EU:
+        process.env.NUXT_ENV_PAYPAL_TOKEN_EU ||
+        process.env.LOCAL_PAYPAL_TOKEN_EU,
+      paypal_PL:
+        process.env.NUXT_ENV_PAYPAL_TOKEN_PL ||
+        process.env.LOCAL_PAYPAL_TOKEN_PL,
+      recaptcha_site_key:
+        process.env.NUXT_ENV_RECAPTCHA_SITE_KEY ||
+        process.env.LOCAL_RECAPTCHA_SITE_KEY,
+      recaptcha_secret_key:
+        process.env.NUXT_ENV_RECAPTCHA_SECRET_KEY ||
+        process.env.LOCAL_RECAPTCHA_SECRET_KEY,
     },
   },
   tailwindcss: {
@@ -83,7 +92,6 @@ export default defineNuxtConfig({
   pinia: {
     autoImports: ["defineStore", ["defineStore", "definePiniaStore"]],
   },
-
   imports: {
     dirs: ["./store"],
   },
