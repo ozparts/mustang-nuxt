@@ -110,7 +110,6 @@ export default defineNuxtConfig({
       autoImport: false,
     },
   },
-
   modules: [
     [
       "@nuxtjs/google-fonts",
@@ -122,7 +121,6 @@ export default defineNuxtConfig({
         },
       },
     ],
-    "nuxt-purgecss",
     "@invictus.codes/nuxt-vuetify",
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
