@@ -41,8 +41,8 @@ gtag("consent", "default", {
     var f = d.getElementsByTagName(s)[0];
     var j = d.createElement(s);
     var dl = l != "dataLayer" ? "&l=" + l : "";
-    // j.defer = true;
-    j.async = true;
+    j.defer = true;
+    // j.async = true;
     j.src = link.href;
     f.parentNode.insertBefore(j, f);
   };
