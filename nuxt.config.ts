@@ -112,7 +112,6 @@ export default defineNuxtConfig({
       useIconCDN: false,
       styles: true,
       autoImport: false,
-      treeshaking: true,
     },
   },
   modules: [
