@@ -1,13 +1,27 @@
 import { VueReCaptcha } from "vue-recaptcha-v3";
 
+const events = ["mousemove", "touchstart", "touchmove"];
+
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(VueReCaptcha, {
-    siteKey: nuxtApp.$config.public.recaptcha_site_key,
-    loaderOptions: {
-      autoHideBadge: false,
-      explicitRenderParameters: {
-        badge: "bottomright",
-      },
-    },
-  });
+  if (process.client) {
+    const initializeReCaptcha = () => {
+      nuxtApp.vueApp.use(VueReCaptcha, {
+        siteKey: nuxtApp.$config.public.recaptcha_site_key,
+        loaderOptions: {
+          autoHideBadge: false,
+          explicitRenderParameters: {
+            badge: "bottomright",
+          },
+        },
+      });
+
+      events.forEach((event) => {
+        window.removeEventListener(event, initializeReCaptcha);
+      });
+    };
+
+    events.forEach((event) => {
+      window.addEventListener(event, initializeReCaptcha);
+    });
+  }
 });
