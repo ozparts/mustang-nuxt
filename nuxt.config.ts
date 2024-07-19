@@ -65,7 +65,11 @@ export default defineNuxtConfig({
   alias: {
     // "@": resolve(__dirname, "/"),
   },
-  css: ["~/assets/main.css", "~/assets/css/tailwind.css"],
+  css: [
+    "~/assets/main.css",
+    "~/assets/css/tailwind.css",
+    "@mdi/font/css/materialdesignicons.min.css",
+  ],
 
   runtimeConfig: {
     // The private keys which are only available server-side
@@ -104,10 +108,11 @@ export default defineNuxtConfig({
     },
   },
   vuetify: {
-    vuetifyOptions: {},
     moduleOptions: {
+      useIconCDN: false,
       styles: true,
       autoImport: false,
+      treeshaking: true,
     },
   },
   modules: [
