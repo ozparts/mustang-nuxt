@@ -1,7 +1,6 @@
 <template>
   <div
     class="z-[1000] w-full h-full fixed bg-[rgba(0,0,0,0.407)] inset-y-0 font-nunito"
-    v-if="state.showDialog"
   >
     <div class="bg-[white] absolute w-full bottom-0 sm:p-4 md:p-6">
       <v-container>
@@ -35,16 +34,16 @@
 
 <script setup>
 const store = useStore();
-const state = reactive({
-  showDialog: "",
-});
+// const state = reactive({
+//   showDialog: "",
+// });
 const mustangCookieConsent = useCookie("mustang-consent");
 
-onMounted(() => {
-  if (!mustangCookieConsent.value || !store.cookiesConsent) {
-    state.showDialog = true;
-  }
-});
+// onMounted(() => {
+//   if (!mustangCookieConsent.value || !store.cookiesConsent) {
+//     state.showDialog = true;
+//   }
+// });
 
 const handleCookieDecision = (value) => {
   store.setCookieConsent(value);
@@ -53,6 +52,6 @@ const handleCookieDecision = (value) => {
   if (value) {
     window.consentGrantedAdStorage();
   }
-  state.showDialog = false;
+  // state.showDialog = false;
 };
 </script>
