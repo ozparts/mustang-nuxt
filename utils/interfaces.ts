@@ -62,8 +62,9 @@ export interface Location {
 }
 
 export type Manufacturer = {
-  id: string;
-  name: string;
+  id: string | string[];
+  name?: string;
+  shortName?: string;
 };
 
 export type ManufacturersType = {
