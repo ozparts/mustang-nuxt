@@ -2,15 +2,15 @@
   <div
     class="mx-auto md:hidden h-2 max-w-[1140px] bg-[#040503] opacity-[0.55] w-full"
   ></div>
-  <div class="flex w-full h-auto bg-white md:hidden">
+  <div class="flex w-full h-[50px] bg-white md:hidden">
     <div class="flex justify-between w-full">
       <div class="basis-[50%]">
         <nuxt-link to="/">
-          <div class="md:w-[200px] lg:w-[300px] h-[80px] aspect-auto">
+          <div class="md:w-[200px] lg:w-[300px] h-[50px]">
             <nuxt-img
+              class="aspect-auto"
               alt="Mustang Performance logo"
               src="/mustang_logo.webp"
-              height="80px"
               sizes="200px lg:300px"
             />
           </div>
