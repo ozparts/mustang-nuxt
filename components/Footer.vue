@@ -9,6 +9,7 @@
       >
         <nuxt-link to="/">
           <NuxtImg
+            class="h-[70px]"
             alt="Mustang Performance logo"
             loading="lazy"
             src="/mustang_logo.webp"
