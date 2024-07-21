@@ -14,6 +14,9 @@
 
 <script setup>
 const props = defineProps({
-  title: String,
+  title: {
+    type: String,
+    default: "",
+  },
 });
 </script>
