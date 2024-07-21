@@ -46,7 +46,7 @@ const onEventTriggered = async () => {
 };
 
 const cookieHandler = async () => {
-  if (!mustangCookieConsent.value || !store.cookiesConsent) {
+  if (!mustangCookieConsent.value && !store.cookiesConsent) {
     cookieConsentIsOpen.value = true;
   }
   if (!mustangCookieCountry.value) {
