@@ -13,10 +13,11 @@
             <li>
               <div>
                 <nuxt-link to="/">
-                  <div class="overflow-hidden w-[200px]">
+                  <div class="overflow-hidden aspect-auto">
                     <nuxt-img
                       src="/mustang_logo.webp"
                       alt="Mustang Performance logo"
+                      width="200px"
                     />
                   </div>
                 </nuxt-link>
