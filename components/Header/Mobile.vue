@@ -8,7 +8,7 @@
         <nuxt-link to="/">
           <div class="md:w-[200px] lg:w-[300px] h-[50px]">
             <nuxt-img
-              class="aspect-auto"
+              class="aspect-auto h-[50px]"
               alt="Mustang Performance logo"
               src="/mustang_logo.webp"
               sizes="200px lg:300px"
