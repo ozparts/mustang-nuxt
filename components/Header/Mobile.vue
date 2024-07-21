@@ -6,11 +6,12 @@
     <div class="flex justify-between w-full">
       <div class="basis-[50%]">
         <nuxt-link to="/">
-          <div class="md:w-[200px] lg:w-[300px] aspect-auto">
+          <div class="md:w-[200px] lg:w-[300px] h-[80px] aspect-auto">
             <nuxt-img
               alt="Mustang Performance logo"
               src="/mustang_logo.webp"
               height="80px"
+              sizes="200px lg:300px"
             />
           </div>
         </nuxt-link>
