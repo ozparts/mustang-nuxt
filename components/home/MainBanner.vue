@@ -11,7 +11,6 @@
           format="webp"
           alt="Mustang Performance"
           src="/banner/mustang_banner.webp"
-          width="1150px"
           sizes="xs:320px sm:640px md:768px lg:1200px"
           fit="contain"
         />

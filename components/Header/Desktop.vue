@@ -15,10 +15,8 @@
                 <nuxt-link to="/">
                   <div class="overflow-hidden md:w-[200px] lg:w-[200px]">
                     <nuxt-img
-                      format="webp"
                       width="200px"
-                      src="/mustang/mustang_logo.png"
-                      provider="cloudinary"
+                      src="/mustang_logo.webp"
                       alt="Mustang Performance logo"
                     />
                   </div>

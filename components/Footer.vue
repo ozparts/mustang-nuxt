@@ -8,13 +8,11 @@
         class="w-64 flex justify-center mx-auto text-center md:!mx-0 md:!text-left"
       >
         <nuxt-link to="/">
-          <nuxt-img
-            format="webp"
+          <NuxtImg
             alt="Mustang Performance logo"
-            src="/mustang/mustang_logo.png"
-            provider="cloudinary"
-            width="200px"
             loading="lazy"
+            src="/mustang_logo.webp"
+            width="200px"
           />
         </nuxt-link>
       </div>
