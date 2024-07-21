@@ -42,6 +42,7 @@ export default defineNuxtConfig({
     cloudinary: {
       baseURL: "https://res.cloudinary.com/dxrwmbpxl/image/upload/",
     },
+    dir: "assets",
     providers: {
       myProvider: {
         name: "3c",
