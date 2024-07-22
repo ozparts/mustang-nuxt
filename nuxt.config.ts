@@ -25,6 +25,10 @@ export default defineNuxtConfig({
           src: `/gtm.js`,
           defer: true,
         },
+        {
+          src: `/hj.js`,
+          defer: true,
+        },
       ],
       // noscript: [
       //   {

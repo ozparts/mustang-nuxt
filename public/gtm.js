@@ -44,6 +44,7 @@ const onEventTriggered = () => {
     window.removeEventListener(event, onEventTriggered)
   );
   loadScript();
+  loadHjScript();
 };
 
 init();
