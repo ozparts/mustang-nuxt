@@ -8,7 +8,7 @@
         class="flex max-h-[500px] items-end justify-center overflow-hidden"
       >
         <nuxt-img
-          class="xs:w-[320px] sm:w-[640px] md:w-[768px] lg:w-[1200px] h-[170px] min-[400px]:!h-auto"
+          class="xs:max-w-[639px] sm:max-w-[767px] md:max-w-[1110px] h-[170px] min-[400px]:!h-auto max-h-[493px]"
           format="webp"
           alt="Mustang Performance"
           src="/banner/mustang_banner.webp"
