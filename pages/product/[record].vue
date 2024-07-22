@@ -455,8 +455,8 @@ const availabilityStatusInfo = computed(() => {
         state.productStatus = "air";
 
         return productType === "discbrake"
-          ? "Available in 3 weeks with extra cost"
-          : "Available in 3 weeks";
+          ? "Available within 4 weeks with extra cost"
+          : "Available in 4 weeks";
       }
     }
     state.productAvailability.outOfStock = true;
