@@ -581,31 +581,6 @@ export const useSearch = async (keyword: string) => {
   }
 };
 
-// export const useGetProductsByCategory = async (name: string) => {
-//   const host = useStoreState();
-
-//   try {
-//     const data = await fetch(`${HTTP_URL}/applications`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         ...(host === "UK" ? baseBodyUK : baseBodyEU),
-//         show: true,
-//         action: ACTION.GET_APPLICATIONS,
-//         categorymaster: categories.find((obj: any) => obj.title === name)
-//           ?.categorydescription,
-//       }),
-//     });
-//     if (data.status === 200) {
-//       return data.json();
-//     } else {
-//       console.log(data);
-//     }
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
-
 export const useGetProductsToCatalogue = async (
   peryear: string,
   show: boolean,

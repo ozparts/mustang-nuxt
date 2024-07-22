@@ -1,5 +1,4 @@
 const loadHjScript = () => {
-  console.log("ok");
   (function (h, o, t, j, a, r) {
     h.hj =
       h.hj ||
