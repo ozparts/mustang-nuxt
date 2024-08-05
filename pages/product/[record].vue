@@ -111,21 +111,47 @@
           />
           <div class="mx-auto sm:!m-0">
             <div
-              class="flex items-baseline mx-auto mt-2 text-xl font-bold font-nunito sm:!text-2xl"
+              class="flex justify-center justify-md-start items-baseline mx-auto mt-2 text-xl font-bold font-nunito sm:!text-2xl"
             >
-              {{ state.product.price.symbol }}
               {{
                 calculateInitialProductPrice(
                   state.product.price.prices[LOCATION.EU].grossprice,
                   productType
                 )
               }}
+              {{ state.product.price.symbol }}
+              <span
+                v-if="state.product.price.prices[LOCATION.EU].promotion"
+                class="ml-3 text-decoration-line-through text-subtitle-1"
+              >
+                {{
+                  calculateInitialProductPrice(
+                    state.product.price.baseprice,
+                    productType
+                  )
+                }}
+                {{ state.product.price.symbol }}</span
+              >
               <span class="ml-2 text-base font-normal"
                 >{{ showPriceInfo(productType) }}
               </span>
             </div>
             <p class="text-xs text-center sm:!ml-2 sm:!text-start sm:text-sm">
               (Vat included)
+            </p>
+            <p
+              v-if="state.product.price.prices[LOCATION.EU].promotion"
+              class="text-xs text-center sm:!ml-2 sm:!text-start sm:text-sm mt-2"
+            >
+              The lowest price offered within the last 30 days before the
+              application of the price reduction:
+              {{
+                calculateInitialProductPrice(
+                  state.product.price.baseprice,
+                  productType
+                )
+              }}
+              {{ state.product.price.symbol }}
             </p>
           </div>
           <!--ADD TO CART / ENQUIRY BUTTON -->
