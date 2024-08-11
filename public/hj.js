@@ -1,6 +1,8 @@
 const loadHjScript = () => {
-  const hotjarId = process.env.NUXT_ENV_HOTJAR_ID;
-  console.log({ hotjarId });
+  if (process.client) {
+    const hotjarId = process.env.NUXT_ENV_HOTJAR_ID;
+    console.log({ hotjarId });
+  }
   (function (h, o, t, j, a, r) {
     h.hj =
       h.hj ||
