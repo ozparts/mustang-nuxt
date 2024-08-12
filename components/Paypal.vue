@@ -24,12 +24,10 @@ onMounted(async () => {
   const currency = order.currency.name;
   let token = "";
 
-  if (currency === "GBP") {
-    token = runtimeConfig.public.paypal_UK;
-  } else if (currency === "PLN") {
-    token = runtimeConfig.public.paypal_PL;
+  if (currency === "PLN") {
+    token = runtimeConfig.public.paypalPl;
   } else {
-    token = runtimeConfig.public.paypal_EU;
+    token = runtimeConfig.public.paypalEu;
   }
 
   const src = `https://www.paypal.com/sdk/js?client-id=${token}&disable-funding=card&currency=${currency}`;

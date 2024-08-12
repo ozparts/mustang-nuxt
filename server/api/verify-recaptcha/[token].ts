@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   try {
     const response = await fetch(
       `https://www.google.com/recaptcha/api/siteverify?secret=${
-        cfg.public.recaptcha_secret_key
+        cfg.public.recaptchaSecretKey
       }&response=${data !== undefined ? data.token : null}`,
       {
         method: "POST",

@@ -20,22 +20,6 @@ export default defineNuxtConfig({
             "Mustang Performance, Ford Mustang, car parts, Disc Brakes, Clutches, Exhaust systems, Suspension parts, Engine bearings, DBA, Pedders, Whiteline, ACL, XForce, Xtreme, Hawk, Turbosmart, Car parts online, Quality auto parts",
         },
       ],
-      script: [
-        {
-          src: `/gtm.js`,
-          defer: true,
-        },
-        {
-          src: `/hj.js`,
-          defer: true,
-        },
-      ],
-      // noscript: [
-      //   {
-      //     children: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWZSWWQV"
-      //     height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
-      //   },
-      // ],
     },
   },
 
@@ -74,24 +58,24 @@ export default defineNuxtConfig({
     "~/assets/css/tailwind.css",
     "@mdi/font/css/materialdesignicons.min.css",
   ],
-
   runtimeConfig: {
-    // The private keys which are only available server-side
-    apiSecret: "",
-    // Keys within public are also exposed client-side
     public: {
-      paypal_EU:
+      paypalEu:
         process.env.NUXT_ENV_PAYPAL_TOKEN_EU ||
-        process.env.LOCAL_PAYPAL_TOKEN_EU,
-      paypal_PL:
+        process.env.NUXT_PUBLIC_PAYPAL_EU,
+      paypalPl:
         process.env.NUXT_ENV_PAYPAL_TOKEN_PL ||
-        process.env.LOCAL_PAYPAL_TOKEN_PL,
-      recaptcha_site_key:
+        process.env.NUXT_PUBLIC_PAYPAL_PL,
+      recaptchaSiteKey:
         process.env.NUXT_ENV_RECAPTCHA_SITE_KEY ||
-        process.env.LOCAL_RECAPTCHA_SITE_KEY,
-      recaptcha_secret_key:
+        process.env.NUXT_PUBLIC_RECAPTCHA_SITE_KEY,
+      recaptchaSecretKey:
         process.env.NUXT_ENV_RECAPTCHA_SECRET_KEY ||
-        process.env.LOCAL_RECAPTCHA_SECRET_KEY,
+        process.env.NUXT_PUBLIC_RECAPTCHA_SECRET_KEY,
+      gtmId: process.env.NUXT_ENV_GTM_ID || process.env.NUXT_PUBLIC_GTM_ID,
+      hotjarSiteId:
+        process.env.NUXT_ENV_HOTJAR_SITE_ID ||
+        process.env.NUXT_PUBLIC_HOTJAR_SITE_ID,
     },
   },
   tailwindcss: {
