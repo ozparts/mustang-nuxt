@@ -6,11 +6,9 @@
     class="my-6 sm:!my-10 w-full max-w-[400px] m-auto flex flex-col"
   >
     <h2
-      class="text-xl font-bold text-center uppercase font-nunito max-w-[400px] rounded-lg py-2"
+      class="text-xl my-6 sm:my-8 font-bold text-center uppercase font-nunito max-w-[400px] rounded-lg py-2"
       :class="
-        state.order.paymentstatus
-          ? 'bg-[#A6F1A6] order-2 my-0 sm:my-0'
-          : 'bg-white my-6 sm:my-8'
+        state.order.paymentstatus ? 'bg-[#A6F1A6] ' : 'bg-white my-6 sm:my-8'
       "
     >
       Your order <span>{{ state.order.name }}</span
