@@ -1,16 +1,25 @@
 <template>
-  <Navigation :route="name" />
+  <Navigation :route="name" :paid="state?.order?.paymentstatus" />
 
-  <div v-if="state.order" class="my-6 sm:!my-10">
+  <div
+    v-if="state.order"
+    class="my-6 sm:!my-10 w-full max-w-[400px] m-auto flex flex-col"
+  >
     <h2
-      class="my-6 text-xl font-bold text-center uppercase sm:!my-8 sm:text-2xl font-nunito"
+      class="text-xl font-bold text-center uppercase font-nunito max-w-[400px] rounded-lg py-2"
+      :class="
+        state.order.paymentstatus
+          ? 'bg-[#A6F1A6] order-2 my-0 sm:my-0'
+          : 'bg-white my-6 sm:my-8'
+      "
     >
-      Your order <span class="text-red-600">{{ state.order.name }}</span
+      Your order <span>{{ state.order.name }}</span
       ><br />
-      has been received.
+      has been {{ state.order.paymentstatus ? "paid" : "received" }}.
     </h2>
+
     <div
-      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mx-auto mb-5"
+      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mb-5"
     >
       <h3
         class="py-3 text-xl italic font-bold tracking-tighter text-center border-b-[1px] sm:text-2xl border-mustangRed"
@@ -107,7 +116,7 @@
       </div>
     </div>
     <div
-      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mx-auto mb-5"
+      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mb-5"
     >
       <div v-if="state.order">
         <h3
@@ -135,7 +144,7 @@
         </div>
       </div>
     </div>
-    <div class="max-w-[400px] mx-auto">
+    <div v-show="!state.order.paymentstatus">
       <button
         @click="navigateTo(`/order/payment/${route.params.id}`)"
         class="font-semibold uppercase btn-red sm:btn-red daisy-btn daisy-btn-block daisy-btn-sm sm:daisy-btn"

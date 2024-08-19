@@ -40,6 +40,7 @@
             :class="[
               props.route.name === 'order-payment-id' ? 'underline' : '',
               isSummaryDisabled() ? 'pointer-events-none' : '',
+              props.paid ? 'pointer-events-none' : '',
             ]"
             >Payment
           </a>
@@ -61,7 +62,17 @@
 </template>
 
 <script setup>
-const props = defineProps(["route"]);
+const props = defineProps({
+  route: {
+    type: String,
+    default: "",
+  },
+  paid: {
+    type: String,
+    default: "",
+    required: false,
+  },
+});
 const state = reactive({
   name: props.route.name,
   id: props.route.params.id,
