@@ -303,7 +303,6 @@ import { useReCaptcha } from "vue-recaptcha-v3";
 
 const store = useStore();
 const host = store.getHost();
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
 const state = reactive({
   firstname: "",
@@ -314,6 +313,7 @@ const state = reactive({
   country: "",
   text: "",
   privacy: false,
+  executeRecaptcha: null,
 });
 
 const modalInfo = reactive({
@@ -322,6 +322,8 @@ const modalInfo = reactive({
 });
 
 onMounted(async () => {
+  const { recaptchaLoaded, executeRecaptcha } = useReCaptcha();
+  state.executeRecaptcha = executeRecaptcha;
   await recaptchaLoaded();
 });
 
@@ -393,7 +395,7 @@ const rules = computed(() => {
 });
 
 const submitForm = async () => {
-  const token = await executeRecaptcha("submitContactForm");
+  const token = await state.executeRecaptcha("submitContactForm");
   const res = await $fetch(`/api/verify-recaptcha/${token}`);
   if (res.success && res.score > 0.5 && (await v$.value.$validate())) {
     const country = countriesArray.find((el) => el.name === state.country);
