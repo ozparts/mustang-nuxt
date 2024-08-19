@@ -1,5 +1,12 @@
 <template>
-  <section class="mx-auto max-w-[1140px]">
+  <section
+    class="mx-auto max-w-[1140px] cursor-pointer"
+    @click="
+      () => {
+        navigateTo('/catalogue');
+      }
+    "
+  >
     <div class="relative my-5 overflow-hidden">
       <div
         class="absolute sm:block bottom-0 left-[-230px] right-[68%] top-0 h-full skew-x-[31deg] transform bg-[#fff101] opacity-[0.75]"
@@ -32,12 +39,7 @@
         class="flex w-[40%] min-[359px]:w-[34%] min-[550px]:left-[10%] md:w-[220px] lg:w-[250px] xs:w-[120px] min-[500px]:w-[160px] sm:w-[170px] font-bolder min-[500px]:flex font-roboto absolute bottom-[2.5%] min-[359px]:left-[5%] left-[2%] skew-x-[31deg] items-center bg-[#040503] uppercase text-white"
       >
         <div
-          class="text-center font-light cursor-pointer basis-[75%] skew-x-[-31deg] text-[8px] min-[500px]:text-[11px] md:text-[13px] lg:text-sm sm:font-bold font-nunito-sans"
-          @click="
-            () => {
-              navigateTo('/catalogue');
-            }
-          "
+          class="text-center font-light basis-[75%] skew-x-[-31deg] text-[8px] min-[500px]:text-[11px] md:text-[13px] lg:text-sm sm:font-bold font-nunito-sans"
         >
           Explore the range
         </div>
