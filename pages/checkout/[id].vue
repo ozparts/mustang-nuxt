@@ -605,7 +605,6 @@ import {
 } from "@vuelidate/validators";
 
 import { useReCaptcha } from "vue-recaptcha-v3";
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha();
 
 const store = useStore();
 const route = useRoute();
@@ -641,9 +640,12 @@ const state = reactive({
   discount: null,
   changeCurrency: false,
   newCurrency: "",
+  executeRecaptcha: null,
 });
 
 onMounted(async () => {
+  const { recaptchaLoaded, executeRecaptcha } = useReCaptcha();
+  state.executeRecaptcha = executeRecaptcha;
   await recaptchaLoaded();
   const basket = await useGetCart(country.code, cart_id);
   assignBasket(basket);
@@ -847,8 +849,7 @@ const createAddress = async () => {
 };
 
 const placeOrder = async () => {
-  await recaptchaLoaded();
-  const token = await executeRecaptcha("submitContactForm");
+  const token = await state.executeRecaptcha("submitContactForm");
   const recaptchaStatus = await $fetch(`/api/verify-recaptcha/${token}`);
 
   try {
