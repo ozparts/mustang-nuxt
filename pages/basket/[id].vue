@@ -26,17 +26,17 @@
       >
         <nuxt-link
           :to="`/checkout/${cart_id}`"
-          class="w-full sm:w-[35%] sm:order-1"
+          class="w-full sm:w-[35%] sm:order-1 gtm_btn_checkout"
         >
           <button
-            class="w-full ml-auto text-sm font-semibold text-white uppercase rounded-lg xs:p-2 daisy-btn-primary sm:text-[15px] daisy-btn daisy-btn-sm sm:daisy-btn-md"
+            class="pointer-events-none w-full ml-auto text-sm font-semibold text-white uppercase rounded-lg xs:p-2 daisy-btn-primary sm:text-[15px] daisy-btn daisy-btn-sm sm:daisy-btn-md"
           >
             Proceed to checkout
           </button>
         </nuxt-link>
         <nuxt-link to="/catalogue" class="w-full sm:w-[35%]">
           <button
-            class="w-full text-sm font-semibold text-white uppercase rounded-lg bg-mustangGrey sm:text-[15px] daisy-btn daisy-btn-sm sm:daisy-btn-md"
+            class="w-full !p-0 gtm_btn_continueshopping text-sm font-semibold text-white uppercase rounded-lg bg-mustangGrey sm:text-[15px] daisy-btn daisy-btn-sm sm:daisy-btn-md"
           >
             Continue shopping
           </button>

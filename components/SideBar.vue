@@ -33,7 +33,9 @@
             <nuxt-link to="/brands">Our brands</nuxt-link>
           </li>
           <li @click="toogleBar">
-            <nuxt-link to="/contact">Contact</nuxt-link>
+            <nuxt-link to="/contact" class="gtm_btn_contactus"
+              >Contact</nuxt-link
+            >
           </li>
         </ul>
       </div>

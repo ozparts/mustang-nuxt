@@ -24,7 +24,7 @@
     <Banner :title="getBannerDescription" />
     <UiAddToCartPopUp :name="product.name" v-if="addToCartPopUp" />
 
-    <section class="container py-3 mx-auto">
+    <section class="container py-3 mx-auto gtm_product_page">
       <!--IMAGES / INFO SECTION -->
 
       <div class="grid gap-3 sm:grid-cols-2 sm:min-h-[450px]">

@@ -475,7 +475,9 @@
               <p class="text-sm font-bold text-black sm:text-base">
                 Agree to
                 <nuxt-link to="/terms" target="_blank">
-                  <span class="text-red-600">terms and conditions.</span>
+                  <span class="text-red-600 gtm_btn_termsandconditions"
+                    >terms and conditions.</span
+                  >
                 </nuxt-link>
               </p>
             </template>
@@ -504,7 +506,7 @@
           <div class="hidden w-full min-[900px]:block">
             <nuxt-link :to="`/basket/${cart_id}`">
               <button
-                class="mt-10 text-sm font-bold tracking-wide text-white bg-mustangGrey daisy-btn sm:bg-mustangGrey daisy-btn-sm sm:daisy-btn"
+                class="mt-10 text-sm font-bold tracking-wide text-white gtm_btn_viewcart bg-mustangGrey daisy-btn sm:bg-mustangGrey daisy-btn-sm sm:daisy-btn"
               >
                 Back to cart
               </button>
@@ -550,12 +552,14 @@
               <button
                 v-if="state.orderButton"
                 @click="placeOrder"
-                class="font-semibold text-white uppercase daisy-btn daisy-btn-sm daisy-btn-primary sm:daisy-btn sm:daisy-btn-primary daisy-btn-block"
+                class="gtm_btn_placeorder font-semibold text-white uppercase !p-0 daisy-btn daisy-btn-sm daisy-btn-primary sm:daisy-btn sm:daisy-btn-primary daisy-btn-block"
               >
-                {{ !state.loading ? "place order" : "" }}
+                <span class="pointer-events-none">
+                  {{ !state.loading ? "place order" : "" }}
+                </span>
                 <span
                   v-if="state.loading"
-                  class="daisy-loading daisy-loading-spinner daisy-loading-sm sm:daisy-loading-lg"
+                  class="pointer-events-none daisy-loading daisy-loading-spinner daisy-loading-sm sm:daisy-loading-lg"
                 ></span>
               </button>
               <button

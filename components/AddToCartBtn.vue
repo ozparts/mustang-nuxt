@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex items-center p-2 font-bold uppercase cursor-pointer btn-red"
+    class="flex items-center p-2 font-bold uppercase cursor-pointer btn-red gtm_btn_addtocart"
     @click="addToBasket"
   >
-    <p class="flex items-center mr-3 text-sm sm:text-base">Add to cart</p>
-    <Icon name="material-symbols:shopping-cart-rounded" size="18px" />
+    <p class="flex items-center mr-3 text-sm pointer-events-none sm:text-base">Add to cart</p>
+    <Icon name="material-symbols:shopping-cart-rounded" class="pointer-events-none" size="18px" />
   </div>
 </template>
 

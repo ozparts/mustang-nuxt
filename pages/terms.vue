@@ -172,7 +172,7 @@
         href="http://dba4x4.home.pl/warranty/return/"
         target="_blank"
         title="Return form to download"
-        ><span class="border-b border-black">form here</span></a
+        ><span class="border-b border-black gtm_btn_returns">form here</span></a
       >. Please, fill it out completely and send in the box with your return.
       Please include your details, part number and explain the reason of the
       return.

@@ -45,7 +45,7 @@
               <li>
                 <nuxt-link
                   to="/terms"
-                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
+                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block gtm_btn_termsandconditions"
                   >Terms&Conditions</nuxt-link
                 >
               </li>
@@ -63,14 +63,14 @@
               <li>
                 <nuxt-link
                   to="/contact"
-                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
+                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block gtm_btn_contactus"
                   >Contact</nuxt-link
                 >
               </li>
               <li>
                 <nuxt-link
                   to="/shipping"
-                  class="py-2.5 block md:!py-0 daisy-link-hover daisy-link"
+                  class="py-2.5 block md:!py-0 daisy-link-hover daisy-link gtm_btn_shippingoptions"
                   >Shipping options</nuxt-link
                 >
               </li>

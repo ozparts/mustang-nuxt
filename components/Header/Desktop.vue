@@ -37,24 +37,31 @@
             >
           </li>
           <li>
-            <nuxt-link class="hover:text-mustangBlue" to="/contact"
+            <nuxt-link
+              class="hover:text-mustangBlue gtm_btn_contactus"
+              to="/contact"
               >Contact Us</nuxt-link
             >
           </li>
           <li>
             <nuxt-link :to="`/basket/${cart_id ? cart_id : 'null'}`">
-              <div class="relative mr-3.5 flex items-center gap-2">
+              <div
+                class="relative mr-3.5 flex items-center gap-2 gtm_btn_viewcart"
+              >
                 <Icon
                   name="material-symbols:shopping-cart-rounded"
                   size="20px"
+                  class="pointer-events-none"
                 />
                 <div
-                  class="absolute right-[-14px] top-[-14px] flex h-5 w-5 items-center justify-center rounded-[50%] bg-red-600 text-[10px] text-white"
+                  class="pointer-events-none absolute right-[-14px] top-[-14px] flex h-5 w-5 items-center justify-center rounded-[50%] bg-red-600 text-[10px] text-white"
                   v-if="basketQuantity"
                 >
                   {{ basketQuantity }}
                 </div>
-                <p class="text-[11px] font-light capitalize tracking-wide">
+                <p
+                  class="text-[11px] font-light capitalize tracking-wide pointer-events-none"
+                >
                   shopping basket
                 </p>
               </div>
