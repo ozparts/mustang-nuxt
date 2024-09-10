@@ -35,6 +35,10 @@ export const loadGtmScript = () => {
     ad_personalization: "denied",
     analytics_storage: "denied",
   });
+
+  gtag("js", new Date());
+  gtag("config", "AW-16532786070");
+
   (function (w, d, s, l, i) {
     w[l] = w[l] || [];
     w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });

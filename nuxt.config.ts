@@ -20,6 +20,12 @@ export default defineNuxtConfig({
             "Mustang Performance, Ford Mustang, car parts, Disc Brakes, Clutches, Exhaust systems, Suspension parts, Engine bearings, DBA, Pedders, Whiteline, ACL, XForce, Xtreme, Hawk, Turbosmart, Car parts online, Quality auto parts",
         },
       ],
+      script: [
+        {
+          src: "https://www.googletagmanager.com/gtag/js?id=AW-16532786070",
+          async: true,
+        },
+      ],
     },
   },
 
