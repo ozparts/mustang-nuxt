@@ -27,6 +27,8 @@ export const loadGtmScript = () => {
     dataLayer.push(arguments);
   }
 
+  window.gtag = gtag;
+
   gtag("set", "url_passthrough", true);
 
   gtag("consent", "default", {
