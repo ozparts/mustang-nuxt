@@ -2,7 +2,7 @@
   <header>
     <Header class="relative z-2 max-w-[1140px] px-[15px] pt-3" />
   </header>
-  <LazyCookieConsent v-if="cookieConsentIsOpen" />
+  <LazyCookieConsent v-if="showCookieModal" />
   <main>
     <div class="z-11 mx-auto max-w-[1140px] px-[15px]">
       <slot />
@@ -14,13 +14,18 @@
 </template>
 
 <script setup>
+const { $loadHjScript } = useNuxtApp();
 const events = ["mousemove", "touchstart", "touchmove"];
-
 const store = useStore();
 const years = store.getProductYears();
-const mustangCookieConsent = useCookie("mustang-consent");
+
+const mustangCookieConsents = useCookie("mustang-cookie-consents", {
+  default: () => ({ accepted: false, preferences: ["mandatory"] }),
+  watch: true,
+  maxAge: 60 * 60 * 24 * 7,
+});
 const mustangCookieCountry = useCookie("mustang-country");
-const cookieConsentIsOpen = ref(false);
+const showCookieModal = ref(false);
 
 onMounted(async () => {
   events.forEach((event) => window.addEventListener(event, onEventTriggered));
@@ -32,7 +37,7 @@ const onEventTriggered = async () => {
   );
 
   await cookieHandler();
-
+  checkConstents();
   if (!years.length) {
     const { options } = await useGetApplications(false);
     store.setProductYears(options.peryear);
@@ -45,10 +50,23 @@ const onEventTriggered = async () => {
   }
 };
 
-const cookieHandler = async () => {
-  if (!mustangCookieConsent.value && !store.cookiesConsent) {
-    cookieConsentIsOpen.value = true;
+const checkConstents = () => {
+  const hasAnalytics =
+    mustangCookieConsents.value.preferences &&
+    mustangCookieConsents.value.preferences.includes("Analytics");
+
+  if (hasAnalytics) {
+    $loadHjScript();
   }
+};
+
+const cookieHandler = async () => {
+  if (!mustangCookieConsents.value.accepted) {
+    showCookieModal.value = true;
+  } else {
+    window.consentGrantedAdStorage();
+  }
+
   if (!mustangCookieCountry.value) {
     const country = await useCountry();
     store.setCountry(country);
@@ -56,15 +74,13 @@ const cookieHandler = async () => {
   } else {
     store.setCountry(mustangCookieCountry.value);
   }
-  if (mustangCookieConsent.value) {
-    window.consentGrantedAdStorage();
-  }
 };
 
 watch(
-  () => mustangCookieConsent.value,
+  () => mustangCookieConsents.value.accepted,
   () => {
-    cookieConsentIsOpen.value = false;
+    showCookieModal.value = false;
+    checkConstents();
   }
 );
 </script>

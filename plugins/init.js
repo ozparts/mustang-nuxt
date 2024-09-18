@@ -1,12 +1,10 @@
 import { loadGtmScript } from "./gtm";
-import { loadHjScript } from "./hotJar";
 import { initializeReCaptcha } from "./google-recaptcha";
 
 const events = ["mousemove", "touchstart", "touchmove", "click"];
 
 const loadScripts = () => {
   loadGtmScript();
-  loadHjScript();
   initializeReCaptcha();
 };
 

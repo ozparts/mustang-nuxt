@@ -16,42 +16,52 @@
           </p>
           <div
             class="mx-2 mt-2 w-full md:w-[200px] text-center text-[white] m-[5px] p-2.5 hover:cursor-pointer bg-red-600 md:ml-8"
-            @click="handleCookieDecision(true)"
+            @click="acceptAll()"
           >
-            I agree
+            Agree
           </div>
           <div
             class="mx-2 mt-2 w-full text-center md:w-[200px] text-[white] m-[5px] p-2.5 hover:cursor-pointer bg-gray-500"
-            @click="handleCookieDecision(false)"
+            @click="openCookieSettings()"
           >
-            Decline
+            Manage
           </div>
         </div>
       </v-container>
     </div>
   </div>
+  <CookiesManager @save-preferences="handleCookiePreferences" />
 </template>
 
 <script setup>
-const store = useStore();
-// const state = reactive({
-//   showDialog: "",
-// });
-const mustangCookieConsent = useCookie("mustang-consent");
+const mustangCookieConsents = useCookie("mustang-cookie-consents");
 
-// onMounted(() => {
-//   if (!mustangCookieConsent.value || !store.cookiesConsent) {
-//     state.showDialog = true;
-//   }
-// });
+const saveCookiePreferences = (accepted, preferences) => {
+  mustangCookieConsents.value = { accepted, preferences };
 
-const handleCookieDecision = (value) => {
-  store.setCookieConsent(value);
-  mustangCookieConsent.value = value;
-
-  if (value) {
+  if (accepted) {
     window.consentGrantedAdStorage();
   }
-  // state.showDialog = false;
+};
+
+const acceptAll = () => {
+  saveCookiePreferences(true, [
+    "Mandatory",
+    "Functional",
+    "Analytics",
+    "Advertisement",
+  ]);
+};
+
+const handleCookiePreferences = (data) => {
+  const preferences = data
+    .filter((pref) => pref.enabled)
+    .map((pref) => pref.label);
+
+  saveCookiePreferences(true, preferences);
+};
+
+const openCookieSettings = () => {
+  cookie.showModal();
 };
 </script>

@@ -483,26 +483,6 @@
             </template>
           </v-checkbox>
 
-          <v-checkbox
-            v-if="!cookieConsent"
-            v-model="state.agreedToCookies"
-            required
-            color="red-600"
-            :error-messages="t$.agreedToCookies.$errors.map((e) => e.$message)"
-            :focused="false"
-            @change="t$.agreedToCookies.$touch"
-            @blur="t$.agreedToCookies.$touch"
-          >
-            <template v-slot:label>
-              <p class="text-sm font-bold text-black sm:text-base">
-                Agree to
-                <nuxt-link to="/cookie-policy" target="_blank">
-                  <span class="text-red-600">cookie policy.</span>
-                </nuxt-link>
-              </p>
-            </template>
-          </v-checkbox>
-
           <div class="hidden w-full min-[900px]:block">
             <nuxt-link :to="`/basket/${cart_id}`">
               <button
@@ -605,6 +585,7 @@ import {
 } from "@vuelidate/validators";
 
 import { useReCaptcha } from "vue-recaptcha-v3";
+const mustangCookieConsents = useCookie("mustang-cookie-consents");
 
 const store = useStore();
 const route = useRoute();
@@ -614,9 +595,6 @@ const country = store.getCountry();
 const host = store.getHost();
 const shippingForm = store.getShippingForm();
 const billingForm = store.getBillingForm();
-const cookieConsent = computed(() => {
-  return store.getCookieConsent();
-});
 
 const name = computed(() => route);
 
@@ -634,7 +612,6 @@ const state = reactive({
   orderButton: false,
   billingAddress: false,
   promoCode: "",
-  agreedToCookies: false,
   loading: false,
   backOrderInfo: false,
   discount: null,
@@ -982,9 +959,6 @@ const taxRules = {
   agreedToTerms: {
     sameAs: helpers.withMessage("Consent is required", sameAs(true)),
   },
-  agreedToCookies: {
-    sameAs: helpers.withMessage("Consent is required", sameAs(true)),
-  },
 };
 
 const v$ = useVuelidate(rules, shippingForm);
@@ -1021,7 +995,7 @@ watch(
     if (
       shippingForm.paymentMethod._id &&
       shippingForm.shippingMethod._id &&
-      (cookieConsent.value || state.agreedToCookies) &&
+      mustangCookieConsents.value.accepted &&
       state.agreedToTerms
     ) {
       if ((await v$.value.$validate()) && !state.billingAddress && !state.vat) {

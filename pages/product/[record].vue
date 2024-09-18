@@ -183,7 +183,7 @@
                 <Enquiry :product="state.product.name" />
               </div>
               <div v-else>
-                <div v-if="mustangCookieConsent">
+                <div v-if="mustangCookieConsents.accepted">
                   <AddToCartBtn
                     @click="() => addToCartPopUpHandler()"
                     :product="product"
@@ -232,7 +232,7 @@ import { LOCATION, Manufacturers, metaInfo } from "../../vars/index";
 const { record } = useRoute().params;
 const store = useStore();
 const country = store.getCountry();
-const mustangCookieConsent = useCookie("mustang-consent");
+const mustangCookieConsents = useCookie("mustang-cookie-consents");
 
 const shoppingCart = await useGetCart(country.code, store.cartId);
 const product = await useGetItem(record, country.code);
@@ -260,19 +260,11 @@ const state = reactive({
     enquiry: false,
   },
   dialog: false,
-  cookieConsent: "",
 });
 
 onMounted(() => {
   state.product = product;
   init();
-  if (mustangCookieConsent.value) {
-    state.cookieConsent = true;
-    store.setCookieConsent(true);
-  } else {
-    state.cookieConsent = false;
-    store.setCookieConsent(false);
-  }
 });
 
 const addToCartPopUp = ref(false);
