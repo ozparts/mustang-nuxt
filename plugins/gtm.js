@@ -2,11 +2,12 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (process.client) {
     window.dataLayer = window.dataLayer || [];
 
-    function consentGrantedAdStorage() {
-      function gtag() {
-        dataLayer.push(arguments);
-      }
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    window.gtag = gtag;
 
+    function consentGrantedAdStorage() {
       gtag("consent", "update", {
         ad_storage: "granted",
         ad_user_data: "granted",
@@ -22,12 +23,6 @@ export default defineNuxtPlugin((nuxtApp) => {
 export const loadGtmScript = () => {
   const runtimeConfig = useRuntimeConfig();
   const gtmId = runtimeConfig.public.gtmId;
-
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-
-  window.gtag = gtag;
 
   gtag("set", "url_passthrough", true);
 
@@ -47,7 +42,7 @@ export const loadGtmScript = () => {
 
     var f = d.getElementsByTagName(s)[0],
       j = d.createElement(s),
-      dl = l != "dataLayer" ? "&l=" + l : "";
+      dl = l !== "dataLayer" ? "&l=" + l : "";
     j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
     f.parentNode.insertBefore(j, f);
   })(window, document, "script", "dataLayer", gtmId);
