@@ -31,14 +31,12 @@ const showCookieModal = ref(false);
 
 const events = ["mousemove", "touchstart", "touchmove", "click"];
 
-const years = store.getProductYears();
+const hasAnalytics = computed(() =>
+  mustangCookieConsents.value.preferences?.includes("Analytics")
+);
 
 const handleInitialConsentResponse = (answer) => {
-  if (answer === "manage") {
-    cookie.showModal();
-  } else {
-    acceptAll();
-  }
+  answer === "manage" ? cookie.showModal() : acceptAll();
 };
 
 const acceptAll = () => {
@@ -66,31 +64,29 @@ const handleCookiePreferences = (data) => {
   saveCookiePreferences(true, preferences);
 };
 
-const onEventTriggered = async () => {
+const removeEventListeners = () => {
   events.forEach((event) =>
     window.removeEventListener(event, onEventTriggered)
   );
+};
 
-  await cookieHandler();
-  checkConstents();
+const loadProductYears = async () => {
+  const years = store.getProductYears();
   if (!years.length) {
     const { options } = await useGetApplications(false);
     store.setProductYears(options.peryear);
   }
-  if (process.client) {
-    window.location.host === "localhost:3000" ||
-    window.location.host === "mustangperformance.eu"
-      ? store.setHost("EU")
-      : store.setHost("UK");
-  }
+};
+
+const onEventTriggered = async () => {
+  removeEventListeners();
+  await loadProductYears();
+  await cookieHandler();
+  checkConstents();
 };
 
 const checkConstents = () => {
-  const hasAnalytics =
-    mustangCookieConsents.value.preferences &&
-    mustangCookieConsents.value.preferences.includes("Analytics");
-
-  if (hasAnalytics) {
+  if (hasAnalytics.value) {
     $loadHjScript();
   }
 };
@@ -116,7 +112,7 @@ onMounted(async () => {
 });
 
 watch(
-  () => mustangCookieConsents.value.accepted,
+  () => mustangCookieConsents.value,
   () => {
     showCookieModal.value = false;
     checkConstents();
