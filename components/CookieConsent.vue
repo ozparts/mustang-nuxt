@@ -5,7 +5,7 @@
     <div class="bg-[white] absolute w-full bottom-0 sm:p-4 md:p-6">
       <v-container>
         <div class="flex flex-col items-center md:flex-row">
-          <p class="text-sm sm:text-base">
+          <p class="p-3 text-sm xs:text-base">
             This site uses cookies and similar technologies to help us to make
             this site work properly and to provide you with a better browsing
             experience. Find out more about how we use cookies and how you can
@@ -30,38 +30,16 @@
       </v-container>
     </div>
   </div>
-  <CookiesManager @save-preferences="handleCookiePreferences" />
 </template>
 
 <script setup>
-const mustangCookieConsents = useCookie("mustang-cookie-consents");
-
-const saveCookiePreferences = (accepted, preferences) => {
-  mustangCookieConsents.value = { accepted, preferences };
-
-  if (accepted) {
-    window.consentGrantedAdStorage();
-  }
-};
+const emit = defineEmits(["cookie-consent-response"]);
 
 const acceptAll = () => {
-  saveCookiePreferences(true, [
-    "Mandatory",
-    "Functional",
-    "Analytics",
-    "Advertisement",
-  ]);
-};
-
-const handleCookiePreferences = (data) => {
-  const preferences = data
-    .filter((pref) => pref.enabled)
-    .map((pref) => pref.label);
-
-  saveCookiePreferences(true, preferences);
+  emit("cookie-consent-response", "agree");
 };
 
 const openCookieSettings = () => {
-  cookie.showModal();
+  emit("cookie-consent-response", "manage");
 };
 </script>

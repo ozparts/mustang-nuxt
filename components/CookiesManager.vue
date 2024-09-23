@@ -2,10 +2,10 @@
   <dialog persistent class="z-40 daisy-modal" id="cookie">
     <div class="daisy-modal-box font-[Nunito] p-0">
       <div class="px-5 py-3 bg-red-600">
-        <p class="text-lg text-white">Cookie Settings</p>
+        <p class="text-base text-white sm:text-lg">Cookie Settings</p>
       </div>
-      <div class="p-5">
-        <p class="mb-4 text-lg font-bold">Your privacy</p>
+      <div class="p-5 text-sm sm:text-lg">
+        <p class="mb-4 text-base font-bold sm:text-lg">Your privacy</p>
         <p class="mb-4">
           Below you can adjust the cookie settings for both our and our
           partners' cookies. We need your consent to use analytical and
@@ -55,15 +55,15 @@
             </label>
           </div>
         </div>
-        <div class="buttons mt-7">
+        <div class="mt-5 buttons">
           <button
-            class="mb-4 text-base text-white bg-red-500 daisy-btn daisy-btn-block hover:bg-red-700"
+            class="mb-4 text-sm text-white bg-red-500 daisy-btn sm:text-base sm:bg-red-500 daisy-btn-sm sm:daisy-btn daisy-btn-block hover:bg-red-700"
             @click="acceptAll"
           >
             ACCEPT ALL
           </button>
           <button
-            class="text-base text-white bg-gray-500 daisy-btn daisy-btn-block hover:bg-gray-700"
+            class="text-sm text-white bg-gray-500 sm:text-base daisy-btn-sm daisy-btn sm:daisy-btn sm:bg-gray-500 daisy-btn-block hover:bg-gray-700"
             @click="saveAndClose"
           >
             SAVE SETTINGS AND CLOSE
@@ -75,20 +75,34 @@
 </template>
 
 <script setup>
+const mustangCookieConsents = useCookie("mustang-cookie-consents");
+
 const emit = defineEmits(["save-preferences"]);
 
-const cookiePreferences = ref([
+const cookiePreferences = reactive([
   { label: "Mandatory", enabled: true, mandatory: true },
   { label: "Functional", enabled: false, mandatory: false },
   { label: "Analytics", enabled: false, mandatory: false },
   { label: "Advertisement", enabled: false, mandatory: false },
 ]);
 
+const updatePreferencesFromCookie = () => {
+  if (mustangCookieConsents.value) {
+    const consentData = mustangCookieConsents.value;
+    updateCookiePreferences(consentData.preferences);
+  }
+};
+
+const updateCookiePreferences = (data) => {
+  cookiePreferences.forEach((pref) => {
+    pref.enabled = pref.mandatory || data.includes(pref.label);
+  });
+};
+
 const acceptAll = () => {
-  cookiePreferences.value = cookiePreferences.value.map((pref) => ({
-    ...pref,
-    enabled: true,
-  }));
+  cookiePreferences.forEach((pref) => {
+    pref.enabled = true;
+  });
   emitPreferences();
 };
 
@@ -97,11 +111,15 @@ const saveAndClose = () => {
 };
 
 const emitPreferences = () => {
-  const currentPreferences = cookiePreferences.value.map((pref) => ({
+  const currentPreferences = cookiePreferences.map((pref) => ({
     label: pref.label,
     enabled: pref.enabled,
   }));
   emit("save-preferences", currentPreferences);
   cookie.close();
 };
+
+onMounted(() => {
+  updatePreferencesFromCookie();
+});
 </script>
