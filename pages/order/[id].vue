@@ -6,14 +6,17 @@
     class="my-6 sm:!my-10 w-full max-w-[400px] m-auto flex flex-col"
   >
     <h2
-      class="text-xl my-6 sm:my-8 font-bold text-center uppercase font-nunito max-w-[400px] rounded-lg py-2"
+      class="text-xl sm:text-2xl my-6 sm:my-8 font-bold text-center uppercase font-nunito max-w-[400px] rounded-lg p-2"
       :class="
-        state.order.paymentstatus ? 'bg-[#A6F1A6] ' : 'bg-white my-6 sm:my-8'
+        state.order.paymentstatus ? 'bg-[#A6F1A6]' : 'bg-white my-6 sm:my-8'
       "
     >
       Your order <span>{{ state.order.name }}</span
       ><br />
-      has been {{ state.order.paymentstatus ? "paid" : "received" }}.
+      <span v-if="state.order.status._id === 'closed'">has been closed</span>
+      <span v-else>
+        has been {{ state.order.paymentstatus ? "paid" : "received" }}
+      </span>
     </h2>
 
     <div
@@ -142,7 +145,9 @@
         </div>
       </div>
     </div>
-    <div v-show="!state.order.paymentstatus">
+    <div
+      v-show="!state.order.paymentstatus && state.order.status._id !== 'closed'"
+    >
       <button
         @click="navigateTo(`/order/payment/${route.params.id}`)"
         class="font-semibold uppercase btn-red sm:btn-red daisy-btn daisy-btn-block daisy-btn-sm sm:daisy-btn"
@@ -155,20 +160,23 @@
 
 <script setup>
 const store = useStore();
-const country = store.getCountry();
 const route = useRoute();
-const name = computed(() => route);
 
 const state = reactive({
   order: null,
 });
 
-onMounted(async () => {
-  const order = await useGetOrder(route.params.id, country.code);
-  state.order = order;
-});
-
+const name = computed(() => route);
 const filterOrderList = computed(() => {
   return state.order.transactionlines.filter((obj) => obj.price !== 0);
+});
+
+const fetchOrder = async () => {
+  const country = store.getCountry();
+  state.order = await useGetOrder(route.params.id, country.code);
+};
+
+onMounted(() => {
+  fetchOrder();
 });
 </script>
