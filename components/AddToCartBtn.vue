@@ -51,7 +51,7 @@ const addToBasket = async () => {
     props.defaultStockLocation
   );
 
-  if (!cartId.value) cartId.value = resp.cart_id;
+  if (!cartId.value) store.setCartId(resp.cart_id);
   cartId.value = resp.cart_id;
 
   const data = await useGetCart(country.code, resp.cart_id);
