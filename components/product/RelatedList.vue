@@ -7,7 +7,7 @@
     </h3>
 
     <div
-      v-if="filterRelatedItems.length >= 1"
+      v-if="filterRelatedItems.length"
       class="grid gap-1 mt-5 xs:grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-1"
     >
       <div v-for="product in filterRelatedItems">
@@ -29,52 +29,53 @@
 </template>
 
 <script setup>
+const route = useRoute();
+
 const props = defineProps(["id"]);
 
-const record = ref(useRoute().params.record);
+const record = ref(route.params.record);
 const state = reactive({
   relatedItems: [],
 });
 
-onMounted(async () => {
-  state.relatedItems = await useGetRelatedItems(props.id);
-});
-
 const filterRelatedItems = computed(() => {
-  const filteredId = [];
-  const properList = [];
-
-  state.relatedItems
-    .filter((item) => {
-      return item.number !== record.value * 1;
-    })
+  return state.relatedItems
+    .filter((item) => item.number !== Number(record.value))
     .sort((a, b) => {
-      if (a.available && !b.available) return -1;
-      if (!a.available && b.available) return 1;
+      if (a.available !== b.available) return b.available ? 1 : -1;
 
-      let [prefixA, suffixA] = a.urlcomponent.split("-");
-      let [prefixB, suffixB] = b.urlcomponent.split("-");
+      const [prefixA, suffixA] = a.urlcomponent.split("-");
+      const [prefixB, suffixB] = b.urlcomponent.split("-");
 
-      if (prefixA !== prefixB) {
-        return prefixA.localeCompare(prefixB);
-      }
-
+      if (prefixA !== prefixB) return prefixA.localeCompare(prefixB);
       if (suffixA === "STD") return -1;
       if (suffixB === "STD") return 1;
       return a.urlcomponent.localeCompare(b.urlcomponent);
     })
-    .forEach((item) => {
-      if (!filteredId.includes(item.id)) {
-        filteredId.push(item.id);
-        properList.push(item);
+    .reduce((acc, item) => {
+      if (!acc.some((i) => i.id === item.id)) {
+        acc.push(item);
       }
-    });
-
-  return properList;
+      return acc;
+    }, []);
 });
 
-const emptyObjectCheck = (array) => {
-  const hasEmptyObject = array.some((obj) => Object.keys(obj).length === 0);
-  return hasEmptyObject ? [] : array;
+const isValidArray = (arr) => {
+  return Array.isArray(arr) && arr.length > 0 && Object.keys(arr[0]).length > 0;
 };
+
+onMounted(async () => {
+  try {
+    const result = await useGetRelatedItems(props.id);
+
+    if (isValidArray(result)) {
+      state.relatedItems = result;
+    } else {
+      state.relatedItems = [];
+    }
+  } catch (error) {
+    console.error("Error fetching related items:", error);
+    state.relatedItems = [];
+  }
+});
 </script>

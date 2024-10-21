@@ -220,7 +220,7 @@
           />
         </div>
 
-        <ProductRealtedList :id="state.product.id" />
+        <ProductRelatedList :id="state.product.id" />
       </div>
     </section>
   </ClientOnly>
