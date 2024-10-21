@@ -199,18 +199,17 @@ export const useAddToBasket = async (
   record: "",
   country: "",
   cart_id: string | "",
-  additionalservice: []
+  additionalservice: [],
+  location: ""
 ) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         additionalservice: additionalservice.length ? additionalservice : [],
-        location: LOCATION.EU,
+        location,
         action: ACTION.ADD_TO_CART,
         quantity,
         record,

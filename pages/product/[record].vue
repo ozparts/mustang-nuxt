@@ -115,13 +115,15 @@
             >
               {{
                 calculateInitialProductPrice(
-                  state.product.price.prices[LOCATION.EU].grossprice,
+                  state.product.price.prices[defaultStockLocation].grossprice,
                   productType
                 )
               }}
               {{ state.product.price.symbol }}
               <span
-                v-if="state.product.price.prices[LOCATION.EU].promotion"
+                v-if="
+                  state.product.price.prices[defaultStockLocation].promotion
+                "
                 class="ml-3 text-decoration-line-through text-subtitle-1"
               >
                 {{
@@ -140,7 +142,7 @@
               (Vat included)
             </p>
             <p
-              v-if="state.product.price.prices[LOCATION.EU].promotion"
+              v-if="state.product.price.prices[defaultStockLocation].promotion"
               class="text-xs text-center sm:!ml-2 sm:!text-start sm:text-sm mt-2"
             >
               The lowest price offered within the last 30 days before the
@@ -187,9 +189,9 @@
                   <AddToCartBtn
                     @click="() => addToCartPopUpHandler()"
                     :product="product"
-                    :availability="state.productAvailability"
                     :quantity="state.quantityOrder"
                     :productStatus="state.productStatus"
+                    :defaultStockLocation="defaultStockLocation"
                   />
                 </div>
                 <div
@@ -227,20 +229,31 @@
 </template>
 
 <script setup>
-import { LOCATION, Manufacturers, metaInfo } from "../../vars/index";
+import { Manufacturers, metaInfo } from "../../vars/index";
 
-const { record } = useRoute().params;
+const route = useRoute();
 const store = useStore();
-const country = store.getCountry();
 const mustangCookieConsents = useCookie("mustang-cookie-consents");
 
-const shoppingCart = await useGetCart(country.code, store.cartId);
-const product = await useGetItem(record, country.code);
+const { data: productData } = await useAsyncData("product", async () => {
+  const record = route.params.record;
+  const country = store.getCountry();
+  const shoppingCart = await useGetCart(country.code, store.cartId);
+  const product = await useGetItem(record, country.code);
+  const defaultStockLocation = product.available.find(
+    (e) => e.default
+  ).location;
 
+  return { product, shoppingCart, defaultStockLocation };
+});
+
+const addToCartPopUp = ref(false);
+
+const { product, shoppingCart, defaultStockLocation } = productData.value;
 const productType = getProductType(product.name);
 
 const state = reactive({
-  product: {},
+  product: product,
   quantityOrder: productType === "discbrake" ? 2 : 1,
   quantityInBasket: 0,
   selectedFoto: "",
@@ -262,12 +275,74 @@ const state = reactive({
   dialog: false,
 });
 
-onMounted(() => {
-  state.product = product;
-  init();
+const availabilityStatusInfo = computed(() => {
+  const backOrder = !!state.product.available.find(
+    (obj) => obj.location === defaultStockLocation
+  ).specialbackorder;
+
+  if (
+    state.quantityOrder + state.quantityInBasket <=
+    state.productAvailability.inStock
+  ) {
+    state.productAvailability.outOfStock = false;
+    state.productStatus = "inStock";
+
+    return "Available and ready to ship (2-4 days delivery)";
+  } else {
+    if (
+      product.manufacturergroup === Manufacturers.DBA.id ||
+      (product.manufacturergroup === Manufacturers.PEDDERS.id && backOrder)
+    ) {
+      if (
+        state.quantityOrder + state.quantityInBasket >
+          state.productAvailability.inStock &&
+        state.quantityOrder + state.quantityInBasket <=
+          state.productAvailability.intransit.quantity +
+            state.productAvailability.inStock
+      ) {
+        state.productAvailability.outOfStock = false;
+        state.productStatus = "inTransit";
+        return "Product in transit - delivery within 3 weeks";
+      } else if (
+        state.productAvailability.inStock <
+          state.quantityOrder + state.quantityInBasket &&
+        state.productAvailability.inStock +
+          state.productAvailability.manufacturer +
+          state.productAvailability.intransit.quantity >=
+          state.quantityOrder + state.quantityInBasket
+      ) {
+        state.productAvailability.outOfStock = false;
+        state.productStatus = "air";
+
+        return productType === "discbrake"
+          ? "Available within 4 weeks with extra cost"
+          : "Available in 4 weeks";
+      }
+    }
+    state.productAvailability.outOfStock = true;
+    state.productStatus = "outOfStock";
+    return "Temporarily out of stock";
+  }
 });
 
-const addToCartPopUp = ref(false);
+const getBannerDescription = computed(() => {
+  if (
+    state.product.categorydescription === "BUSHINGS AND OTHER" &&
+    state.product.description
+  ) {
+    return state.product.description;
+  } else if (state.product.groupdescription) {
+    return state.product.groupdescription;
+  } else if (state.product.categorydescription) {
+    return state.product.categorydescription;
+  } else if (
+    !state.product.categorydescription &&
+    !state.product.groupdescription
+  ) {
+    return state.product.description;
+  }
+});
+
 const init = () => {
   checkQuantityInBasket();
   kitItemCheck();
@@ -341,7 +416,7 @@ const checkAvailabilityStatus = () => {
 };
 
 const getStockQuantity = (arr) => {
-  const stock = arr.find((obj) => obj.location === LOCATION.EU);
+  const stock = arr.find((obj) => obj.location === defaultStockLocation);
   return stock ? stock.quantityavailable : 0;
 };
 
@@ -380,7 +455,7 @@ const subtractQuantity = () => {
 
 const getInTransitInfo = (product) => {
   const location = product.available.find(
-    (obj) => obj.location === LOCATION.EU
+    (obj) => obj.location === defaultStockLocation
   );
   if (!location.intransit) {
     state.productAvailability.intransit.deliveryDate = "";
@@ -388,7 +463,7 @@ const getInTransitInfo = (product) => {
     return;
   }
 
-  const deliveries = product.deliveries[LOCATION.EU];
+  const deliveries = product.deliveries[defaultStockLocation];
   let productsInTransitInLessTreeWeeks = 0;
   let deliveryDate = "";
 
@@ -433,71 +508,8 @@ const kitItemCheck = () => {
   }
 };
 
-const availabilityStatusInfo = computed(() => {
-  const backOrder = !!state.product.available.find(
-    (obj) => obj.location === LOCATION.EU
-  ).specialbackorder;
-
-  if (
-    state.quantityOrder + state.quantityInBasket <=
-    state.productAvailability.inStock
-  ) {
-    state.productAvailability.outOfStock = false;
-    state.productStatus = "inStock";
-
-    return "Available and ready to ship (2-4 days delivery)";
-  } else {
-    if (
-      product.manufacturergroup === Manufacturers.DBA.id ||
-      (product.manufacturergroup === Manufacturers.PEDDERS.id && backOrder)
-    ) {
-      if (
-        state.quantityOrder + state.quantityInBasket >
-          state.productAvailability.inStock &&
-        state.quantityOrder + state.quantityInBasket <=
-          state.productAvailability.intransit.quantity +
-            state.productAvailability.inStock
-      ) {
-        state.productAvailability.outOfStock = false;
-        state.productStatus = "inTransit";
-        return "Product in transit - delivery within 3 weeks";
-      } else if (
-        state.productAvailability.inStock <
-          state.quantityOrder + state.quantityInBasket &&
-        state.productAvailability.inStock +
-          state.productAvailability.manufacturer +
-          state.productAvailability.intransit.quantity >=
-          state.quantityOrder + state.quantityInBasket
-      ) {
-        state.productAvailability.outOfStock = false;
-        state.productStatus = "air";
-
-        return productType === "discbrake"
-          ? "Available within 4 weeks with extra cost"
-          : "Available in 4 weeks";
-      }
-    }
-    state.productAvailability.outOfStock = true;
-    state.productStatus = "outOfStock";
-    return "Temporarily out of stock";
-  }
-});
-
-const getBannerDescription = computed(() => {
-  if (
-    state.product.categorydescription === "BUSHINGS AND OTHER" &&
-    state.product.description
-  ) {
-    return state.product.description;
-  } else if (state.product.groupdescription) {
-    return state.product.groupdescription;
-  } else if (state.product.categorydescription) {
-    return state.product.categorydescription;
-  } else if (
-    !state.product.categorydescription &&
-    !state.product.groupdescription
-  ) {
-    return state.product.description;
-  }
+onMounted(() => {
+  // state.product = product;
+  init();
 });
 </script>

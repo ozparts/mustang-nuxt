@@ -15,11 +15,13 @@
 <script setup>
 import { getProductInfo } from "../../vars/productInfo";
 
-const { part, productType, manufacturergroup } = defineProps([
-  "part",
-  "productType",
-  "manufacturergroup",
-]);
+const { part, productType, manufacturergroup } = defineProps({
+  part: { type: String, required: true },
+  productType: { type: String, required: true },
+  manufacturergroup: { type: String, required: true },
+});
 
-const info = getProductInfo(part, productType, manufacturergroup);
+const info = computed(() =>
+  getProductInfo(part, productType, manufacturergroup)
+);
 </script>
