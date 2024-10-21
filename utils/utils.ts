@@ -113,9 +113,11 @@ export const groupProductsByCategory = (products: Product[]) => {
       },
       []
     )
-    .sort((a: ProductGroupedBySubCategory, b: ProductGroupedBySubCategory) =>
-      a.category.localeCompare(b.category)
-    );
+    .sort((a: ProductGroupedBySubCategory, b: ProductGroupedBySubCategory) => {
+      if (a.category.includes("Varex")) return -1;
+      if (b.category.includes("Varex")) return 1;
+      return a.category.localeCompare(b.category);
+    });
 };
 
 export const groupProductsByMasterCategory = (

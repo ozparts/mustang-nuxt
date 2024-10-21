@@ -105,17 +105,18 @@ const metaDescription = computed(() => {
 });
 
 const filter = computed(() => {
-  const filteredId = [];
-  const properList = [];
-  if (state.productList.length > 0) {
-    state.productList.forEach((obj) => {
-      if (!filteredId.includes(obj.item.id)) {
-        filteredId.push(obj.item.id);
-        properList.push(obj);
-      }
-    });
-  }
-  return properList;
+  if (!state.productList.length) return [];
+
+  const uniqueMap = new Map();
+
+  return state.productList.filter((obj) => {
+    const id = obj.item.id;
+    if (!uniqueMap.has(id)) {
+      uniqueMap.set(id, true);
+      return true;
+    }
+    return false;
+  });
 });
 </script>
 

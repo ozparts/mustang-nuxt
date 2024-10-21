@@ -29,19 +29,17 @@
     </div>
 
     <div v-if="state.show" class="space-y-2 sm:!space-y-4">
-      <div v-for="masterCategory in state.products" :key="masterCategory">
+      <div
+        v-for="masterCategory in sortedProducts"
+        :key="masterCategory.masterCategory"
+      >
         <p class="font-nunito md:text-xl">
           {{ masterCategory.masterCategory }}
         </p>
 
         <div
-          v-for="groupedProducts in masterCategory.subCategories.sort(
-            (a, b) => {
-              if (a.category.includes('Varex')) return -1;
-              if (b.category.includes('Varex')) return 1;
-              return a.category.localeCompare(b.category);
-            }
-          )"
+          v-for="groupedProducts in masterCategory.sortedSubCategories"
+          :key="groupedProducts.category"
           class="my-1 flex items-center gap-0.5 border border-gray-300 bg-gray-200 pr-0.5"
         >
           <div>
@@ -85,6 +83,17 @@ onMounted(() => {
 
 onUpdated(() => {
   state.products = props.products;
+});
+
+const sortedProducts = computed(() => {
+  return state.products.map((masterCategory) => ({
+    ...masterCategory,
+    sortedSubCategories: [...masterCategory.subCategories].sort((a, b) => {
+      if (a.category.includes("Varex")) return -1;
+      if (b.category.includes("Varex")) return 1;
+      return a.category.localeCompare(b.category);
+    }),
+  }));
 });
 
 const turnOnAndOf = () => {
