@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+
+User-agent: serpstatbot
+Disallow: /
+
+Sitemap: https://sitemaps.janusz-ozparts.usermd.net/mustangperformanceeu.xml
