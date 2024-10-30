@@ -1,4 +1,10 @@
-import { ProductByGetItemAction, Location } from "utils/interfaces";
+import { checkUserCountry } from "ozparts-client";
+import {
+  ProductByGetItemAction,
+  Location,
+  PaymentOptions,
+} from "utils/interfaces";
+
 import {
   ACTION,
   CURRENCY,
@@ -22,15 +28,6 @@ const baseBodyEU = {
   mastercatalogue: true,
 };
 
-const baseBodyUK = {
-  source: SOURCE.UK,
-  make: Make,
-  model: Model,
-  currency: CURRENCY.GBP,
-  customer: "guest",
-  mastercatalogue: true,
-};
-
 const searchBody = {
   source: "ozpartseu",
   make: Make,
@@ -49,13 +46,11 @@ export const useGetApplications = async (
   country: string,
   item?: string
 ) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/applications`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         manufacturergroup: Manufacturers.ALL.id,
         action: ACTION.GET_APPLICATIONS,
@@ -75,14 +70,11 @@ export const useGetApplications = async (
 };
 
 export const useGetEngines = async (show: boolean, variant: string) => {
-  const host = useStoreState();
-
   try {
     const data = await fetch(`${HTTP_URL}/applications`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         manufacturergroup: "",
         show,
@@ -104,13 +96,11 @@ export const useGetProducts = async (
   variant: string,
   manufacturer?: string
 ) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/applications`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         show: true,
         action: ACTION.GET_APPLICATIONS,
@@ -132,13 +122,11 @@ export const useGetItem = async (record: string, country: string) => {
   let errorData = {
     message: "",
   };
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/item`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.GET_ITEM,
         byNumber: true,
@@ -161,13 +149,11 @@ export const useGetItem = async (record: string, country: string) => {
 };
 
 export const useGetRelatedItems = async (record: string) => {
-  const host = useStoreState();
   try {
     const res = await fetch(`${HTTP_URL}/applications`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.GET_RELATED_ITEMS,
         record,
@@ -229,25 +215,18 @@ export const useAddToBasket = async (
 
 export const useCountry = async () => {
   try {
-    const data = await fetch(`https://api.ozparts.eu/country`);
-    if (data.status === 200) {
-      return await data.json();
-    } else {
-      console.log(data);
-    }
+    return await checkUserCountry(true);
   } catch (e) {
     console.log(e);
   }
 };
 
 export const useGetCart = async (country: string, cart_id: string) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.GET_CARTS,
         country,
@@ -269,13 +248,11 @@ export const useDeleteItems = async (
   country: string,
   cart_id: string
 ) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.UPDATE_CART,
         field: "deleted",
@@ -301,13 +278,11 @@ export const useDeleteItem = async (
   value: number,
   cart_id: string
 ) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.UPDATE_CART,
         field: "quantity",
@@ -369,13 +344,11 @@ export const useAvlInManstock = (part: ProductByGetItemAction) => {
 };
 
 export const useUpdateCartFields = async (cart_id: string, changes: {}) => {
-  const host = useStoreState();
   try {
     const res = await fetch(`${HTTP_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.UPDATE_CART,
         cart_id,
@@ -432,13 +405,11 @@ export const useCreateAddress = async (
   form: {},
   country: string
 ) => {
-  const host = useStoreState();
   try {
     const res = await fetch(`${HTTP_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.UPDATE_ADDRESS,
         ...form,
@@ -453,13 +424,11 @@ export const useCreateAddress = async (
 };
 
 export const useConfirmOrder = async (cart_id: string, country: string) => {
-  const host = useStoreState();
   try {
     const res = await fetch(`${HTTP_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.ADD_ORDER,
         cart_id,
@@ -478,13 +447,11 @@ export const useConfirmOrder = async (cart_id: string, country: string) => {
 };
 
 export const useGetOrder = async (transaction_id: string, country: string) => {
-  const host = useStoreState();
   try {
     const res = await fetch(`${HTTP_URL}/transactions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         action: ACTION.GET_TRANSACTIONS,
         transaction_id,
@@ -559,7 +526,6 @@ export const useCreateLead = async (form: {}) => {
 };
 
 export const useSearch = async (keyword: string) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/item`, {
       method: "POST",
@@ -585,19 +551,37 @@ export const useGetProductsToCatalogue = async (
   show: boolean,
   variant?: string
 ) => {
-  const host = useStoreState();
-
   try {
     const data = await fetch(`${HTTP_URL}/applications`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        // ...(host === "UK" ? baseBodyUK : baseBodyEU),
         ...baseBodyEU,
         show,
         peryear,
         action: ACTION.GET_APPLICATIONS,
         variant,
+      }),
+    });
+    if (data.status === 200) {
+      return data.json();
+    } else {
+      console.log(data);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getPaymentMethods = async (options: PaymentOptions) => {
+  try {
+    const data = await fetch(`${HTTP_URL}/paymentmethods`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: ACTION.GET_PAYMENT_METHODS,
+        source: SOURCE.EU,
+        ...options,
       }),
     });
     if (data.status === 200) {

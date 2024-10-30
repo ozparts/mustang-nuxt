@@ -7,77 +7,84 @@
 </template>
 
 <script setup>
+import { WIDGET_TYPE } from "./../vars/index";
+
+const props = defineProps({
+  order: {
+    type: Object,
+    required: true,
+  },
+});
+
 const emit = defineEmits(["success", "error"]);
-const store = useStore();
-const host = store.getHost();
-const country = store.getCountry();
-const route = useRoute();
+
 const state = reactive({
   order: null,
 });
 
-const runtimeConfig = useRuntimeConfig();
+const getToken = async (order) => {
+  const res = await getPaymentMethods({
+    currency: order?.currency?.iso,
+    amount: order?.grossamount,
+    transactionid: order?._id,
+  });
+
+  const payPalMethod = res.find(
+    (method) => method.widgettype === WIDGET_TYPE.PAYPAL
+  );
+
+  return payPalMethod?.token[0]?.value || "";
+};
+
+const createPayPalScript = (token, currency) => {
+  const script = document.createElement("script");
+  script.src = `https://www.paypal.com/sdk/js?currency=${currency}&disable-funding=card&client-id=${token}`;
+  script.addEventListener("load", initializePayPal);
+  document.body.appendChild(script);
+};
+
+const initializePayPal = () => {
+  const paypalConfig = {
+    purchase_units: [
+      {
+        amount: {
+          value: state.order.grossamount,
+          currency_code: state.order.currency.name,
+        },
+      },
+    ],
+  };
+
+  paypal
+    .Buttons({
+      createOrder: (_, actions) => actions.order.create(paypalConfig),
+      onApprove: async (_, actions) => {
+        try {
+          const details = await actions.order.capture();
+          if (details.status === "COMPLETED") {
+            emit("success");
+          }
+        } catch (error) {
+          emit("error", error);
+        }
+      },
+    })
+    .render("#pp");
+};
 
 onMounted(async () => {
-  const order = await useGetOrder(route.params.id, country.code);
-  state.order = order;
-  const currency = order.currency.name;
-  let token = "";
+  try {
+    state.order = props.order;
 
-  if (currency === "PLN") {
-    token = runtimeConfig.public.paypalPl;
-  } else {
-    token = runtimeConfig.public.paypalEu;
-  }
+    const token = await getToken(state.order);
+    if (!token) {
+      emit("error", new Error("Failed to get PayPal token"));
+      return;
+    }
 
-  const src = `https://www.paypal.com/sdk/js?client-id=${token}&disable-funding=card&currency=${currency}`;
-
-  const script = document.createElement("script");
-  script.src = src;
-  script.addEventListener("load", setLoaded);
-  document.body.appendChild(script);
-
-  function setLoaded() {
-    const value = state.order.grossamount;
-    const object =
-      host === "UK"
-        ? {
-            purchase_units: [
-              {
-                amount: {
-                  value,
-                  currency_code: "GBP",
-                },
-              },
-            ],
-          }
-        : {
-            purchase_units: [
-              {
-                amount: {
-                  value,
-                  currency_code: state.order.currency.name,
-                },
-              },
-            ],
-          };
-    paypal
-      .Buttons({
-        createOrder: (data, actions) => actions.order.create(object),
-        onApprove: (data, actions) => {
-          return actions.order
-            .capture()
-            .then((details) => {
-              if (details.status === "COMPLETED") {
-                emit("success");
-              }
-            })
-            .catch((error) => {
-              emit("error", error);
-            });
-        },
-      })
-      .render("#pp");
+    createPayPalScript(token, state.order.currency.name);
+  } catch (error) {
+    emit("error", error);
   }
 });
 </script>

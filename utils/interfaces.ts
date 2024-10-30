@@ -70,3 +70,9 @@ export type Manufacturer = {
 export type ManufacturersType = {
   [key: string]: Manufacturer;
 };
+
+export type PaymentOptions = {
+  currency: String;
+  amount: Number;
+  transactionid: String;
+};

@@ -12,6 +12,11 @@ export const LOCATION = {
   UK: "61e14c6ae4a35a668517a8fe",
 };
 
+export const WIDGET_TYPE = {
+  REVOLUT: "Revolut",
+  PAYPAL: "PayPal",
+};
+
 export const TAX = {
   ZERO: "5e0dbaba9e33df43f0b3a480",
   EU: "5e0dbaba9e33df43f0b3a47f", // 23%
@@ -53,6 +58,7 @@ export const ACTION = {
   UPDATE_CART: "updateCart",
   UPDATE_ADDRESS: "updateAddress",
   SEARCH: "search",
+  GET_PAYMENT_METHODS: "getPaymentMethods",
 };
 
 export const countriesObjectEU = {

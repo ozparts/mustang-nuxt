@@ -78,6 +78,7 @@
         state.order.status._id !== 'closed' &&
         !state.order.paymentstatus
       "
+      :order="state.order"
       @success="showSuccess({ status: 'COMPLETED' })"
       @error="(error) => showError(error)"
     />
