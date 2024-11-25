@@ -209,6 +209,19 @@
         </div>
         <div
           class="flex flex-col mb-3"
+          v-if="state.type === options.options[0]"
+        >
+          <label for="vin" class="mb-2 text-sm sm:text-base">VIN</label>
+          <v-text-field
+            id="vin"
+            v-model="state.vin"
+            type="text"
+            density="compact"
+            variant="outlined"
+          />
+        </div>
+        <div
+          class="flex flex-col mb-3"
           v-if="state.type === options.options[1]"
         >
           <label for="partNumber" class="mb-2 text-sm sm:text-base"
@@ -312,6 +325,7 @@ const state = reactive({
   type: "",
   country: "",
   text: "",
+  vin: "",
   privacy: false,
   executeRecaptcha: null,
 });
