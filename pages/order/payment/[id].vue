@@ -3,32 +3,14 @@
   <div
     class="my-10 text-xl font-bold text-center uppercase sm:my-20 sm:text-3xl font-nunito"
   >
-    <h1
-      v-if="
-        state.order &&
-        state.order.status._id === 'pendingapproval' &&
-        state.order.status._id !== 'closed' &&
-        !state.order.paymentstatus
-      "
-      class="mt-4 text-center uppercase"
-    >
-      Pay for the order<br /><span class="text-red-600">{{
-        state.order.name
-      }}</span>
+    <h1 v-if="isPendingPayment" class="mt-4 text-center uppercase">
+      Pay for the order<br />
+      <span class="text-red-600">{{ order?.name }}</span>
     </h1>
-
-    <div
-      v-if="
-        state.order &&
-        state.order.paymentstatus &&
-        state.order.paymentstatus === 'fullypaid'
-      "
-      class="flex flex-col lg:my-16"
-    >
+    <div v-if="isFullyPaid" class="flex flex-col lg:my-16">
       <h1 class="mt-4 text-center uppercase">
-        Your order has been paid<br /><span class="text-red-600">{{
-          state.order.name
-        }}</span>
+        Your order has been paid<br />
+        <span class="text-red-600">{{ order?.name }}</span>
       </h1>
       <NuxtLink to="/" class="mx-auto my-6">
         <button
@@ -38,15 +20,10 @@
         </button>
       </NuxtLink>
     </div>
-
-    <div
-      v-if="state.order && state.order.status._id === 'closed'"
-      class="flex flex-col lg:my-16"
-    >
+    <div v-if="isClosed" class="flex flex-col lg:my-16">
       <h1 class="mt-4 text-center uppercase">
-        Your order has been closed<br /><span class="text-red-600">{{
-          state.order.name
-        }}</span>
+        Your order has been closed<br />
+        <span class="text-red-600">{{ order?.name }}</span>
       </h1>
       <NuxtLink to="/" class="mx-auto my-6">
         <button
@@ -56,55 +33,57 @@
         </button>
       </NuxtLink>
     </div>
-
-    <revolut
-      v-if="
-        ((state.order && state.paymentId === 'revolut') ||
-          (state.order && state.paymentId === 'revolutuk')) &&
-        state.order.status._id === 'pendingapproval' &&
-        state.order.status._id !== 'closed' &&
-        !state.order.paymentstatus
-      "
-      :order="state.order"
-      @success="showSuccess({ status: 'COMPLETED' })"
-      @error="(error) => showError(error)"
-    />
-
-    <paypal
-      v-if="
-        state.order &&
-        state.paymentId === '607468324e5b797a767fe87d' &&
-        state.order.status._id === 'pendingapproval' &&
-        state.order.status._id !== 'closed' &&
-        !state.order.paymentstatus
-      "
-      :order="state.order"
-      @success="showSuccess({ status: 'COMPLETED' })"
-      @error="(error) => showError(error)"
-    />
+    <template v-if="isPendingPayment">
+      <revolut
+        v-if="isRevolutPayment"
+        :order="order"
+        @success="handlePaymentSuccess({ status: 'COMPLETED' })"
+        @error="handlePaymentError"
+      />
+      <paypal
+        v-if="isPaypalPayment"
+        :order="order"
+        @success="handlePaymentSuccess({ status: 'COMPLETED' })"
+        @error="handlePaymentError"
+      />
+    </template>
   </div>
 </template>
 
 <script setup>
 const store = useStore();
-const country = store.getCountry();
 const route = useRoute();
+const country = store.getCountry();
+
+const order = ref(null);
+
 const name = computed(() => route);
-const state = reactive({
-  order: null,
-  paymentId: "",
-});
+const isClosed = computed(() => order.value?.status._id === "closed");
+const isFullyPaid = computed(() => order.value?.paymentstatus === "fullypaid");
+const isRevolutPayment = computed(() =>
+  order.value?.paymentmethod.name.toLowerCase().includes("revolut")
+);
+const isPaypalPayment = computed(() =>
+  order.value?.paymentmethod.name.toLowerCase().includes("paypal")
+);
+const isPendingPayment = computed(
+  () =>
+    order.value?.status._id === "pendingapproval" &&
+    !order.value?.paymentstatus &&
+    order.value?.status._id !== "closed"
+);
 
-onMounted(async () => {
-  const order = await useGetOrder(route.params.id, country.code);
-  state.order = order;
-  state.paymentId = order.paymentmethod._id;
-});
-
-const showSuccess = async (data) => {
+const handlePaymentSuccess = async (data) => {
   if (data.status === "COMPLETED") {
     await useSetPaymentStatus(route.params.id);
-    navigateTo(`/summary/payment`);
+    navigateTo("/summary/payment");
   }
 };
+const handlePaymentError = (error) => {
+  console.error("Payment error:", error);
+};
+
+onMounted(async () => {
+  order.value = await useGetOrder(route.params.id, country.code);
+});
 </script>
