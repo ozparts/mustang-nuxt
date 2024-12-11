@@ -134,13 +134,12 @@ export const useGetItem = async (record: string, country: string) => {
         country,
       }),
     });
+
     if (data.status === 200) {
       return data.json();
-    } else {
-      if (data.status === 404) {
-        errorData.message = (await data.json()).message;
-        throw new Error(errorData.message);
-      }
+    } else if (data.status === 404) {
+      errorData.message = (await data.json()).message;
+      navigateTo("/error?page=product", { replace: true });
     }
   } catch (e) {
     console.log(e);

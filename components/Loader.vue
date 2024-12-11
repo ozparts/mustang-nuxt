@@ -15,8 +15,8 @@
   padding: 20px 0;
 
   .loader {
-    width: 65px;
-    height: 65px;
+    width: 60px;
+    height: 60px;
     animation: preload 2s linear;
   }
 
