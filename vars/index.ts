@@ -17,6 +17,12 @@ export const WIDGET_TYPE = {
   PAYPAL: "PayPal",
 };
 
+export const WAREHOUSE_LOCATION = {
+  UK: "61e14c6ae4a35a668517a8fe",
+  EU: "5e0dbaba9e33df43f0b3a495",
+  NL: "66e04fcba16b2e1e7d873be8",
+};
+
 export const TAX = {
   ZERO: "5e0dbaba9e33df43f0b3a480",
   EU: "5e0dbaba9e33df43f0b3a47f", // 23%

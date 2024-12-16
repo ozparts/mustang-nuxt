@@ -72,6 +72,7 @@ export interface StoreState {
   billingForm: BillingForm;
   host: string | undefined;
   productYears: string[] | [];
+  userRegionData: null | Object;
 }
 
 export const useStore = defineStore("store", {
@@ -87,6 +88,7 @@ export const useStore = defineStore("store", {
       billingForm: emptyBillingForm,
       host: "EU",
       productYears: [],
+      userRegionData: null,
     };
   },
 
@@ -117,6 +119,9 @@ export const useStore = defineStore("store", {
     },
     getProductYears: (state: StoreState) => () => {
       return state.productYears;
+    },
+    getUserRegionData: (state: StoreState) => () => {
+      return state.userRegionData;
     },
   },
 
@@ -188,6 +193,9 @@ export const useStore = defineStore("store", {
     },
     setProductYears(data: string[]) {
       this.productYears = data;
+    },
+    setUserRegionData(data: Object) {
+      this.userRegionData = data;
     },
   },
 

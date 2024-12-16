@@ -78,10 +78,18 @@ const loadProductYears = async () => {
   }
 };
 
+const checkUserRegion = async () => {
+  if (!store.userRegionData) {
+    const data = await getUserRegion();
+    store.setUserRegionData(data);
+  }
+};
+
 const onEventTriggered = async () => {
   removeEventListeners();
   await loadProductYears();
   await cookieHandler();
+  await checkUserRegion();
   checkConstents();
 };
 

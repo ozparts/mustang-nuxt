@@ -592,3 +592,16 @@ export const getPaymentMethods = async (options: PaymentOptions) => {
     console.log(e);
   }
 };
+
+export async function getUserRegion() {
+  try {
+    const data = await fetch(`${HTTP_URL}/source/${SOURCE.EU}`);
+    if (data.status === 200) {
+      return data.json();
+    } else {
+      console.log(data);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}

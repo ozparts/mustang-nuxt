@@ -97,20 +97,53 @@
           >
             contact
           </div>
-          <nav class="mb-10 text-[15px] list-none font-nunito">
-            <ul>
+          <nav
+            v-if="store.userRegionData?.location"
+            class="mb-10 text-[15px] list-none font-nunito"
+          >
+            <ul v-if="currentRegionData === 'EU'">
               <li>
-                <p class="py-2 md:!py-0">OZPARTS PL sp. z o.o.</p>
+                <p class="py-2 md:!py-0">Ozparts PL sp. z o.o.</p>
               </li>
               <li>
                 <p class="py-2 md:!py-0">
-                  ul. Mazowiecka 46-48, 87-100, Torun, Poland
+                  ul. Mazowiecka 46-48, 87-100, Toruń, Poland
                 </p>
               </li>
               <li>
                 <a class="py-2 md:!py-0" href="mailto:info@ozparts.eu"
                   >info@ozparts.eu</a
                 >
+              </li>
+            </ul>
+            <ul v-if="currentRegionData === 'NL'">
+              <li>
+                <p class="py-2 md:!py-0">Ozparts B.V.</p>
+              </li>
+              <li>
+                <p class="py-2 md:!py-0">Geloërveld, Blauwwater 15D,</p>
+              </li>
+              <li>
+                <p class="py-2 md:!py-0">5951 DB Belfeld, Netherlands</p>
+              </li>
+            </ul>
+            <ul v-if="currentRegionData === 'UK'">
+              <li>
+                <p class="py-2 md:!py-0">Ozparts UK Ltd</p>
+              </li>
+              <li>
+                <p class="py-2 md:!py-0">Ricketts Close,</p>
+              </li>
+              <li>
+                <p class="py-2 md:!py-0">
+                  Firs Industrial Estate, Kidderminster,
+                </p>
+              </li>
+              <li>
+                <p class="py-2 md:!py-0">DY11 7QN, UK</p>
+              </li>
+              <li>
+                <p class="py-2 md:!py-0">Tel: 01296711044</p>
               </li>
             </ul>
           </nav>
@@ -128,6 +161,20 @@
 </template>
 
 <script setup>
+import { WAREHOUSE_LOCATION } from "./../vars/index";
+const store = useStore();
+
+const currentRegionData = computed(() => {
+  const locationId = store.userRegionData.location._id;
+  return findWarehouseById(locationId);
+});
+
+const findWarehouseById = (value) => {
+  return Object.keys(WAREHOUSE_LOCATION).find(
+    (key) => WAREHOUSE_LOCATION[key] === value
+  );
+};
+
 const openCookieSettings = () => {
   cookie.showModal();
 };
