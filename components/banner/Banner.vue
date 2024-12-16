@@ -1,6 +1,9 @@
 <template>
   <section
-    class="mx-auto bg-gradient-to-tl from-gray-200 via-white to-gray-200 flex items-center justify-center p-[30px] sm:!h-[20vh]"
+    :class="[
+      'mx-auto bg-gradient-to-tl from-gray-200 via-white to-gray-200 flex items-center justify-center p-[30px]',
+      title === 'contact us' ? 'sm:!h-[10vh]' : 'sm:!h-[20vh]',
+    ]"
   >
     <div>
       <h1

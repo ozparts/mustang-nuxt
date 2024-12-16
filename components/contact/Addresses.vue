@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4">
+  <div class="px-4 py-5">
     <template v-if="store.userRegionData?.location">
       <ContactAddressEu v-if="currentRegionData === 'EU'" />
       <ContactAddressNl v-if="currentRegionData === 'NL'" />
