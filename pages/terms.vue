@@ -151,16 +151,6 @@
       (without any signs of opening) and include all original manufacturer's
       packaging and/or tags.
     </p>
-    <p>
-      Please email us at
-      <a
-        href="mailto:support@mustangperformance.eu"
-        class="border-b border-black"
-        title="Email to support"
-        >support@mustangperformance.eu</a
-      >
-      before returning any products.
-    </p>
     <p class="mb-3 text-sm sm:text-base">
       Important! Please, make sure that you include in the parcel filled Return
       Form (you can download below) together with a copy of the receipt and send
@@ -169,7 +159,7 @@
     <p class="mb-3 text-sm sm:text-base">
       You can download our return
       <a
-        href="http://dba4x4.home.pl/warranty/return/"
+        href="https://dba4x4.home.pl/returns/?source=mustangperformanceeu"
         target="_blank"
         title="Return form to download"
         ><span class="border-b border-black gtm_btn_returns">form here</span></a
