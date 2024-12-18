@@ -5,11 +5,11 @@
       <p class="mb-4 text-xs md:text-sm">(billing purposes)</p>
       <p>
         <b class="mb-1 text-base md:text-lg">Ozparts Uk Ltd </b>
-        <br />Prospect House,
+        <br />Ricketts Close,
         <br />
-        1 Prospect Place, Pride Park
-        <br />DE24 8HG Derby, United Kingdom <br />Tax number: 365077679
-        <br />Company number: 12945327
+        Firs Industrial Estate, Kidderminster
+        <br />DY11 7QN, United Kingdom <br />Tax number: 365077679 <br />Company
+        number: 12945327
       </p>
     </div>
     <div class="text-sm font-medium text-left md:text-base mb-7">
