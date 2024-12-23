@@ -857,14 +857,12 @@ const placeOrder = async () => {
         },
       });
 
-      // <!-- //! window.gtag - new GA account, to change with new conversion id -->
-
-      // window.gtag("event", "conversion", {
-      //   send_to: "AW-16532786070/gorKCK2Xm6cZEJaXucs9",
-      //   value: order.grossamount,
-      //   currency: order.currency.name,
-      //   transaction_id: order.name,
-      // });
+      window.gtag("event", "conversion", {
+        send_to: "AW-16769394046/PB6PCKb8_vkZEP7Korw-",
+        value: order.grossamount,
+        currency: order.currency.name,
+        transaction_id: order.name,
+      });
 
       store.setBasketQuantity(0);
       store.setCartId("");
