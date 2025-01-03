@@ -35,7 +35,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-
+  components: true,
   devtools: { enabled: true },
   ssr: true,
   image: {
