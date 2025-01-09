@@ -32,8 +32,8 @@
           </tr>
           <tr>
             <td>
-              Austria, Denmark, France, Germany, Italy, Norway, Poland,
-              Slovenia, United Kingdom, Luxembourg
+              Austria, Denmark, France, Germany, Italy, Luxembourg, Norway,
+              Poland, Slovenia, United Kingdom
             </td>
             <td>2 days</td>
           </tr>
@@ -76,8 +76,8 @@
           <tr>
             <td>
               Austria, Belgium, Czech Republic, Denmark, France, Germany, Italy,
-              Netherlands, Poland, Portugal, Slovenia, Spain, Switzerland,
-              United Kingdom, Luxembourg
+              Luxembourg, Netherlands, Poland, Portugal, Slovenia, Spain,
+              Switzerland, United Kingdom
             </td>
             <td>1 day</td>
           </tr>
