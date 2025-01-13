@@ -50,7 +50,7 @@
             <td>5 days</td>
           </tr>
           <tr>
-            <td>Bulgaria, Greece, Latvia, Sweden</td>
+            <td>Bulgaria, Greece</td>
             <td>6 days</td>
           </tr>
         </tbody>

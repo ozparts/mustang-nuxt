@@ -189,8 +189,9 @@
     <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">11. Shipping Options</h3>
     <div>
       <div class="container mx-auto max-w-[1200px]">
-        <ShippingOptionsEu v-if="userRegion === 'EU'" />
-        <ShippingOptionsNl v-else-if="userRegion === 'NL'" />
+        <ShippingOptionsNl v-if="userRegion === 'NL'" />
+        <ShippingOptionsUk v-else-if="userRegion === 'UK'" />
+        <ShippingOptionsEu v-else />
       </div>
     </div>
     <div>
