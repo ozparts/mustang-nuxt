@@ -55,6 +55,15 @@
           </tr>
         </tbody>
       </table>
+      <figure>
+        <img
+          src="@/assets/ups-standard-delivery-times-nl.webp"
+          alt="UPS Standard delivery times map across Europe showing estimated shipping durations by country"
+          title="UPS Standard Delivery Times Across Europe"
+          loading="lazy"
+        />
+        <figcaption>UPS Standard delivery times map</figcaption>
+      </figure>
     </div>
 
     <p class="mb-3 font-bold">UPS Express</p>
@@ -98,6 +107,35 @@
           </tr>
         </tbody>
       </table>
+      <figure>
+        <img
+          src="@/assets/ups-express-delivery-times-nl.webp"
+          alt="UPS Express delivery times map across Europe showing estimated shipping durations by country"
+          title="UPS Express Delivery Times Across Europe"
+          loading="lazy"
+        />
+        <figcaption>UPS Express delivery times map</figcaption>
+      </figure>
     </div>
   </div>
 </template>
+
+<style scoped>
+figure {
+  width: 100%;
+  margin: 0 auto;
+  @media (min-width: 960px) {
+    width: 80%;
+  }
+
+  img {
+    width: 100%;
+    display: block;
+  }
+}
+
+figcaption {
+  font-size: 14px;
+  text-align: center;
+}
+</style>
