@@ -11,7 +11,7 @@
     <p class="mb-3 text-sm sm:text-base">
       The following terms and conditions (‘The Terms’) shall be incorporated
       into every contract for sale and/or delivery of goods (‘the goods’) by
-      OZPARTS PL sp. z o.o. (‘The Seller’).
+      {{ addressText }} (‘The Seller’).
     </p>
     <p class="mb-3 text-sm sm:text-base">
       All quotations given, orders accepted and credit extended by The Seller is
@@ -113,8 +113,8 @@
       8. Use of Trade Name and Trademarks
     </h3>
     <p class="mb-3 text-sm sm:text-base">
-      Customers shall not use OZPARTS PL sp. z o.o. trade name or trademarks, or
-      any portion thereof, within the customer’s name.
+      Customers shall not use {{ addressText }} trade name or trademarks, or any
+      portion thereof, within the customer’s name.
     </p>
     <p class="mb-3 text-sm sm:text-base">
       Customers shall have no right, interest in, or claim, on any such trade
@@ -189,8 +189,8 @@
     <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">11. Shipping Options</h3>
     <div>
       <div class="container mx-auto max-w-[1200px]">
-        <ShippingOptionsNl v-if="userRegion === 'NL'" />
-        <ShippingOptionsUk v-else-if="userRegion === 'UK'" />
+        <ShippingOptionsNl v-if="currentRegionData === 'NL'" />
+        <ShippingOptionsUk v-else-if="currentRegionData === 'UK'" />
         <ShippingOptionsEu v-else />
       </div>
     </div>
@@ -208,10 +208,25 @@
 </template>
 
 <script setup>
+import { WAREHOUSE_LOCATION } from "./../vars/index";
+
 const store = useStore();
 
-const userRegion = computed(() => {
-  const name = store.userRegionData?.location.name;
-  return name || "NL";
+const currentRegionData = computed(() => {
+  const locationId = store.userRegionData?.location._id;
+
+  return findWarehouseById(locationId);
 });
+
+const addressText = computed(() => {
+  return currentRegionData.value === "NL"
+    ? "OZPARTS B.V."
+    : "OZPARTS PL sp. z o.o.";
+});
+
+const findWarehouseById = (value) => {
+  return Object.keys(WAREHOUSE_LOCATION).find(
+    (key) => WAREHOUSE_LOCATION[key] === value
+  );
+};
 </script>

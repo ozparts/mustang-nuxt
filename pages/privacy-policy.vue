@@ -16,9 +16,13 @@
       protection criteria, Users can refer to the applicability section.
     </p>
     <p class="my-5 text-lg font-bold">Owner and Data Controller</p>
-    <p class="mb-3 text-sm sm:text-base">
+    <p v-if="currentRegionData === 'EU'" class="mb-3 text-sm sm:text-base">
       OZPARTS PL sp. z o.o.<br />ul. Słowackiego 32/5<br />87-100, Torun,
       Poland<br />VAT: PL 956 223 01 29
+    </p>
+    <p v-else class="mb-3 text-sm sm:text-base">
+      OZPARTS B.V.<br />Weena 690,<br />3012CN Rotterdam, Netherlands <br />VAT:
+      NL.8663.35.791B01
     </p>
     <p class="mb-3 text-sm sm:text-base">
       Contact Email: privacy.policy@ozparts.eu
@@ -558,6 +562,23 @@
       This privacy policy relates solely to this Website, if not stated
       otherwise within this document.
     </p>
+
     <p class="mb-3 text-sm sm:text-base">Latest update: May 24, 2018</p>
   </section>
 </template>
+
+<script setup>
+import { WAREHOUSE_LOCATION } from "./../vars/index";
+const store = useStore();
+
+const currentRegionData = computed(() => {
+  const locationId = store.userRegionData?.location._id;
+  return findWarehouseById(locationId);
+});
+
+const findWarehouseById = (value) => {
+  return Object.keys(WAREHOUSE_LOCATION).find(
+    (key) => WAREHOUSE_LOCATION[key] === value
+  );
+};
+</script>
