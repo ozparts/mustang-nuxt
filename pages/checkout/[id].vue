@@ -950,6 +950,17 @@ const billingRules = {
 const taxRules = {
   taxnumber: {
     required: helpers.withMessage("Value is required", requiredIf(!state.vat)),
+    noLettersBeforeVat: helpers.withMessage(
+      "Please remove letters before the VAT number. Use country selection for prefix",
+      (value) => {
+        if (!value) return true;
+        const vatWithoutPrefix = countryPrefix
+          ? value.replace(countryPrefix, "")
+          : value;
+        const letterBeforeNumberRegex = /^[a-zA-Z]+.*\d/;
+        return !letterBeforeNumberRegex.test(vatWithoutPrefix);
+      }
+    ),
     valid: helpers.withMessage(`Invalid VAT number`, () => state.isValid),
   },
   agreedToTerms: {
@@ -982,6 +993,25 @@ watch(
     ];
     await handleChange(changes);
     updateTax();
+  }
+);
+
+watch(
+  () => billingForm.billCountryName,
+  async () => {
+    const [billingCountry] = countriesArray.filter(
+      (el) => el.name === billingForm.billCountryName
+    );
+    const basket = await useUpdateCartField(
+      cart_id,
+      null,
+      "billcountry",
+      billingCountry.code
+    );
+    assignBasket(basket);
+    if (state.vat) {
+      isValid();
+    }
   }
 );
 
