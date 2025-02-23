@@ -841,6 +841,9 @@ const placeOrder = async () => {
     if (transaction && order) {
       window.dataLayer?.push({
         event: "purchase",
+        ev: {
+          email: order.shipemail,
+        },
         ecommerce: {
           items: order.transactionlines.map((line) => ({
             id: line._id,
@@ -855,13 +858,6 @@ const placeOrder = async () => {
           currency: order.currency.name,
           coupon: "",
         },
-      });
-
-      window.gtag("event", "conversion", {
-        send_to: "AW-16769394046/PB6PCKb8_vkZEP7Korw-",
-        value: order.grossamount,
-        currency: order.currency.name,
-        transaction_id: order.name,
       });
 
       store.setBasketQuantity(0);
