@@ -6,17 +6,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       dataLayer.push(arguments);
     }
     window.gtag = gtag;
-
-    function consentGrantedAdStorage() {
-      gtag("consent", "update", {
-        ad_storage: "granted",
-        ad_user_data: "granted",
-        ad_personalization: "granted",
-        analytics_storage: "granted",
-      });
-    }
-
-    window.consentGrantedAdStorage = consentGrantedAdStorage;
   }
 });
 

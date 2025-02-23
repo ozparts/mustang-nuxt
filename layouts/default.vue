@@ -31,10 +31,6 @@ const showCookieModal = ref(false);
 
 const events = ["mousemove", "touchstart", "touchmove", "click"];
 
-const hasAnalytics = computed(() =>
-  mustangCookieConsents.value.preferences?.includes("Analytics")
-);
-
 const handleInitialConsentResponse = (answer) => {
   answer === "manage" ? cookie.showModal() : acceptAll();
 };
@@ -51,8 +47,23 @@ const acceptAll = () => {
 const saveCookiePreferences = (accepted, preferences) => {
   mustangCookieConsents.value = { accepted, preferences };
 
+  const hasAnalytics = preferences.includes("Analytics");
+
+  // const hasFunctional = preferences.includes("Functional");
+
+  const hasAdvertisement = preferences.includes("Advertisement");
+
+  if (hasAnalytics) {
+    $loadHjScript();
+  }
+
   if (accepted) {
-    window.consentGrantedAdStorage();
+    window.gtag("consent", "update", {
+      ad_storage: hasAdvertisement ? "granted" : "denied",
+      ad_user_data: hasAdvertisement ? "granted" : "denied",
+      ad_personalization: hasAdvertisement ? "granted" : "denied",
+      analytics_storage: hasAnalytics ? "granted" : "denied",
+    });
   }
 };
 
@@ -90,20 +101,14 @@ const onEventTriggered = async () => {
   await loadProductYears();
   await cookieHandler();
   await checkUserRegion();
-  checkConstents();
-};
-
-const checkConstents = () => {
-  if (hasAnalytics.value) {
-    $loadHjScript();
-  }
 };
 
 const cookieHandler = async () => {
   if (!mustangCookieConsents.value.accepted) {
     showCookieModal.value = true;
   } else {
-    window.consentGrantedAdStorage();
+    const { accepted, preferences } = mustangCookieConsents.value;
+    saveCookiePreferences(accepted, preferences);
   }
 
   if (!mustangCookieCountry.value) {
@@ -123,7 +128,6 @@ watch(
   () => mustangCookieConsents.value,
   () => {
     showCookieModal.value = false;
-    checkConstents();
   }
 );
 </script>
