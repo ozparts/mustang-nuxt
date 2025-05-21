@@ -651,9 +651,11 @@ const countriesArray =
 
 const countryPrefix = computed(() => {
   if (billingForm.billCountryName) {
-    return Object.entries(countriesObjectEU).find(
+    const countryName = Object.entries(countriesObjectEU).find(
       (obj) => obj[0] === billingForm.billCountryName
     )[1];
+
+    return countryName === "GR" ? "EL" : countryName;
   }
 });
 
@@ -706,9 +708,11 @@ const updateZipCode = debounce(async (zip) => {
 
 const isValid = debounce(async () => {
   if (billingForm.billCountryName && state.taxnumber.length > 6) {
-    const prefix = Object.entries(countriesObjectEU).find(
+    const countryName = Object.entries(countriesObjectEU).find(
       (obj) => obj[0] === billingForm.billCountryName
     )[1];
+
+    const prefix = countryName === "GR" ? "EL" : countryName;
 
     const res = await useUpdateCartField(
       cart_id,
