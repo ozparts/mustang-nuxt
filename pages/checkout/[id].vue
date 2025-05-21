@@ -1073,13 +1073,11 @@ watch(
 watch(
   () => state.vat,
   async () => {
-    updateTax();
-
-    if (await t$.value.$validate()) {
-      state.orderButton = true;
-    } else {
-      state.orderButton = false;
+    if (state.taxnumber) {
+      state.taxnumber = "";
+      await useUpdateCartField(cart_id, null, "taxnumber", "");
     }
+    updateTax();
   }
 );
 </script>
