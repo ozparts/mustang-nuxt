@@ -8,7 +8,7 @@
         class="text-lg daisy-link daisy-link-hover daisy-link-error"
       >
         <nuxt-link :to="'/product/' + item.number" target="_blank">
-          {{ item.name }} - {{ item.description }}
+          {{ item.quantity }} x {{ item.name }} - {{ item.description }}
         </nuxt-link>
       </li>
     </ul>
