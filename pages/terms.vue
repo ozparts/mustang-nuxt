@@ -135,57 +135,66 @@
       said Catalogues, Price Lists and Technical References.
     </p>
 
-    <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">
-      10. 30 days returns - conditions
-    </h3>
+    <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">10. 30 days returns</h3>
     <p class="mb-3 text-sm sm:text-base">
       If you are not satisfied with your purchase, please follow the
-      instructions below to return the item.
+      instructions below to return the product:
     </p>
-    <p class="mb-3 text-sm sm:text-base">
-      Returns are acceptable within 30 days from the day of purchase (date of
-      invoice).
-    </p>
-    <p class="mb-3 text-sm sm:text-base">
-      All returns must be in their original conditions, originally packed
-      (without any signs of opening) and include all original manufacturer's
-      packaging and/or tags.
-    </p>
-    <p class="mb-3 text-sm sm:text-base">
-      Important! Please, make sure that you include in the parcel filled Return
-      Form (you can download below) together with a copy of the receipt and send
-      it within 30 days from the day of purchase (date of receipt).
-    </p>
-    <p class="mb-3 text-sm sm:text-base">
-      You can download our return
-      <a
-        href="https://dba4x4.home.pl/returns/?source=mustangperformanceeu"
-        target="_blank"
-        title="Return form to download"
-        ><span class="border-b border-black gtm_btn_returns">form here</span></a
-      >. Please, fill it out completely and send in the box with your return.
-      Please include your details, part number and explain the reason of the
-      return.
-    </p>
-    <p class="mb-3 text-sm sm:text-base">
-      Any returns not approved by us will be refused. You will be responsible
-      for shipping to us and back to you so be sure to contact us prior to
-      taking any action.
-    </p>
-    <p class="mb-3 text-sm sm:text-base">
-      When shipping returned items, you are responsible to pack and ship items
-      properly so the items do not get damaged or lost in transit.
-    </p>
-    <p class="mb-3 text-sm sm:text-base">
-      We will be glad to refund undamaged and unused items with no restocking
-      fee within 30 days from the date of sale.
-    </p>
-    <p class="mb-3 text-sm sm:text-base">
-      If any parts were purchased as a set, it is not possible to return its
-      individual components. In such cases, it is possible to return the entire
-      set only containing all components. Returns of a single set's components'
-      will be rejected and sent back at the customer's cost.
-    </p>
+    <ol class="returns-list">
+      <li>
+        <strong>Return period</strong> – returns are accepted within 30 days
+        from the date of the final invoice.
+      </li>
+      <li>
+        <strong>Product condition</strong> – all returned items must be in their
+        original condition, factory-sealed (no signs of opening), and include
+        all original manufacturer’s packaging and/or tags.
+      </li>
+      <li>
+        <strong>Return registration</strong> – before sending the return
+        shipment, the return must be registered
+        <a
+          href="https://dba4x4.home.pl/returns/?source=mustangperformanceeu"
+          target="_blank"
+          title="Return form to download"
+          ><span class="border-b border-black gtm_btn_returns">[HERE]</span></a
+        >.
+      </li>
+      <li>
+        <strong>Return form</strong> – the return package must include a
+        completed and printed return form that includes under the link above.
+      </li>
+      <li>
+        <strong>Return shipping costs</strong> – return shipping costs are
+        covered by the customer.
+      </li>
+      <li>
+        <strong>Cash on delivery</strong> – we do not accept returns sent via
+        cash on delivery (COD).
+      </li>
+      <li>
+        <strong>Packaging responsibility</strong> – the customer is responsible
+        for packing the returned items securely. We do not accept items damaged
+        during transport organized by the customer.
+      </li>
+      <li>
+        <strong>Return of "kits"</strong> – in the case of product sets
+        consisting of multiple parts, we only accept returns of the entire set.
+        Partial returns of individual components will not be accepted.
+      </li>
+      <li>
+        <strong>Credit note</strong> – will be issued within 5 business days
+        from the receipt of the returned goods at our warehouse.
+      </li>
+      <li>
+        <strong>Refund method</strong> – the refund will be issued using the
+        same payment method as used for the original order.
+      </li>
+      <li>
+        <strong>Return address</strong> – the return shipping address will be
+        provided at the end of the online return form process.
+      </li>
+    </ol>
     <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">11. Shipping Options</h3>
     <div>
       <div class="container mx-auto max-w-[1200px]">
@@ -230,3 +239,21 @@ const findWarehouseById = (value) => {
   );
 };
 </script>
+
+<style scoped lang="scss">
+.returns-list {
+  list-style: decimal;
+  margin-left: 30px;
+  margin-bottom: 20px;
+  li {
+    margin: 10px 0;
+    .gtm_btn_returns {
+      color: red;
+      font-weight: 600;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+</style>
