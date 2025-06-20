@@ -440,4 +440,6 @@ export const EXCLUDED = [
   "DBA42246CXL",
   "DBA42394CXL",
   "DBA3274EL",
+  "DBA43882LS",
+  "DBA43882RS",
 ];
