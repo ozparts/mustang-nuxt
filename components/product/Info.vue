@@ -5,7 +5,6 @@
         <div class="flex items-center justify-center">
           <Icon name="ph:dot-outline-fill" size="18px" />
         </div>
-
         <span class="ml-1"> {{ singleInfo }} </span>
       </li>
     </ul>
@@ -15,13 +14,13 @@
 <script setup>
 import { getProductInfo } from "../../vars/productInfo";
 
-const { part, productType, manufacturergroup } = defineProps({
+const { part, productType, productType2, manufacturergroup } = defineProps({
   part: { type: String, required: true },
   productType: { type: String, required: true },
   manufacturergroup: { type: String, required: true },
 });
 
-const info = computed(() =>
-  getProductInfo(part, productType, manufacturergroup)
-);
+const info = computed(() => {
+  return getProductInfo(part, productType, manufacturergroup);
+});
 </script>

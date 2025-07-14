@@ -15,29 +15,93 @@
 </template>
 
 <script setup>
+import { EXCLUDED } from "~/vars";
 const store = useStore();
 
 const props = defineProps({
   product: { type: Object },
+  productInfo: { type: Object },
   quantity: { type: Number },
-  productStatus: { type: String },
+  productType: { type: String },
   defaultStockLocation: { type: String },
 });
 
+const getType = (name) => {
+  const excluded = EXCLUDED;
+  if (name) {
+    if (excluded.includes(name)) {
+      return "exluded";
+    } else if (
+      name.includes("DBA") &&
+      (name.includes("SP") || name.includes("XP"))
+    ) {
+      return "kit";
+    } else if (name.includes("DBABU")) {
+      return "dbakit";
+    } else if (name.includes("DBAC")) {
+      return "calipers";
+    } else if (name.includes("DBA")) {
+      return "discbrake";
+    } else if (name.includes("DB")) {
+      return "brakepad";
+    }
+  }
+};
 const cartId = ref(null);
 
 const country = store.getCountry();
 const storeCartId = store.getCartId();
-const productType = getProductType(props.product.name);
+
+const FreeService = "6704d5b3bb6a6850a3f81f96";
+const PaidService = "6704db02bb6a6850a3f840b6";
 
 const serviceCode =
-  productType === "brakepad"
-    ? "5e2566e63e8d6645e0e62291"
-    : "5e0dbaba9e33df43f0b3a4f3";
+  props.productType === "brakepad" ? FreeService : PaidService;
 
-// const local = useAvlInLocation(props.product, LOCATION);
-// const stock = useAvlInManstock(props.product);
-// const additionalservice = local === 0 && stock > 0 ? [serviceCode] : [];
+const isDbaProduct =
+  props.product.manufacturergroup === "5f9bda55dcdf6b0c04f1878c";
+
+const setServiceCode = computed(() => {
+  const availability = props.productInfo.av;
+
+  if (isDbaProduct && availability.case !== "airfreight") {
+    return [];
+  } else if (isDbaProduct && availability.case === "airfreight") {
+    if (props.productType !== "kit") {
+      return [serviceCode];
+    } else {
+      if (!props.product?.components) {
+        return [];
+      }
+
+      const components = props.product.components;
+      let discbrake;
+      let brakepad;
+
+      for (const e of components) {
+        const type = getType(e.name);
+        if (type === "brakepad") {
+          brakepad = e;
+        } else if (type === "discbrake") {
+          // More specific condition
+          discbrake = e;
+        }
+      }
+
+      if (
+        (brakepad.available || 0) + (brakepad.manufacturerstock || 0) >=
+          props.quantity &&
+        discbrake.available === 0 &&
+        (discbrake.manufacturerstock || 0) >= props.quantity * 2
+      ) {
+        return [serviceCode];
+      } else {
+        return [];
+      }
+    }
+  }
+  return [];
+});
 
 const addToBasket = async () => {
   const resp = await useAddToBasket(
@@ -45,9 +109,7 @@ const addToBasket = async () => {
     props.product.id,
     country.code,
     cartId.value,
-    props.productStatus === "air" && productType === "discbrake"
-      ? [serviceCode]
-      : [],
+    setServiceCode.value,
     props.defaultStockLocation
   );
 
