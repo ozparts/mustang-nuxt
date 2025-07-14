@@ -32,7 +32,6 @@
         @click="showMessage = !showMessage"
       />
     </div>
-    <p>{{ productInfo.av.case }}</p>
     <div
       v-if="isAirfreight && showMessage"
       class="p-3 mt-2 text-xs text-blue-800 rounded-lg bg-blue-50"
