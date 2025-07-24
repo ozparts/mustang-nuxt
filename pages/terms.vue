@@ -165,6 +165,11 @@
         completed and printed return form that includes under the link above.
       </li>
       <li>
+        <strong>Return shipping deadline</strong> – the return shipment must be
+        dispatched within a maximum of 7 days from the date the return was
+        registered online.
+      </li>
+      <li>
         <strong>Return shipping costs</strong> – return shipping costs are
         covered by the customer.
       </li>
