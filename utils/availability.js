@@ -13,16 +13,6 @@ export const getAvailability = (
 
   const isAirFreight = !part.custombox;
 
-  const countKitsInStocks = () => {
-    const transformedData = part.components?.map(({ available, quantity }) => ({
-      available,
-      quantity,
-      max: quantity !== 0 ? Math.floor(available / quantity) : null,
-    }));
-
-    return Math.min(...transformedData.map((item) => item.max));
-  };
-
   const countAlternativeStock = () => {
     const inDropshipStock =
       avSettings[MANUFACTURER].dropship && dropshipStock
@@ -32,7 +22,8 @@ export const getAvailability = (
       avSettings[MANUFACTURER].alternative && alternativeStock
         ? alternativeStock.quantityavailable
         : 0;
-    const kits = part.recordtype === "kititem" ? countKitsInStocks() : 0; //maksymalna ilość kitów jakie można złożyć z dwóch magazynów
+    const kits =
+      part.recordtype === "kititem" ? defaultStock.multilocationavailable : 0; //maksymalna ilość kitów jakie można złożyć z dwóch magazynów
     return part.recordtype === "kititem"
       ? kits - defaultStock.quantityavailable - inDropshipStock
       : allItems - inDropshipStock;

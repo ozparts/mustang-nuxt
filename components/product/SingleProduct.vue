@@ -45,7 +45,13 @@
         <p>Parameter: {{ product.parameter }}</p>
       </div>
       <div class="w-full mt-4 mb-2">
-        <InStock v-if="product.item.available" size="26px" />
+        <InStock
+          v-if="
+            product.item.availabledetails[0].multilocationavailable ||
+            product.item.available
+          "
+          size="26px"
+        />
         <CheckAvailability size="26px" v-else />
       </div>
     </div>

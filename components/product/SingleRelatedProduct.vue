@@ -40,7 +40,12 @@
     {{ product.description }}
   </div>
   <div>
-    <InStock v-if="product.available" size="1.2rem" />
+    <InStock
+      v-if="
+        product.availabledetails[0].multilocationavailable || product.available
+      "
+      size="1.2rem"
+    />
     <CheckAvailability size="1.2rem" v-else />
   </div>
 </template>
