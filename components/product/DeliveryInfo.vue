@@ -24,7 +24,7 @@
         {{ productInfo.av.case
         }}{{
           productInfo.av.case === "intransit" &&
-          (av.days.match(/-/g) || []).length >= 2
+          (productInfo.av.days.match(/-/g) || []).length >= 2
             ? "Expected within the next few days"
             : productInfo.av.days
         }}
