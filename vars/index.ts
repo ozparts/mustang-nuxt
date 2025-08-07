@@ -3,7 +3,7 @@ export const SOURCE = {
   UK: "mustangperformanceuk",
 };
 
-export const HTTP_URL = "https://ozparts2.usermd.net/api/external";
+export const HTTP_URL = "https://3cerp.eu/api/external";
 
 export const MANUFACTURER = "5f9bda55dcdf6b0c04f1878c";
 
@@ -78,6 +78,7 @@ export const countriesObjectEU = {
   Estonia: "EE",
   Finland: "FI",
   France: "FR",
+  "France - Réunion": "RE",
   Germany: "DE",
   Greece: "GR",
   Hungary: "HU",
