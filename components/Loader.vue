@@ -17,7 +17,7 @@
   .loader {
     width: 60px;
     height: 60px;
-    animation: preload 2s linear;
+    animation: preload 800ms linear infinite;
   }
 
   @keyframes preload {
