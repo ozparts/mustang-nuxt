@@ -590,8 +590,8 @@ const mustangCookieConsents = useCookie("mustang-cookie-consents");
 const store = useStore();
 const route = useRoute();
 const cart_id = route.params.id;
+const { country } = useCountry();
 
-const country = store.getCountry();
 const host = store.getHost();
 const shippingForm = store.getShippingForm();
 const billingForm = store.getBillingForm();
@@ -624,7 +624,7 @@ onMounted(async () => {
   const { recaptchaLoaded, executeRecaptcha } = useReCaptcha();
   state.executeRecaptcha = executeRecaptcha;
   await recaptchaLoaded();
-  const basket = await useGetCart(country.code, cart_id);
+  const basket = await useGetCart(country.value, cart_id);
   assignBasket(basket);
   state.basket = basket.shoppingcarts[0].shoppingcart;
 });
@@ -674,7 +674,7 @@ const checkCurrency = async (value) => {
 const updateCurrency = async (val) => {
   if (val) {
     await useUpdateCartField(cart_id, null, "currency", state.newCurrency);
-    const basket = await useGetCart(country.code, cart_id);
+    const basket = await useGetCart(country.value, cart_id);
     assignBasket(basket);
   }
   state.changeCurrency = false;
@@ -839,8 +839,8 @@ const placeOrder = async () => {
     }
     state.loading = true;
     await createAddress();
-    const transaction = await useConfirmOrder(cart_id, country.code);
-    const order = await useGetOrder(cart_id, country.code);
+    const transaction = await useConfirmOrder(cart_id, country.value);
+    const order = await useGetOrder(cart_id, country.value);
 
     if (transaction && order) {
       window.dataLayer?.push({
@@ -1058,14 +1058,14 @@ watch(
 watch(
   () => shippingForm.country,
   async () => {
-    const country = shippingForm.country
+    const formCountry = shippingForm.country
       ? countriesArray.find((obj) => obj.name === shippingForm.country)
-      : store.getCountry();
-    await useUpdateCartField(cart_id, null, "shipcountry", country.code);
+      : country.value;
+    await useUpdateCartField(cart_id, null, "shipcountry", formCountry.code);
     const changes = [{ field: "shippingmethod", value: "" }];
     await handleChange(changes);
     updateTax();
-    checkCurrency(country.code);
+    checkCurrency(formCountry.code);
     if (shippingForm.shippingMethod._id) shippingForm.shippingMethod._id = "";
   }
 );

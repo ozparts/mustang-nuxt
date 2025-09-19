@@ -49,7 +49,8 @@ const getType = (name) => {
 };
 const cartId = ref(null);
 
-const country = store.getCountry();
+const { country } = useCountry();
+
 const storeCartId = store.getCartId();
 
 const FreeService = "6704d5b3bb6a6850a3f81f96";
@@ -107,7 +108,7 @@ const addToBasket = async () => {
   const resp = await useAddToBasket(
     props.quantity,
     props.product.id,
-    country.code,
+    country.value,
     cartId.value,
     setServiceCode.value,
     props.defaultStockLocation
@@ -116,7 +117,7 @@ const addToBasket = async () => {
   if (!cartId.value) store.setCartId(resp.cart_id);
   cartId.value = resp.cart_id;
 
-  const data = await useGetCart(country.code, resp.cart_id);
+  const data = await useGetCart(country.value, resp.cart_id);
   store.setBasketQuantity(
     countBasketQuantity(data.shoppingcarts[0].shoppingcart.transactionlines)
   );

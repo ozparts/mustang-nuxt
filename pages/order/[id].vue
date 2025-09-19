@@ -159,8 +159,8 @@
 </template>
 
 <script setup>
-const store = useStore();
 const route = useRoute();
+const { country } = useCountry();
 
 const state = reactive({
   order: null,
@@ -172,8 +172,7 @@ const filterOrderList = computed(() => {
 });
 
 const fetchOrder = async () => {
-  const country = store.getCountry();
-  state.order = await useGetOrder(route.params.id, country.code);
+  state.order = await useGetOrder(route.params.id, country.value);
 };
 
 onMounted(() => {

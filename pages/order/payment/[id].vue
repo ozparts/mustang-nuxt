@@ -53,7 +53,7 @@
 <script setup>
 const store = useStore();
 const route = useRoute();
-const country = store.getCountry();
+const { country } = useCountry();
 
 const order = ref(null);
 
@@ -84,6 +84,6 @@ const handlePaymentError = (error) => {
 };
 
 onMounted(async () => {
-  order.value = await useGetOrder(route.params.id, country.code);
+  order.value = await useGetOrder(route.params.id, country.value);
 });
 </script>

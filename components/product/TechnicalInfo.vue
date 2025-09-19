@@ -88,6 +88,7 @@
 import { Manufacturers } from "../../vars/index";
 
 const props = defineProps(["product", "weight", "kitItem"]);
+const { country } = useCountry();
 
 const state = reactive({
   kitComponents: [],
@@ -95,8 +96,18 @@ const state = reactive({
 
 onMounted(() => {
   if (props.kitItem.isKitItem) {
-    props.kitItem.components.map(async (obj) => {
-      const data = await useGetItem(obj);
+    props.kitItem.components.map(async (record) => {
+      const { data, error } = await useGetItem(record, country.value);
+
+      if (error) {
+        console.error("Failed to get kit component details:", error);
+        return;
+      }
+
+      if (!data) {
+        console.error("Kit component not found");
+        return;
+      }
 
       state.kitComponents.push({
         ...data.technicaldetails,
