@@ -1,9 +1,4 @@
-import { checkUserCountry } from "ozparts-client";
-import {
-  ProductByGetItemAction,
-  Location,
-  PaymentOptions,
-} from "utils/interfaces";
+import { PaymentOptions } from "utils/interfaces";
 
 import {
   ACTION,
@@ -13,11 +8,15 @@ import {
   Model,
   SOURCE,
   LOCATION,
-  MANUFACTURER,
-  EXCLUDED,
-  categories,
   Manufacturers,
 } from "../vars/index";
+
+import {
+  GetApplicationsApiResponse,
+  GetApplicationsForItemResponse,
+  GetItemResponse,
+  GetRelatedItemsResponse,
+} from "~/types/api";
 
 const baseBodyEU = {
   source: SOURCE.EU,
@@ -36,37 +35,120 @@ const searchBody = {
   customer: "guest",
 };
 
-const useStoreState = () => {
-  const store = useStore();
-  return store.getHost();
-};
+interface ApiResponse<T = any> {
+  data: T | null;
+  error: string | null;
+  status?: number;
+}
 
-export const useGetApplications = async (
-  show: boolean,
-  country: string,
-  item?: string
-) => {
+const makeApiRequest = async <T = any>(
+  endpoint: string,
+  body: any
+): Promise<ApiResponse<T>> => {
   try {
-    const data = await fetch(`${HTTP_URL}/applications`, {
+    const response = await fetch(`${HTTP_URL}/${endpoint}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
+        ...body,
         ...baseBodyEU,
-        manufacturergroup: Manufacturers.ALL.id,
-        action: ACTION.GET_APPLICATIONS,
-        item,
-        show,
-        country,
       }),
     });
-    if (data.status === 200) {
-      return data.json();
-    } else {
-      console.log(data);
+
+    if (!response.ok) {
+      let errorMessage = `Error status: ${response.status}.`;
+      if (response.statusText) {
+        errorMessage += ` Error message: ${response.statusText}`;
+      }
+      throw new Error(errorMessage, { cause: response.status });
     }
-  } catch (e) {
-    console.log(e);
+
+    const data = await response.json();
+    return {
+      data,
+      error: null,
+      status: response.status,
+    };
+  } catch (error: any) {
+    console.error(
+      `API Error on /${endpoint} endpoint with ${body.action} method.`,
+      error
+    );
+    return {
+      data: null,
+      error: error.message || "Network error occurred",
+      status: error.cause,
+    };
   }
+};
+
+interface GetApplicationsParams {
+  show: boolean;
+  country: string;
+  item?: string;
+}
+
+export const useGetApplications = async (
+  params: GetApplicationsParams
+): Promise<ApiResponse<GetApplicationsApiResponse>> => {
+  const { show, country, item } = params;
+
+  return makeApiRequest("applications", {
+    manufacturergroup: Manufacturers.ALL.id,
+    action: ACTION.GET_APPLICATIONS,
+    item,
+    show,
+    country,
+  });
+};
+
+interface GetApplicationsForItemParams {
+  id: string;
+}
+
+export const useGetApplicationsForItem = async (
+  params: GetApplicationsForItemParams
+): Promise<ApiResponse<GetApplicationsForItemResponse>> => {
+  const { id } = params;
+  return makeApiRequest("applications", {
+    item: id,
+    action: ACTION.GET_APPLICATIONS,
+  });
+};
+
+interface GetRelatedItemsParams {
+  record: string;
+}
+
+export const useGetRelatedItems = async (
+  params: GetRelatedItemsParams
+): Promise<ApiResponse<GetRelatedItemsResponse>> => {
+  const { record } = params;
+  return makeApiRequest("applications", {
+    record,
+    action: ACTION.GET_RELATED_ITEMS,
+  });
+};
+
+interface GetItemParams {
+  record: string;
+  country: string;
+}
+
+export const useGetItem = async (
+  params: GetItemParams
+): Promise<ApiResponse<GetItemResponse>> => {
+  const { record, country } = params;
+
+  return makeApiRequest("item", {
+    manufacturergroup: Manufacturers.ALL.id,
+    action: ACTION.GET_ITEM,
+    record,
+    country,
+    byNumber: true,
+  });
 };
 
 export const useGetEngines = async (show: boolean, variant: string) => {
@@ -118,61 +200,14 @@ export const useGetProducts = async (
   }
 };
 
-export const useGetItem = async (record: string, country: string) => {
-  let errorData = {
-    message: "",
-  };
-  try {
-    const data = await fetch(`${HTTP_URL}/item`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...baseBodyEU,
-        action: ACTION.GET_ITEM,
-        byNumber: true,
-        record,
-        country,
-      }),
-    });
-
-    if (data.status === 200) {
-      return data.json();
-    } else if (data.status === 404) {
-      errorData.message = (await data.json()).message;
-      navigateTo("/error?page=product", { replace: true });
-    }
-  } catch (e) {
-    console.log(e);
-    throw new Error(errorData.message);
-  }
-};
-
-export const useGetRelatedItems = async (record: string) => {
-  try {
-    const res = await fetch(`${HTTP_URL}/applications`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...baseBodyEU,
-        action: ACTION.GET_RELATED_ITEMS,
-        record,
-      }),
-    });
-    return res.status === 200 ? await res.json() : console.log(res);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export const useSubmitEnquiry = async (email: string, product: string) => {
-  const host = useStoreState();
   return await fetch(`https://api.ozparts.eu/email/enquiry-form`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       email,
       part: product,
-      source: host === "UK" ? SOURCE.UK : SOURCE.EU,
+      source: SOURCE.EU,
       text: `Hi, I am interested in ${product}. Let me know if this is
     available.`,
     }),
@@ -207,14 +242,6 @@ export const useAddToBasket = async (
     } else {
       console.log(data);
     }
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const useCountry = async () => {
-  try {
-    return await checkUserCountry(true);
   } catch (e) {
     console.log(e);
   }
@@ -301,47 +328,6 @@ export const useDeleteItem = async (
   }
 };
 
-export const useAvlInLocation = (
-  part: ProductByGetItemAction,
-  location: Location
-) => {
-  const host = useStoreState();
-  if (part) {
-    let item = 0;
-    if (host === "EU") {
-      const local = part.available.find((obj) => obj.location === location.EU);
-      if (local !== undefined) {
-        item = local.quantityavailable;
-      } else {
-        item = 0;
-      }
-    } else if (host === "UK") {
-      const local = part.available.find((obj) => obj.location === location.UK);
-      if (local !== undefined) {
-        item = local.quantityavailable;
-      } else {
-        item = 0;
-      }
-    }
-    return item;
-  }
-};
-
-export const useAvlInManstock = (part: ProductByGetItemAction) => {
-  if (part) {
-    const manufacturer = part.available.find(
-      (e) => e.location === "manufacturer"
-    );
-    if (manufacturer) {
-      const avl = manufacturer.quantityavailable
-        ? manufacturer.quantityavailable
-        : 0;
-      return avl;
-    }
-  }
-  return 0;
-};
-
 export const useUpdateCartFields = async (cart_id: string, changes: {}) => {
   try {
     const res = await fetch(`${HTTP_URL}/cart`, {
@@ -367,8 +353,6 @@ export const useUpdateCartField = async (
   field: string,
   value: string
 ) => {
-  const host = useStoreState();
-
   const data = line_id
     ? {
         action: ACTION.UPDATE_CART,
@@ -389,7 +373,7 @@ export const useUpdateCartField = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...data,
-        source: host === "UK" ? SOURCE.UK : SOURCE.EU,
+        source: SOURCE.EU,
         customer: "guest",
       }),
     });
@@ -469,12 +453,8 @@ export const useGetOrder = async (transaction_id: string, country: string) => {
 };
 
 export const useSubmitContactForm = async (form: {}, formType: string) => {
-  const host = useStoreState();
-
-  const to =
-    host === "UK"
-      ? "support@mustangperformance.uk"
-      : "support@mustangperformance.eu";
+  // const to = "support@mustangperformance.eu";
+  const to = "wojciech.rosinski@ozparts.eu";
 
   const url =
     formType === "GENERAL"
@@ -486,7 +466,7 @@ export const useSubmitContactForm = async (form: {}, formType: string) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...form,
-        source: host === "UK" ? SOURCE.UK : SOURCE.EU,
+        source: SOURCE.EU,
         to,
       }),
     });
@@ -501,7 +481,6 @@ export const useSubmitContactForm = async (form: {}, formType: string) => {
 };
 
 export const useCreateLead = async (form: {}) => {
-  const host = useStoreState();
   try {
     const data = await fetch(`${HTTP_URL}/users`, {
       method: "POST",
@@ -509,9 +488,9 @@ export const useCreateLead = async (form: {}) => {
       body: JSON.stringify({
         ...form,
         action: ACTION.CREATE_LEAD,
-        currency: host === "UK" ? CURRENCY.GBP : CURRENCY.EUR,
-        location: host === "UK" ? LOCATION.UK : LOCATION.EU,
-        source: host === "UK" ? SOURCE.UK : SOURCE.EU,
+        currency: CURRENCY.EUR,
+        location: LOCATION.EU,
+        source: SOURCE.EU,
       }),
     });
     if (data.status === 200) {
