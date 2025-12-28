@@ -37,21 +37,39 @@
   />
 </template>
 
-<script setup>
-const props = defineProps(["product", "weight", "kitItem"]);
-const text = ref("technical information");
+<script setup lang="ts">
+import { GetItemResponse } from "~/types/api";
 
-const state = reactive({
+interface KitItem {
+  isKitItem: boolean;
+  components: number[];
+}
+
+interface TabState {
+  overview: boolean;
+  applications: boolean;
+  techInfo: boolean;
+}
+
+interface Props {
+  product: GetItemResponse;
+  weight: number;
+  kitItem: KitItem;
+}
+
+const props = defineProps<Props>();
+
+const state = reactive<TabState>({
   overview: true,
   applications: false,
   techInfo: false,
 });
 
-const toggle = (section) => {
+const toggle = (section: keyof TabState) => {
   for (const key in state) {
-    state[key] = false;
+    state[key as keyof TabState] = false;
   }
-  state[section] = state[section] = true;
+  state[section] = true;
 };
 </script>
 
