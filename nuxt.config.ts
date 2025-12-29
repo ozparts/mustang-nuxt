@@ -21,10 +21,10 @@ export default defineNuxtConfig({
         },
       ],
       script: [
-        {
-          src: "https://www.googletagmanager.com/gtag/js?id=AW-16769394046",
-          async: true,
-        },
+        // {
+        //   src: "https://www.googletagmanager.com/gtag/js?id=AW-16769394046",
+        //   async: true,
+        // },
       ],
       noscript: [
         {
@@ -71,6 +71,7 @@ export default defineNuxtConfig({
     "~/assets/css/tailwind.css",
     "@mdi/font/css/materialdesignicons.min.css",
   ],
+
   runtimeConfig: {
     public: {
       paypalEu:

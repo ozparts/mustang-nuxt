@@ -23,7 +23,7 @@ export const loadGtmScript = () => {
   });
 
   gtag("js", new Date());
-  gtag("config", "AW-16769394046");
+  // gtag("config", "AW-16769394046");
 
   (function (w, d, s, l, i) {
     w[l] = w[l] || [];
