@@ -372,7 +372,6 @@ const fetchProductData = async () => {
     // if (productResponse.error) {
     //   throw new Error(productResponse.error);
     // }
-    console.log(useGetItemResponse);
 
     if (useGetItemResponse.error) {
       if (useGetItemResponse.status === 404) {
@@ -425,7 +424,6 @@ const init = async () => {
 };
 
 const openModal = () => {
-  console.log("elo");
   state.dialog = !state.dialog;
 };
 
