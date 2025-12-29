@@ -12,7 +12,7 @@
     >
       <div v-for="product in filterRelatedItems" :key="product.id">
         <NuxtLink
-          :to="`/product/${product.number}`"
+          :to="`/product/${product.urlcomponent}`"
           class="flex flex-col gap-1 overflow-hidden border border-gray-400 rounded-lg font-nunito"
         >
           <ProductSingleRelatedProduct :product="product" />
@@ -56,7 +56,7 @@ const hasError = ref(false);
 
 const filterRelatedItems = computed((): GetRelatedItemsResponse[] => {
   return relatedItems.value
-    .filter((item) => item.number !== Number(record.value))
+    .filter((item) => item.urlcomponent !== record.value)
     .sort((a, b) => {
       const availableA = a.available ?? 0;
       const availableB = b.available ?? 0;

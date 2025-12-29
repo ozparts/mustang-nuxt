@@ -143,11 +143,9 @@ export const useGetItem = async (
   const { record, country } = params;
 
   return makeApiRequest("item", {
-    manufacturergroup: Manufacturers.ALL.id,
     action: ACTION.GET_ITEM,
     record,
     country,
-    byNumber: true,
   });
 };
 
@@ -158,36 +156,9 @@ export const useGetEngines = async (show: boolean, variant: string) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ...baseBodyEU,
-        manufacturergroup: "",
         show,
         action: ACTION.GET_APPLICATIONS,
         variant,
-      }),
-    });
-    if (data.status === 200) {
-      return data.json();
-    } else {
-      console.log(data);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const useGetProducts = async (
-  variant: string,
-  manufacturer?: string
-) => {
-  try {
-    const data = await fetch(`${HTTP_URL}/applications`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...baseBodyEU,
-        show: true,
-        action: ACTION.GET_APPLICATIONS,
-        variant,
-        manufacturergroup: manufacturer ? Manufacturers[manufacturer].id : "",
       }),
     });
     if (data.status === 200) {
