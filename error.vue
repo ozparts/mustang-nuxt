@@ -1,58 +1,32 @@
 <template>
-  <div class="grid h-screen px-4 bg-white place-content-center font-roboto">
-    <div class="text-center">
-      <h1 class="font-black text-black text-9xl">
-        {{ error?.statusCode || "404" }}
+  <div v-if="error" class="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+    <div class="w-full max-w-md text-center">
+      <h1 class="text-6xl font-bold text-gray-300 mb-4">
+        {{ error.statusCode || '500' }}
       </h1>
-      <p class="mt-4 text-black">
-        {{ pageMessage }}
+
+      <p class="text-lg text-gray-700 mb-8">
+        {{ error.statusMessage || "Something went wrong" }}
       </p>
+
       <button
-        @click="handleBackToHome"
-        class="my-5 text-white daisy-btn daisy-btn-primary font-nunito"
+        @click="handleClearError"
+        class="px-6 py-2.5 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors"
       >
-        Go Back Home
+        Back to Home
       </button>
     </div>
   </div>
 </template>
 
-<script setup>
-const page = ref(null);
-const message = ref(null);
+<script setup lang="ts">
+import type { NuxtError } from "#app";
 
 const props = defineProps({
-  error: {
-    type: Object,
-  },
+  error: Object as () => NuxtError,
 });
 
-const errorMessages = {
-  product: {
-    incorrect: "Incorrect product number",
-    default: "Product is not available",
-  },
-  default: "Page not found",
+const handleClearError = async () => {
+  await clearError({ redirect: "/" });
 };
-
-const pageMessage = computed(() => {
-  if (page.value === "product") {
-    return (
-      errorMessages.product[message.value] || errorMessages.product.default
-    );
-  }
-  return errorMessages.default;
-});
-
-const handleBackToHome = () => {
-  clearError({ redirect: "/" });
-};
-
-onMounted(() => {
-  if (process.client) {
-    const url = new URL(window.location.href);
-    page.value = url.searchParams.get("page");
-    message.value = url.searchParams.get("message");
-  }
-});
 </script>
