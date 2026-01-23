@@ -15,7 +15,7 @@
                 <div class="overflow-hidden aspect-auto">
                   <nuxt-img
                     class="h-[72px]"
-                    src="/mustang_logo.webp"
+                    src="/mustang-performance-logo.webp"
                     alt="Mustang Performance logo"
                     width="200px"
                   />

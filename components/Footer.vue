@@ -12,7 +12,7 @@
             class="h-[70px]"
             alt="Mustang Performance logo"
             loading="lazy"
-            src="/mustang_logo.webp"
+            src="/mustang-performance-logo.webp"
             width="200px"
           />
         </nuxt-link>
@@ -171,7 +171,7 @@ const currentRegionData = computed(() => {
 
 const findWarehouseById = (value) => {
   return Object.keys(WAREHOUSE_LOCATION).find(
-    (key) => WAREHOUSE_LOCATION[key] === value
+    (key) => WAREHOUSE_LOCATION[key] === value,
   );
 };
 
