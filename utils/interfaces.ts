@@ -1,3 +1,17 @@
+declare global {
+  interface Window {
+    gtag: (
+      command: string,
+      action: string,
+      params: {
+        ad_storage?: "granted" | "denied";
+        ad_user_data?: "granted" | "denied";
+        ad_personalization?: "granted" | "denied";
+        analytics_storage?: "granted" | "denied";
+      }
+    ) => void;
+  }
+}
 export interface TechnicalDetail {
   _id: string;
   name: string;
@@ -54,11 +68,6 @@ export interface ProductByGetItemAction {
   technicaldetails: TechnicalDetail[];
   urlcomponent: string;
   weight: number;
-}
-
-export interface Location {
-  EU: string;
-  UK: string;
 }
 
 export type Manufacturer = {

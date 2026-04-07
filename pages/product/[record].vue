@@ -2,9 +2,35 @@
   <div>
     <div v-if="isLoading">Loading product...</div>
 
-    <div v-else-if="error" class="error">
-      {{ error }}
-      <button @click="refreshData">Retry</button>
+    <div v-else-if="error" class="container px-4 py-12 mx-auto">
+      <div class="max-w-lg p-4 mx-auto text-center">
+        <Icon
+          name="material-symbols:info-outline"
+          class="mb-3 text-gray-400"
+          size="32px"
+        />
+        <p class="mb-4 text-sm text-gray-600">
+          {{
+            error === "This product is currently unavailable."
+              ? error
+              : "We couldn't load this product right now."
+          }}
+        </p>
+        <div class="flex justify-center gap-2">
+          <button
+            @click="refreshData"
+            class="px-4 py-1.5 text-sm text-blue-600 border border-blue-600 rounded hover:bg-blue-50 transition-colors"
+          >
+            Try Again
+          </button>
+          <NuxtLink
+            to="/"
+            class="px-4 py-1.5 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+          >
+            Go Home
+          </NuxtLink>
+        </div>
+      </div>
     </div>
 
     <div v-else-if="productData.product">
@@ -59,7 +85,7 @@
             />
             <div
               class="flex items-center justify-center overflow-hidden !border border-black p-2 sm:h-full sm:w-full cursor-pointer"
-              @click="openModal(state.selectedFoto)"
+              @click="openModal()"
               v-if="state.selectedFoto"
             >
               <div
@@ -247,68 +273,57 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { getAvailability } from "@/utils/availability";
 import { Manufacturers, metaInfo } from "@/vars/index";
+import {
+  AvailableDetail,
+  ComponentsItem,
+  GetItemResponse,
+  TransactionlinesInterface,
+} from "~/types/api";
 
 const route = useRoute();
 const store = useStore();
-const mustangCookieConsents = useCookie("mustang-cookie-consents");
+const { country } = useCountry();
+const mustangCookieConsents = useCookie("mustang-cookie-consents") as any;
 
-const country = store.getCountry();
-
-const productType = ref(null);
-
-const productData = ref({
+const productType = ref<string>("");
+const productData = ref<{
+  product: GetItemResponse | null;
+  shoppingCart: any;
+  defaultStockLocation: string;
+}>({
   product: null,
   shoppingCart: null,
-  defaultStockLocation: null,
+  defaultStockLocation: "",
 });
-
 const isLoading = ref(false);
-const error = ref(null);
-
-const fetchProductData = async () => {
-  try {
-    isLoading.value = true;
-    error.value = null;
-
-    const record = route.params.record;
-
-    if (!record || !country) {
-      throw new Error("Missing required parameters");
-    }
-
-    const [shoppingCart, product] = await Promise.all([
-      useGetCart(country, store.cartId),
-      useGetItem(record, country),
-    ]);
-
-    const defaultStockLocation =
-      product.available?.find((e) => e.default)?.location || null;
-
-    productData.value = {
-      product,
-      shoppingCart,
-      defaultStockLocation,
-    };
-
-    productType.value = getProductType(productData.value.product.name);
-
-    state.quantityOrder =
-      getProductType(productData.value.product.name) === "discbrake" ? 2 : 1;
-  } catch (err) {
-    console.error("Error fetching product data:", err);
-    error.value = err.message || "Failed to fetch product data";
-  } finally {
-    isLoading.value = false;
-  }
-};
-
+const error = ref<string | null>(null);
 const addToCartPopUp = ref(false);
+const productInfo = ref({ av: null, ctx: null, max: 0 });
+// const state = reactive({
+//   quantityOrder: 0,
+//   quantityInBasket: 0,
+//   selectedFoto: "",
+//   kitItem: {
+//     isKitItem: false,
+//     components: [],
+//   },
+//   dialog: false,
+// });
 
-const state = reactive({
-  quantityOrder: "",
+const state = reactive<{
+  quantityOrder: number;
+  quantityInBasket: number;
+  selectedFoto: string;
+  kitItem: {
+    isKitItem: boolean;
+    components: number[];
+  };
+  dialog: boolean;
+}>({
+  quantityOrder: 0,
   quantityInBasket: 0,
   selectedFoto: "",
   kitItem: {
@@ -318,9 +333,9 @@ const state = reactive({
   dialog: false,
 });
 
-const productInfo = ref({ av: null, ctx: null, max: null });
-
 const getBannerDescription = computed(() => {
+  if (!productData.value.product) return "";
+
   if (
     productData.value.product.categorydescription === "BUSHINGS AND OTHER" &&
     productData.value.product.description
@@ -338,34 +353,100 @@ const getBannerDescription = computed(() => {
   }
 });
 
+const fetchProductData = async () => {
+  try {
+    isLoading.value = true;
+    error.value = null;
+
+    const record = route.params.record as string;
+
+    if (!record || !country.value) {
+      throw new Error("Missing required parameters");
+    }
+
+    const [shoppingCart, useGetItemResponse] = await Promise.all([
+      useGetCart(country.value, store.cartId),
+      useGetItem({ record, country: country.value }),
+    ]);
+
+    // if (productResponse.error) {
+    //   throw new Error(productResponse.error);
+    // }
+
+    if (useGetItemResponse.error) {
+      if (useGetItemResponse.status === 404) {
+        error.value = "This product is currently unavailable.";
+      } else {
+        error.value = useGetItemResponse.error;
+      }
+      return;
+    }
+
+    const product = useGetItemResponse.data;
+
+    if (!product) {
+      error.value = "This product is currently unavailable.";
+      return;
+    }
+
+    const defaultStockLocation =
+      product?.available?.find((e) => e.default)?.location || "";
+
+    productType.value = getProductType(product.name);
+    state.quantityOrder = getProductType(product.name) === "discbrake" ? 2 : 1;
+
+    productData.value = {
+      product,
+      shoppingCart,
+      defaultStockLocation,
+    };
+  } catch (err: any) {
+    console.error("Error fetching product data:", err);
+    error.value =
+      err.message || "Unable to load product. Please try again later.";
+  } finally {
+    isLoading.value = false;
+  }
+};
+
 const init = async () => {
   checkQuantityInBasket();
   kitItemCheck();
 
-  if (productData.value.product.photos.length > 0) {
+  if (
+    productData.value.product &&
+    productData.value.product.photos.length > 0
+  ) {
     state.selectedFoto = productData.value.product.photos[0].url;
   } else {
-    productData.value.selectedFoto = "";
+    state.selectedFoto = "";
   }
 };
+
 const openModal = () => {
   state.dialog = !state.dialog;
 };
 
 const checkQuantityInBasket = () => {
-  if (productData.value.shoppingCart.shoppingcarts.length > 0) {
+  if (
+    productData.value.product &&
+    productData.value.shoppingCart.shoppingcarts.length > 0
+  ) {
+    const productId = productData.value.product.id;
     const quantityInBasket =
       productData.value.shoppingCart.shoppingcarts[0].shoppingcart.transactionlines
-        .filter((obj) => obj.item._id === productData.value.product.id)
-        .reduce((prev, curr) => prev + curr.quantity, 0);
+        .filter((obj: TransactionlinesInterface) => obj.item._id === productId)
+        .reduce(
+          (prev: number, curr: TransactionlinesInterface) =>
+            prev + curr.quantity,
+          0
+        );
 
     if (quantityInBasket) {
       state.quantityInBasket = quantityInBasket;
     }
   }
 };
-
-// FUNKCJE
 
 const addToCartPopUpHandler = () => {
   addToCartPopUp.value = true;
@@ -379,9 +460,12 @@ const addToCartPopUpHandler = () => {
   }, 2000);
 };
 
-const calculateInitialProductPrice = (price, productType) => {
+const calculateInitialProductPrice = (
+  price: number | string,
+  productType: string
+) => {
   return productType === "discbrake"
-    ? (price * 2).toFixed(2)
+    ? (Number(price) * 2).toFixed(2)
     : Number(price).toFixed(2);
 };
 
@@ -404,11 +488,22 @@ const subtractQuantity = () => {
 };
 
 const kitItemCheck = () => {
-  if (productData.value.product.recordtype === "kititem") {
+  if (
+    productData.value.product &&
+    productData.value.product.recordtype === "kititem"
+  ) {
     state.kitItem.isKitItem = true;
     state.kitItem.components = productData.value.product.components.map(
       (obj) => obj.number
     );
+  }
+};
+
+const refreshData = async () => {
+  error.value = null;
+  await fetchProductData();
+  if (productData.value.product) {
+    init();
   }
 };
 
@@ -423,16 +518,18 @@ watch(
     if (newProduct && newShoppingCart && newProduct.manufacturergroup) {
       checkQuantityInBasket();
 
-      const manufacturer = metaInfo.find(
+      const manufacturerInfo = metaInfo.find(
         (obj) => obj.id === newProduct.manufacturergroup
-      ).shortName;
+      );
+
+      if (!manufacturerInfo) return;
 
       const { av, ctx, max } = getAvailability(
         newProduct,
         state.quantityOrder,
         state.quantityInBasket,
-        manufacturer
-      );
+        manufacturerInfo.shortName
+      ) as { av: any; ctx: any; max: number };
 
       productInfo.value = { av, ctx, max };
     }
@@ -446,16 +543,18 @@ watch(
     if (productData.value.product && productData.value.shoppingCart) {
       checkQuantityInBasket();
 
-      const manufacturer = metaInfo.find(
-        (obj) => obj.id === productData.value.product.manufacturergroup
-      ).shortName;
+      const manufacturerInfo = metaInfo.find(
+        (obj) => obj.id === productData.value.product!.manufacturergroup
+      );
+
+      if (!manufacturerInfo) return;
 
       const { av, ctx, max } = getAvailability(
         productData.value.product,
         state.quantityOrder,
         state.quantityInBasket,
-        manufacturer
-      );
+        manufacturerInfo.shortName
+      ) as { av: any; ctx: any; max: number };
 
       productInfo.value = { av, ctx, max };
     }

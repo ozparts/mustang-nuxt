@@ -1,5 +1,9 @@
 <template>
-  <div class="h-full px-2 py-5 overflow-x-auto">
+  <Loader v-if="isLoading" />
+  <div
+    v-else-if="applications.length > 0"
+    class="h-full px-2 py-5 overflow-x-auto"
+  >
     <table class="daisy-table font-nunito">
       <thead class="text-xs text-black sm:text-sm">
         <tr>
@@ -14,7 +18,7 @@
       </thead>
       <tbody class="text-xs sm:text-[13px]">
         <tr
-          v-for="application in results"
+          v-for="application in applications"
           className="daisy-hover cursor-pointer"
           @click="
             () =>
@@ -40,18 +44,71 @@
       </tbody>
     </table>
   </div>
+  <div
+    v-else-if="hasError"
+    class="w-full py-12 mt-5 text-center border border-red-200 rounded-lg bg-red-50 font-nunito"
+  >
+    <div class="max-w-md mx-auto">
+      <p class="text-base text-red-600">
+        Unable to load vehicle applications. Please try again later.
+      </p>
+    </div>
+  </div>
+  <div
+    v-else
+    class="w-full py-12 mt-5 text-center border border-gray-200 rounded-lg bg-gray-50 font-nunito"
+  >
+    <div class="max-w-md mx-auto">
+      <p class="text-base text-gray-600">
+        No vehicle applications specified for this product.
+      </p>
+    </div>
+  </div>
 </template>
 
-<script setup>
-const store = useStore();
-const country = store.getCountry();
-const { results } = await useGetApplications(true, country.code, props.id);
+<script setup lang="ts">
+import { GetApplicationsResults } from "~/types/api";
 
-const fixVariant = computed(() => (variant) => {
+const props = defineProps<{
+  id: string;
+}>();
+
+const loadedApplications = useState<
+  Record<string, GetApplicationsResults[] | null>
+>("loaded-applications", () => ({}));
+const applications = ref<GetApplicationsResults[]>([]);
+const hasError = ref(false);
+const isLoading = ref(true);
+
+const fixVariant = computed(() => (variant: string) => {
   return variant.split(" | ").slice(0, 2).join(" | ");
 });
 
-const props = defineProps({
-  id: String,
+onMounted(async () => {
+  if (loadedApplications.value[props.id] !== undefined) {
+    applications.value = loadedApplications.value[props.id] || [];
+    isLoading.value = false;
+    return;
+  }
+
+  try {
+    const { data, error } = await useGetApplicationsForItem({
+      id: props.id,
+    });
+
+    if (error) {
+      hasError.value = true;
+    } else if (data) {
+      applications.value = data.results || [];
+      loadedApplications.value[props.id] = data.results || [];
+    } else {
+      applications.value = [];
+      loadedApplications.value[props.id] = [];
+    }
+  } catch {
+    hasError.value = true;
+  } finally {
+    isLoading.value = false;
+  }
 });
 </script>

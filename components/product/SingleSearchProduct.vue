@@ -33,7 +33,7 @@
 
     <div>
       <nuxt-link
-        :to="`/product/${product.number}`"
+        :to="`/product/${product.urlcomponent}/`"
         class="my-2 px-1 block w-full text-center text-[18px] font-medium uppercase text-red-600"
         >{{ product.name }}</nuxt-link
       >

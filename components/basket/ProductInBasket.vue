@@ -18,20 +18,119 @@
         <tr
           class="flex flex-col gap-1 font-nunito text-[0.825rem] sm:flex-row sm:gap-0 lg:text-base"
           :class="
-            product.item.recordtype !== 'service'
-              ? 'mb-2 border border-[#C0C0C0] bg-white p-2  '
-              : 'mb-2  ml-3 mt-[-8px] bg-white pr-3'
+            (product.item.recordtype === 'inventoryitem' ||
+              product.item.recordtype === 'kititem') &&
+            !product.kitcomponent
+              ? 'mb-2 border border-[#C0C0C0] bg-white p-2'
+              : 'mb-2  ml-3 mt-[-8px] bg-white pr-3 hidden sm:flex'
           "
           v-for="(product, index) in limitedProducts"
           :key="index"
         >
           <td
             class="flex basis-[50%]"
-            :class="product.item.recordtype === 'service' && 'hidden sm:block'"
+            :class="
+              (product.item.recordtype === 'service' || product.kitcomponent) &&
+              'hidden sm:block'
+            "
           >
-            <div v-if="product.item.recordtype !== 'service'" class="w-full">
+            <div
+              v-if="
+                (product.item.recordtype === 'inventoryitem' ||
+                  product.item.recordtype === 'kititem') &&
+                !product.kitcomponent
+              "
+              class="w-full"
+            >
               <div
                 class="grid grid-cols-[80px_auto] md:!grid-cols-[100px_auto] lg:!grid-cols-[120px_auto] gap-1 mb-2 sm:!mb-0 sm:!gap-3"
+              >
+                <div class="flex items-start justify-center sm:!p-0">
+                  <NuxtLink :to="`/product/${product.item.urlcomponent}`">
+                    <div v-if="product.item.photos[0]">
+                      <nuxt-img
+                        :src="product.item.photos[0].url"
+                        :alt="product.item.photos[0].name"
+                        width="120px"
+                        height="120px"
+                        fit="contain"
+                        sizes="100px sm:120px"
+                        background="white"
+                        class="w-[120px] h-[120px] object-contain"
+                      />
+                    </div>
+                    <div class="min-w-[65px]" v-else>
+                      <nuxt-img
+                        src="/mustang/no_image.jpg"
+                        format="webp"
+                        alt="No image"
+                        provider="cloudinary"
+                        width="120px"
+                        height="120px"
+                        fit="contain"
+                        sizes="100px sm:120px"
+                        background="white"
+                      />
+                    </div>
+                  </NuxtLink>
+                </div>
+
+                <div
+                  class="flex flex-col items-start justify-around gap-1 cursor-pointer"
+                  @click="
+                    () => navigateTo(`/product/${product.item.urlcomponent}`)
+                  "
+                >
+                  <div
+                    class="flex flex-col items-start gap-[1px] font-nunito text-sm lg:text-base w-full"
+                  >
+                    <div class="flex justify-between w-full">
+                      <span class="font-bold"> {{ product.displayname }} </span>
+                      <div class="sm:hidden">
+                        <Icon
+                          v-if="
+                            (product.item.recordtype === 'inventoryitem' ||
+                              product.item.recordtype === 'kititem') &&
+                            !product.kitcomponent
+                          "
+                          name="solar:trash-bin-trash-linear"
+                          class="cursor-pointer sm:hidden"
+                          size="18px"
+                          @click="$emit('deleteProducts', product)"
+                        ></Icon>
+                      </div>
+                    </div>
+                    <span class="text-start lg:text-[15px]">
+                      {{ product.item.description }}
+                    </span>
+                  </div>
+                  <div>
+                    <BasketAvailabilityInStock
+                      :inTransit="true"
+                      v-if="
+                        product.additionalservice.length === 0 &&
+                        product.quantity > product.item.quantityavailable
+                      "
+                    />
+
+                    <BasketAvailabilityInStock
+                      :inTransit="false"
+                      v-else-if="
+                        product.additionalservice.length === 0 &&
+                        product.quantity <= product.item.quantityavailable
+                      "
+                    />
+                    <BasketAvailabilityAirFreight
+                      v-else-if="product.additionalservice.length > 0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div v-else-if="product.item.recordtype === 'kititem'">
+              <div
+                class="grid border-2 border-green-700 grid-cols-[80px_auto] md:!grid-cols-[100px_auto] lg:!grid-cols-[120px_auto] gap-1 mb-2 sm:!mb-0 sm:!gap-3"
               >
                 <div class="flex items-start justify-center sm:!p-0">
                   <NuxtLink :to="`/product/${product.item.number}`">
@@ -106,9 +205,14 @@
                   />
                 </div>
               </div>
-            </div>
+            </div> -->
 
-            <div v-else class="hidden bg-white sm:flex">
+            <div
+              v-else-if="
+                product.item.recordtype === 'service' || product.kitcomponent
+              "
+              class="hidden bg-white sm:flex"
+            >
               <div
                 class="mb-[-1px] ml-[-1px] flex w-[140px] items-start justify-end bg-white"
               >
@@ -118,7 +222,13 @@
                 />
               </div>
               <div
-                class="bg-[#F6F6F6] w-[80px] h-[80px] border-l aspect-square"
+                class="bg-[#F6F6F6] w-[80px] h-[80px] border-l aspect-square cursor-pointer"
+                :class="
+                  product.item.recordtype === 'service' && 'pointer-events-none'
+                "
+                @click="
+                  () => navigateTo(`/product/${product.item.urlcomponent}`)
+                "
               >
                 <nuxt-img
                   format="webp"
@@ -133,27 +243,31 @@
               </div>
 
               <div
-                class="flex items-center w-full px-3 border-b border-l font-nunito"
+                class="flex items-center w-full px-3 border-b border-l cursor-pointer font-nunito"
+                :class="
+                  product.item.recordtype === 'service' && 'pointer-events-none'
+                "
+                @click="
+                  () => navigateTo(`/product/${product.item.urlcomponent}`)
+                "
               >
-                <p class="text-xs sm:text-sm">
-                  {{ product.displayname }} {{ product.item.description }}
-                </p>
+                <div class="text-[12px] text-left md:text-sm">
+                  <p class="pb-1 font-bold">
+                    {{ product.displayname }}
+                  </p>
+                  {{ product.item.description }}
+                </div>
               </div>
             </div>
           </td>
 
           <td class="flex basis-[calc(45%/4)] items-center bg-white">
-            <!-- <p class="font-roboto sm:hidden">Quantity:</p> -->
-            <!-- <div v-if="product.item.recordtype !== 'service'"> -->
-            <!-- <Icon
-              v-if="!product.additionalservice.length > 0"
-              class="cursor-pointer"
-              name="ic:sharp-minus"
-              size="20px"
-              @click="$emit('updateQuantity', 'minus', product)"
-            /> -->
             <div
-              v-if="product.item.recordtype !== 'service'"
+              v-if="
+                (product.item.recordtype === 'inventoryitem' ||
+                  product.item.recordtype === 'kititem') &&
+                !product.kitcomponent
+              "
               class="flex justify-between w-full sm:justify-center"
             >
               <p class="sm:hidden">Quantity:</p>
@@ -163,16 +277,16 @@
             </div>
             <div
               v-else
-              class="w-full h-full border-b border-[#C0C0C0] hidden sm:block"
-            ></div>
-            <!-- <Icon
-                v-if="!product.additionalservice.length > 0"
-                class="cursor-pointer"
-                name="material-symbols:add-rounded"
-                size="20px"
-                @click="$emit('updateQuantity', 'plus', product)"
-              ></Icon> -->
-            <!-- </div> -->
+              :class="
+                !product.kitcomponent
+                  ? 'w-full h-full border-b border-[#C0C0C0] hidden sm:block'
+                  : 'w-full h-full  border-b border-r hidden sm:block content-center'
+              "
+            >
+              <p v-if="product.item.recordtype !== 'service'">
+                {{ product.quantity }}
+              </p>
+            </div>
           </td>
 
           <td
@@ -182,8 +296,10 @@
               'hidden sm:flex border-b border-[#C0C0C0]'
             "
           >
-            <p class="sm:hidden">Unit price:</p>
-            <div>{{ props.currency }} {{ product.unitprice }}</div>
+            <p v-if="!product.kitcomponent" class="sm:hidden">Unit price:</p>
+            <div v-if="!product.kitcomponent">
+              {{ props.currency }} {{ product.unitprice }}
+            </div>
           </td>
 
           <td
@@ -193,8 +309,10 @@
               'hidden sm:flex border-b border-[#C0C0C0]'
             "
           >
-            <p class="sm:hidden">Subtotal:</p>
-            <div>{{ props.currency }} {{ product.amount }}</div>
+            <p v-if="!product.kitcomponent" class="sm:hidden">Subtotal:</p>
+            <div v-if="!product.kitcomponent">
+              {{ props.currency }} {{ product.amount }}
+            </div>
           </td>
 
           <td
@@ -204,7 +322,10 @@
               'hidden sm:flex border-b border-r'
             "
           >
-            <div class="flex justify-between w-full sm:justify-center">
+            <div
+              v-if="!product.kitcomponent"
+              class="flex justify-between w-full sm:justify-center"
+            >
               <p class="sm:hidden">Tax:</p>
               <div>{{ props.currency }} {{ product.taxamount }}</div>
             </div>
@@ -228,7 +349,11 @@
             class="hidden right-[5%] top-[5%] basis-[5%] items-center justify-center bg-white sm:flex"
           >
             <Icon
-              v-if="product.item.recordtype !== 'service'"
+              v-if="
+                (product.item.recordtype === 'inventoryitem' ||
+                  product.item.recordtype === 'kititem') &&
+                !product.kitcomponent
+              "
               name="solar:trash-bin-trash-linear"
               class="cursor-pointer"
               size="18px"
@@ -245,11 +370,14 @@
 const props = defineProps(["products", "summary", "currency"]);
 
 const limitedProducts = computed(() => {
-  return props.products.filter((obj) => obj.kitcomponent !== true);
+  // return props.products.filter((obj) => obj.kitcomponent !== true);
+  return props.products;
 });
 
 const airFreightCost = computed(() => {
-  return props.products.find((obj) => obj.item.recordtype === "service")
-    .grossprice;
+  const found = props.products.find((obj) => obj.item.recordtype === "service");
+  return found || 0;
+  // return props.products.find((obj) => obj.item.recordtype === "service")
+  //   .grossprice;
 });
 </script>

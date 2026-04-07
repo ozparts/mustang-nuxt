@@ -21,8 +21,7 @@
         :aria-hidden="true"
       />
       <p class="mx-1 sm:mx-2">
-        {{ productInfo.av.case
-        }}{{
+        {{
           productInfo.av.case === "intransit" &&
           (productInfo.av.days.match(/-/g) || []).length >= 2
             ? "Expected within the next few days"

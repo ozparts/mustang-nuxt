@@ -43,7 +43,7 @@
         "
       >
         <table
-          v-for="technicalInfo in state.kitComponents"
+          v-for="technicalInfo in kitComponents"
           class="daisy-table daisy-table-xs sm:daisy-table"
         >
           <thead>
@@ -84,25 +84,60 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { TechnicalDetail, GetItemResponse } from "~/types/api";
 import { Manufacturers } from "../../vars/index";
 
-const props = defineProps(["product", "weight", "kitItem"]);
+interface Props {
+  product: GetItemResponse;
+  weight: number;
+  kitItem: KitItem;
+}
 
-const state = reactive({
-  kitComponents: [],
-});
+interface KitItem {
+  isKitItem: boolean;
+  components: number[];
+}
+
+interface KitComponentTechnicalInfo {
+  name: string;
+  weight: number;
+  technicaldetails: TechnicalDetail[];
+  [key: string]: any;
+}
+
+const props = defineProps<Props>();
+
+const { country } = useCountry();
+
+const kitComponents = ref<KitComponentTechnicalInfo[]>([]);
 
 onMounted(() => {
   if (props.kitItem.isKitItem) {
-    props.kitItem.components.map(async (obj) => {
-      const data = await useGetItem(obj);
+    props.kitItem.components.map(async (record) => {
+      const { data, error } = await useGetItem({
+        record: String(record),
+        country: country.value,
+      });
 
-      state.kitComponents.push({
-        ...data.technicaldetails,
+      if (error) {
+        console.error("Failed to get kit component details:", error);
+        return;
+      }
+
+      if (!data) {
+        console.error("Kit component not found");
+        return;
+      }
+
+      const componentData: KitComponentTechnicalInfo = {
         name: data.name,
         weight: data.weight,
-      });
+        technicaldetails: data.technicaldetails,
+        ...data.technicaldetails,
+      };
+
+      kitComponents.value.push(componentData);
     });
   }
 });

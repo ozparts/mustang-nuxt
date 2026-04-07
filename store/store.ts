@@ -67,7 +67,6 @@ export interface StoreState {
   filter: FilterSchema;
   cartId: string | "";
   basketQuantity: number;
-  country: string;
   shippingForm: ShippingForm;
   billingForm: BillingForm;
   host: string | undefined;
@@ -83,7 +82,6 @@ export const useStore = defineStore("store", {
       filter: {},
       basketQuantity: 0,
       cartId: "",
-      country: "",
       shippingForm: emptyShippingForm,
       billingForm: emptyBillingForm,
       host: "EU",
@@ -101,9 +99,6 @@ export const useStore = defineStore("store", {
     },
     getBasketQuantity: (state: StoreState) => () => {
       return state.basketQuantity;
-    },
-    getCountry: (state: StoreState) => () => {
-      return state.country;
     },
     getCartId: (state: StoreState) => () => {
       return state.cartId;
@@ -175,9 +170,6 @@ export const useStore = defineStore("store", {
     },
     setBasketQuantity(data: number) {
       this.basketQuantity = data;
-    },
-    setCountry(data: string) {
-      this.country = data;
     },
     setCartId(data: string) {
       this.cartId = data;

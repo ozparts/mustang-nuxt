@@ -7,7 +7,7 @@
         :key="item.id"
         class="text-lg daisy-link daisy-link-hover daisy-link-error"
       >
-        <nuxt-link :to="'/product/' + item.number" target="_blank">
+        <nuxt-link :to="'/product/' + item.urlcomponent" target="_blank">
           {{ item.quantity }} x {{ item.name }} - {{ item.description }}
         </nuxt-link>
       </li>

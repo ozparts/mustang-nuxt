@@ -25,7 +25,7 @@
                 class="mb-5 grid min-h-[250px] grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-2 md:grid-cols-3"
               >
                 <nuxt-link
-                  :to="`/product/${product.item.number}`"
+                  :to="`/product/${product.item.urlcomponent}`"
                   v-for="product in groupedProducts.products"
                   class="flex flex-col h-full border border-gray-400"
                 >

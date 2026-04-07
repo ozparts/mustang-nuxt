@@ -10,7 +10,7 @@
             <nuxt-img
               class="block xs:w-[200px] min-[400px]:!w-full p-1 h-[50px] min-[400px]:!h-[70px]"
               alt="Mustang Performance logo"
-              src="/mustang_logo.webp"
+              src="/mustang-performance-logo.webp"
             />
           </div>
         </nuxt-link>

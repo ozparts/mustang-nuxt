@@ -16,8 +16,8 @@
         :summary="state.summary"
         :currency="state.currency"
         @deleteProducts="(product) => deleteProducts(product)"
-        @updateQuantity="(option, product) => updateQuantity(option, product)"
       />
+      <!-- //TODO aupdateQuantity - refactor and change LOCATION if use -->
 
       <BasketPriceSummary :summary="state.summary" :currency="state.currency" />
 
@@ -45,12 +45,12 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { LOCATION, Manufacturers } from "../../vars/index";
 
 const store = useStore();
-const country = store.getCountry();
+const { country } = useCountry();
+
 const route = useRoute();
 const cart_id = route.params.id;
 
@@ -62,7 +62,7 @@ const state = reactive({
 
 onMounted(async () => {
   if (cart_id !== "null") {
-    const data = await useGetCart(country.code, cart_id);
+    const data = await useGetCart(country.value, cart_id);
 
     if (data.shoppingcarts[0]) {
       state.products = data.shoppingcarts[0].shoppingcart.transactionlines;
@@ -99,68 +99,7 @@ const updateData = (data) => {
 };
 
 const deleteProducts = async (product) => {
-  const data = await useDeleteItems(product._id, country.code, cart_id);
+  const data = await useDeleteItems(product._id, country.value, cart_id);
   updateData(data);
-};
-
-const updateQuantity = async (option, product) => {
-  const value = getProductType(product.item.name) === "discbrake" ? 2 : 1;
-  if (option === "minus") {
-    if (product.quantity === 1 && value === 1) {
-      deleteProducts(product);
-      return;
-    } else if (product.quantity === 2 && value === 2) {
-      deleteProducts(product);
-      return;
-    }
-    const data = await useDeleteItem(
-      product._id,
-      country.code,
-      product.quantity - value,
-      cart_id
-    );
-    updateData(data);
-  } else if (option === "plus") {
-    const actualItem = await useGetItem(product.item.number, country);
-    const itemAvailability = actualItem.available.find(
-      (obj) => obj.location === LOCATION.EU
-    );
-    const itemManufacturerAvailability = actualItem.available.find(
-      (obj) => obj.location === "manufacturer"
-    );
-
-    if (actualItem.manufacturergroup !== Manufacturers.DBA.id) {
-      if (
-        actualItem.available.find((obj) => obj.location === LOCATION.EU)
-          .quantityavailable <
-        product.quantity + value
-      ) {
-        outOfStockModal.showModal();
-        return;
-      }
-    } else {
-      if (product.item.manufacturerstock) {
-        if (
-          product.quantity + value >
-          product.item.manufacturerstock + product.item.quantityavailable
-        ) {
-          outOfStockModal.showModal();
-          return;
-        }
-      } else if (!product.item.manufacturerstock) {
-        if (product.quantity + value > product.item.quantityavailable) {
-          outOfStockModal.showModal();
-          return;
-        }
-      }
-    }
-    const data = await useDeleteItem(
-      product._id,
-      country.code,
-      product.quantity + value,
-      cart_id
-    );
-    updateData(data);
-  }
 };
 </script>

@@ -170,7 +170,20 @@ export const Manufacturers: ManufacturersType = {
   },
 };
 
-export const metaInfo = [
+type MetaInfoType = {
+  id: string;
+  shortName:
+    | "ACS"
+    | "ACL"
+    | "DBA"
+    | "HAWK"
+    | "XFORCE"
+    | "PEDDERS"
+    | "WHITELINE";
+  description: string;
+};
+
+export const metaInfo: MetaInfoType[] = [
   { id: "5f9bda55dcdf6b0c04f18789", shortName: "ACS", description: "" },
   { id: "5f9bda56dcdf6b0c04f1878e", shortName: "ACL", description: "" },
   { id: "5f9bda55dcdf6b0c04f1878c", shortName: "DBA", description: "" },
@@ -448,3 +461,94 @@ export const EXCLUDED = [
   "DBA3144EL",
   "DBA3144ER",
 ];
+
+// const uniquePartsArray = [
+//   "ES-FM17-VMK-02-CBS",
+//   "ES-FM17-KITB",
+//   "ES-FM17-02-CBS",
+//   "KFD24682-1A",
+//   "KFD24682-1R",
+//   "KFD24582-1A",
+//   "KFD24582-1R",
+//   "KFD23697-2G",
+//   "KFD23697-2E",
+//   "KFD23597-2E",
+//   "KFD23597-2G",
+//   "KFD25697",
+//   "KFD25497",
+//   "DBA3652E",
+//   "DBA42164S",
+//   "DBA42164XD",
+//   "DBA42164XS",
+//   "DBA3651E",
+//   "DBA42165",
+//   "DBA42165S",
+//   "ES-FM15-02-VMK-CBS",
+//   "ES-FM15VMK-CBS",
+//   "ES-FM15-CFTIPS",
+//   "ES-FM15-BTIPS",
+//   "H2-FM15KIT",
+//   "ES-FM15-02-CBS",
+//   "ES-FM15-CBS",
+//   "KFD27655-2A",
+//   "KFD27655-2G",
+//   "KFD23655-2G",
+//   "KFD23655-2E",
+//   "DBA42166",
+//   "DBA42166S",
+//   "DBA42166WXD",
+//   "DBA42166XD",
+//   "DBA52166BLKS",
+//   "DBA52166BLKXD",
+//   "DBA52165BLKS",
+//   "DBA52165BLKXD",
+//   "DB9021SP",
+//   "DB9021XP",
+//   "DB9022SP",
+//   "DB9022XP",
+//   "BFK006",
+//   "BFF95Z",
+//   "BFR68Z",
+//   "KCA416",
+//   "KDT928",
+//   "W53642",
+//   "KCA486",
+//   "KLC179",
+//   "W23255",
+//   "KTA229",
+//   "KDT943",
+//   "KDT953",
+//   "KLC198",
+//   "KTA228",
+//   "804022",
+//   "804023",
+//   "220136",
+//   "220137",
+//   "222137R",
+//   "222137L",
+//   "140315",
+//   "160199",
+//   "162199",
+//   "164199",
+//   "902315",
+//   "KFD27640-2A",
+//   "KFD27540-2A",
+//   "KFD23674-2E",
+//   "ES-FM18-CBS",
+//   "H2-FM18-KITB",
+//   "ES-FM18-BLACKTIPS",
+//   "ES-FM18VMK-CBS",
+//   "KFD23658-2B",
+//   "KFD23658-2G",
+//   "KFD23658-2E",
+//   "KFD27658-2G",
+//   "KFD27658-2A",
+//   "8B1442H-STD",
+//   "8B1442H-.025",
+//   "8B1442H-.25",
+//   "8B1442HX-STD",
+//   "5M5655H-.025",
+//   "5M5655H-.25",
+//   "5M5655H-STD",
+//   "5M5655HX-STD",
+// ];
