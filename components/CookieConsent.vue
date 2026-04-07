@@ -6,12 +6,22 @@
       <v-container>
         <div class="flex flex-col items-center md:flex-row">
           <p class="p-3 text-sm xs:text-base">
-            This site uses cookies and similar technologies to help us to make
-            this site work properly and to provide you with a better browsing
-            experience. Find out more about how we use cookies and how you can
-            change your preferences by reading our
-            <NuxtLink class="text-red-600" to="/privacy-policy" target="_blank"
-              >Privacy and Cookie Policy</NuxtLink
+            This site uses cookies and similar technologies to ensure the proper
+            functioning of our website, to analyze traffic, and to personalize
+            ads. With your consent, we and our partners (including Google) may
+            use cookies and mobile advertising identifiers to measure
+            advertising performance and to provide personalized and
+            non-personalized advertising. Find out more about how we use cookies
+            and how you can change your preferences by reading our
+            <nuxt-link class="text-red-600" to="/privacy-policy" target="_blank"
+              >Cookie Policy</nuxt-link
+            >
+            and
+            <a
+              class="text-red-600"
+              href="https://business.safety.google/privacy/"
+              target="_blank"
+              >Google’s Business Data Responsibility Site.</a
             >.
           </p>
           <div

@@ -31,6 +31,16 @@
             Cookie Policy.
           </nuxt-link>
         </p>
+        <p class="mb-4">
+          Information about how Google uses your data can be found in
+          <a
+            href="https://business.safety.google/privacy/"
+            target="_blank"
+            class="text-red-600 underline"
+          >
+            Google’s Business Data Responsibility Site..
+          </a>
+        </p>
         <p class="mb-4 text-lg font-bold">Manage cookies</p>
         <div class="flex flex-col">
           <div
