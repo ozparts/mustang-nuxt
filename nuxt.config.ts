@@ -87,9 +87,6 @@ export default defineNuxtConfig({
         process.env.NUXT_ENV_RECAPTCHA_SECRET_KEY ||
         process.env.NUXT_PUBLIC_RECAPTCHA_SECRET_KEY,
       gtmId: process.env.NUXT_ENV_GTM_ID || process.env.NUXT_PUBLIC_GTM_ID,
-      hotjarSiteId:
-        process.env.NUXT_ENV_HOTJAR_SITE_ID ||
-        process.env.NUXT_PUBLIC_HOTJAR_SITE_ID,
     },
   },
   tailwindcss: {
@@ -116,6 +113,9 @@ export default defineNuxtConfig({
       autoImport: false,
     },
   },
+  // typescript: {
+  //   typeCheck: true,
+  // },
   modules: [
     [
       "@nuxtjs/google-fonts",

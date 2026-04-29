@@ -57,7 +57,6 @@
 <script setup lang="ts">
 type CookieAnswerType = "manage" | "agree";
 
-const { $loadHjScript } = useNuxtApp();
 const store = useStore();
 const { country } = useCountry();
 
@@ -94,11 +93,15 @@ const saveCookiePreferences = (accepted: boolean, preferences: string[]) => {
   const hasAnalytics = preferences.includes("Analytics");
   const hasAdvertisement = preferences.includes("Advertisement");
 
-  if (hasAnalytics) {
-    $loadHjScript();
+  if (hasAnalytics && process.client) {
+    window.dataLayer = window.dataLayer || [];
+
+    window.dataLayer.push({
+      event: "hotjar_init",
+    });
   }
 
-  if (accepted && window.gtag) {
+  if (accepted && process.client && window.gtag) {
     window.gtag("consent", "update", {
       ad_storage: hasAdvertisement ? "granted" : "denied",
       ad_user_data: hasAdvertisement ? "granted" : "denied",
@@ -109,7 +112,7 @@ const saveCookiePreferences = (accepted: boolean, preferences: string[]) => {
 };
 
 const handleCookiePreferences = (
-  data: { label: string; enabled: boolean }[]
+  data: { label: string; enabled: boolean }[],
 ) => {
   const preferences = data
     .filter((pref) => pref.enabled)
@@ -120,7 +123,7 @@ const handleCookiePreferences = (
 
 const removeEventListeners = () => {
   events.forEach((event) =>
-    window.removeEventListener(event, onEventTriggered)
+    window.removeEventListener(event, onEventTriggered),
   );
 };
 
@@ -178,7 +181,7 @@ watch(
   () => mustangCookieConsents.value,
   () => {
     showCookieModal.value = false;
-  }
+  },
 );
 
 onMounted(async () => {
