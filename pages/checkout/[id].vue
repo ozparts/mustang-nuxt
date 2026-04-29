@@ -395,7 +395,7 @@
                 ></v-select>
               </div>
               <v-checkbox
-                v-if="host && host === 'EU'"
+                v-if="host && host === 'EU' && isViesCountry"
                 v-model="state.vat"
                 color="red-600"
                 :class="{ red: state.vat }"
@@ -572,7 +572,7 @@
 </template>
 
 <script setup>
-import { TAX, countriesObjectEU, countriesObjectUK } from "../../vars/index";
+import { TAX, countriesObjectEU, countriesObjectUK, VIES_COUNTRY_CODES } from "../../vars/index";
 import { useVuelidate } from "@vuelidate/core";
 import debounce from "lodash.debounce";
 import {
@@ -648,6 +648,12 @@ const countriesArray =
           code: countriesObjectEU[key],
         };
       });
+
+const isViesCountry = computed(() => {
+  if (!billingForm.billCountryName) return false;
+  const code = countriesObjectEU[billingForm.billCountryName];
+  return VIES_COUNTRY_CODES.includes(code);
+});
 
 const countryPrefix = computed(() => {
   if (billingForm.billCountryName) {
