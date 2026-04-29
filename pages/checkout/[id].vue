@@ -954,17 +954,6 @@ const billingRules = {
 const taxRules = {
   taxnumber: {
     required: helpers.withMessage("Value is required", requiredIf(!state.vat)),
-    noLettersBeforeVat: helpers.withMessage(
-      "Please remove letters before the VAT number. Use country selection for prefix",
-      (value) => {
-        if (!value) return true;
-        const vatWithoutPrefix = countryPrefix
-          ? value.replace(countryPrefix, "")
-          : value;
-        const letterBeforeNumberRegex = /^[a-zA-Z]+.*\d/;
-        return !letterBeforeNumberRegex.test(vatWithoutPrefix);
-      }
-    ),
     valid: helpers.withMessage(`Invalid VAT number`, () => state.isValid),
   },
   agreedToTerms: {
