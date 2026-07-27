@@ -68,6 +68,7 @@ export const ACTION = {
 };
 
 export const countriesObjectEU = {
+  Albania: "AL",
   Austria: "AT",
   Belgium: "BE",
   Bulgaria: "BG",
