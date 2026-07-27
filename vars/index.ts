@@ -82,6 +82,7 @@ export const countriesObjectEU = {
   Germany: "DE",
   Greece: "GR",
   Hungary: "HU",
+  Iceland: "IS",
   Ireland: "IE",
   Italy: "IT",
   Latvia: "LV",
