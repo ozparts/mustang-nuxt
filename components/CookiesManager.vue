@@ -38,7 +38,7 @@
             target="_blank"
             class="text-red-600 underline"
           >
-            Google’s Business Data Responsibility Site..
+            Google’s Business Data Responsibility Site.
           </a>
         </p>
         <p class="mb-4 text-lg font-bold">Manage cookies</p>
