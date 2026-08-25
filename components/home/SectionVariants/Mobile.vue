@@ -1,7 +1,7 @@
 <template>
   <nuxt-link
     :to="`/catalogue/${data.variant}`"
-    class="mx-auto mb-3 flex w-[250px] flex-col overflow-hidden rounded-lg border border-mustangLightGrey bg-white text-left shadow-sm transition-shadow duration-200 active:shadow-md"
+    class="group mx-auto mb-3 flex w-[250px] flex-col overflow-hidden rounded-lg border border-mustangLightGrey bg-white text-left shadow-sm transition-all duration-200 active:scale-[0.98] active:shadow-md"
   >
     <figure
       class="flex h-[150px] items-center justify-center bg-mustangLightGrey"
@@ -37,7 +37,7 @@
       <Icon
         name="mingcute:arrows-right-line"
         size="18px"
-        class="shrink-0 text-mustangRed"
+        class="shrink-0 text-mustangRed transition-transform duration-200 group-active:translate-x-1"
       />
     </div>
     <div class="flex flex-wrap gap-1 px-3 pb-3 font-open-sans">
