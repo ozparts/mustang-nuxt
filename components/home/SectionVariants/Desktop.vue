@@ -71,7 +71,7 @@
                   loading="lazy"
                   :alt="`Mustang variant ${variant.variant}`"
                   @error="imageErrors.add(variant.variant)"
-                  class="object-contain w-full h-full"
+                  class="object-cover w-full h-full"
                 />
                 <div
                   v-else

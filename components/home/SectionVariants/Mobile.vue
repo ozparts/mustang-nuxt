@@ -11,12 +11,12 @@
         :src="`/images/variants/${getVariantImage(data.variant)}`"
         width="250px"
         height="150px"
-        fit="contain"
+        fit="cover"
         format="webp"
         loading="lazy"
         :alt="`Mustang variant ${data.variant}`"
         @error="imageError = true"
-        class="object-contain w-full h-full"
+        class="object-cover w-full h-full"
       />
       <div
         v-else
