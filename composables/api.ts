@@ -5,7 +5,7 @@ import {
   CURRENCY,
   HTTP_URL,
   Make,
-  Model,
+  Models,
   SOURCE,
   LOCATION,
   Manufacturers,
@@ -21,7 +21,6 @@ import {
 const baseBodyEU = {
   source: SOURCE.EU,
   make: Make,
-  model: Model,
   currency: CURRENCY.EUR,
   customer: "guest",
   mastercatalogue: true,
@@ -30,7 +29,6 @@ const baseBodyEU = {
 const searchBody = {
   source: "ozpartseu",
   make: Make,
-  model: Model,
   currency: CURRENCY.EUR,
   customer: "guest",
 };
@@ -43,7 +41,7 @@ interface ApiResponse<T = any> {
 
 const makeApiRequest = async <T = any>(
   endpoint: string,
-  body: any
+  body: any,
 ): Promise<ApiResponse<T>> => {
   try {
     const response = await fetch(`${HTTP_URL}/${endpoint}`, {
@@ -74,7 +72,7 @@ const makeApiRequest = async <T = any>(
   } catch (error: any) {
     console.error(
       `API Error on /${endpoint} endpoint with ${body.action} method.`,
-      error
+      error,
     );
     return {
       data: null,
@@ -88,19 +86,20 @@ interface GetApplicationsParams {
   show: boolean;
   country: string;
   item?: string;
+  model?: string;
 }
 
 export const useGetApplications = async (
-  params: GetApplicationsParams
+  params: GetApplicationsParams,
 ): Promise<ApiResponse<GetApplicationsApiResponse>> => {
-  const { show, country, item } = params;
+  const { show, country, item, model } = params;
 
   return makeApiRequest("applications", {
-    manufacturergroup: Manufacturers.ALL.id,
     action: ACTION.GET_APPLICATIONS,
     item,
     show,
     country,
+    model,
   });
 };
 
@@ -109,7 +108,7 @@ interface GetApplicationsForItemParams {
 }
 
 export const useGetApplicationsForItem = async (
-  params: GetApplicationsForItemParams
+  params: GetApplicationsForItemParams,
 ): Promise<ApiResponse<GetApplicationsForItemResponse>> => {
   const { id } = params;
   return makeApiRequest("applications", {
@@ -123,7 +122,7 @@ interface GetRelatedItemsParams {
 }
 
 export const useGetRelatedItems = async (
-  params: GetRelatedItemsParams
+  params: GetRelatedItemsParams,
 ): Promise<ApiResponse<GetRelatedItemsResponse>> => {
   const { record } = params;
   return makeApiRequest("applications", {
@@ -138,7 +137,7 @@ interface GetItemParams {
 }
 
 export const useGetItem = async (
-  params: GetItemParams
+  params: GetItemParams,
 ): Promise<ApiResponse<GetItemResponse>> => {
   const { record, country } = params;
 
@@ -191,7 +190,7 @@ export const useAddToBasket = async (
   country: "",
   cart_id: string | "",
   additionalservice: [],
-  location: ""
+  location: "",
 ) => {
   try {
     const data = await fetch(`${HTTP_URL}/cart`, {
@@ -243,7 +242,7 @@ export const useGetCart = async (country: string, cart_id: string) => {
 export const useDeleteItems = async (
   line_id: string,
   country: string,
-  cart_id: string
+  cart_id: string,
 ) => {
   try {
     const data = await fetch(`${HTTP_URL}/cart`, {
@@ -273,7 +272,7 @@ export const useDeleteItem = async (
   line_id: string,
   country: string,
   value: number,
-  cart_id: string
+  cart_id: string,
 ) => {
   try {
     const data = await fetch(`${HTTP_URL}/cart`, {
@@ -322,7 +321,7 @@ export const useUpdateCartField = async (
   cart_id: string,
   line_id: any,
   field: string,
-  value: string
+  value: string,
 ) => {
   const data = line_id
     ? {
@@ -357,7 +356,7 @@ export const useUpdateCartField = async (
 export const useCreateAddress = async (
   cart_id: string,
   form: {},
-  country: string
+  country: string,
 ) => {
   try {
     const res = await fetch(`${HTTP_URL}/cart`, {
@@ -498,7 +497,8 @@ export const useSearch = async (keyword: string) => {
 export const useGetProductsToCatalogue = async (
   peryear: string,
   show: boolean,
-  variant?: string
+  variant?: string,
+  model: string = Models[0],
 ) => {
   try {
     const data = await fetch(`${HTTP_URL}/applications`, {
@@ -510,6 +510,7 @@ export const useGetProductsToCatalogue = async (
         peryear,
         action: ACTION.GET_APPLICATIONS,
         variant,
+        model,
       }),
     });
     if (data.status === 200) {

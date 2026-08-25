@@ -16,20 +16,10 @@
         />
       </div>
       <div class="flex flex-col flex-grow mb-2 font-nunito">
-        <label class="text-xs sm:!text-sm">Model:</label>
-        <v-text-field
-          :readonly="true"
-          type="text"
-          density="compact"
-          variant="outlined"
-          value="Mustang VI"
-        />
-      </div>
-      <div class="flex flex-col flex-grow mb-2 font-nunito">
         <label class="text-xs sm:!text-sm">Year:</label>
         <v-select
           type="text"
-          @update:modelValue="(year) => getVariants(year)"
+          @update:modelValue="onYearChange"
           density="compact"
           variant="outlined"
           :items="state.years"
@@ -37,10 +27,22 @@
         />
       </div>
       <div class="flex flex-col flex-grow mb-2 font-nunito">
-        <label class="text-xs sm:!text-sm">Variant:</label>
+        <label class="text-xs sm:!text-sm">Model:</label>
         <v-select
           type="text"
           :disabled="!state.search.year"
+          @update:modelValue="(model) => getVariants(model)"
+          density="compact"
+          variant="outlined"
+          :items="Models"
+          v-model="state.search.model"
+        />
+      </div>
+      <div class="flex flex-col flex-grow mb-2 font-nunito">
+        <label class="text-xs sm:!text-sm">Variant:</label>
+        <v-select
+          type="text"
+          :disabled="!state.search.model"
           @update:modelValue="(variant) => getProducts(variant)"
           v-model="state.search.variant"
           density="compact"
@@ -61,12 +63,15 @@
 </template>
 
 <script setup>
+import { Models } from "~/vars/index";
+
 const store = useStore();
-const { variant, year } = useRoute().query;
+const { variant, year, model } = useRoute().query;
 const state = reactive({
   search: {
-    variant: "",
     year: "",
+    model: "",
+    variant: "",
   },
   loading: {
     variants: false,
@@ -77,15 +82,31 @@ const state = reactive({
   loader: false,
 });
 
-const getVariants = async (year) => {
+const onYearChange = () => {
+  state.search.model = "";
+  state.search.variant = "";
+  state.variants = [];
+  state.products = [];
+};
+
+const getVariants = async (model) => {
   state.products = [];
   state.search.variant = "";
   state.loading.variants = true;
-  const { options } = await useGetProductsToCatalogue(year, false);
+  const { options } = await useGetProductsToCatalogue(
+    state.search.year,
+    false,
+    undefined,
+    model,
+  );
   state.variants = options.variant.sort();
   state.loading.variants = false;
 
-  navigateTo(`/catalogue/?year=${state.search.year}`);
+  navigateTo(
+    `/catalogue/?year=${state.search.year}&model=${encodeURIComponent(
+      state.search.model,
+    )}`,
+  );
 };
 
 const getProducts = async (variant) => {
@@ -95,23 +116,28 @@ const getProducts = async (variant) => {
   const { results } = await useGetProductsToCatalogue(
     state.search.year,
     true,
-    variant
+    variant,
+    state.search.model,
   );
 
   state.products = results;
   state.loader = false;
 
   navigateTo(
-    `/catalogue/?year=${state.search.year}&variant=${state.search.variant}`
+    `/catalogue/?year=${state.search.year}&variant=${
+      state.search.variant
+    }&model=${encodeURIComponent(state.search.model)}`,
   );
 };
 
 onMounted(async () => {
   state.years = store.getProductYears();
-  if (year && !variant) {
-    await getVariants(year);
-  } else if (year && variant) {
-    state.search.year = year;
+  state.search.year = year || "";
+  state.search.model = model || "";
+
+  if (year && model && !variant) {
+    await getVariants(model);
+  } else if (year && model && variant) {
     state.search.variant = variant;
     await getProducts(variant);
   }
@@ -138,7 +164,7 @@ const metaDescription = computed(() => {
     return `Unlock your Mustang ${variant
       .split(" | ")
       .join(
-        ", "
+        ", ",
       )}'s potential with our high-quality car parts. From DBA disc brakes to Pedders suspension parts, we've got you covered. Experience peak performance now`;
   } else {
     return `Boost your Ford Mustang performance with our exclusive range of parts. Shop Pedders springs and shocks, ACL engine bearings and more from top manufacturers`;
@@ -153,7 +179,7 @@ watch(
         behavior: "smooth",
       });
     }
-  }
+  },
 );
 
 const filter = computed(() => {

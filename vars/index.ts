@@ -41,9 +41,12 @@ export const PAYMENT_METHOD = {
   REVOLUTUK: "revolutuk",
 };
 
-export const Make = "FORD";
+export const Make = "Ford";
 
-export const Model = "Mustang VI (2015-)";
+export const Models = [
+  "Mustang VI Coupe (2014-2023)",
+  "Mustang VI Convertible (2014-2023)",
+];
 
 export const CURRENCY = {
   EUR: "eur",
@@ -134,7 +137,6 @@ export const VIES_COUNTRY_CODES = [
   "ES",
   "SE",
 ];
-
 
 export const countriesObjectUK = {
   "United Kingdom": "GB",

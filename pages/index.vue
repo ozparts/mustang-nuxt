@@ -58,6 +58,7 @@
 <script setup lang="ts">
 import { GetApplicationsOptions } from "~/types/api";
 import type { Variant } from "~/utils/utils";
+import { Models } from "~/vars/index";
 
 interface HomeState {
   variantsWithHorsepower: Variant[];
@@ -81,14 +82,46 @@ const state = useState<HomeState>("home-state", () => ({
 const pending = ref(false);
 const hasError = ref(false);
 
+const APPLICATIONS_STORAGE_KEY = "home-applications-options";
+
+const loadCachedApplications = (): GetApplicationsOptions | null => {
+  const cached = localStorage.getItem(APPLICATIONS_STORAGE_KEY);
+  if (!cached) return null;
+
+  try {
+    return JSON.parse(cached) as GetApplicationsOptions;
+  } catch (e) {
+    return null;
+  }
+};
+
+const cacheApplications = (options: GetApplicationsOptions) => {
+  localStorage.setItem(APPLICATIONS_STORAGE_KEY, JSON.stringify(options));
+};
+
 const updateState = (options: GetApplicationsOptions) => {
   state.value.categories = options.categorymaster ?? [];
   state.value.variants = options.variant ?? [];
   state.value.years = options.peryear ?? [];
   state.value.variantsWithHorsepower = parseVariantsAndHorsepower(
-    options.variant ?? []
+    options.variant ?? [],
   );
   state.value.loaded = true;
+};
+
+const mergeApplicationOptions = (
+  optionsList: GetApplicationsOptions[],
+): GetApplicationsOptions => {
+  const merged = {} as GetApplicationsOptions;
+  const keys = Object.keys(optionsList[0]) as (keyof GetApplicationsOptions)[];
+
+  keys.forEach((key) => {
+    merged[key] = [
+      ...new Set(optionsList.flatMap((options) => options[key] ?? [])),
+    ];
+  });
+
+  return merged;
 };
 
 const getApplications = async () => {
@@ -98,20 +131,28 @@ const getApplications = async () => {
   hasError.value = false;
 
   try {
-    const { data, error, status } = await useGetApplications({
-      show: false,
-      country: country.value,
-    });
+    const responses = await Promise.all(
+      Models.map((model) =>
+        useGetApplications({
+          show: false,
+          country: country.value,
+          model,
+        }),
+      ),
+    );
 
-    if (error) {
+    if (responses.some((response) => response.error)) {
       hasError.value = true;
       return;
     }
-    if (data) {
-      updateState(data.options);
-      store.setProductYears(data.options.peryear);
-      hasError.value = false;
-    }
+
+    const mergedOptions = mergeApplicationOptions(
+      responses.map((response) => response.data!.options),
+    );
+    updateState(mergedOptions);
+    store.setProductYears(mergedOptions.peryear.sort());
+    cacheApplications(mergedOptions);
+    hasError.value = false;
   } catch (e) {
     console.error("Unexpected error in getApplications:", e);
     hasError.value = true;
@@ -126,9 +167,16 @@ const retryLoad = async () => {
 };
 
 onMounted(async () => {
-  if (!state.value.loaded) {
-    await getApplications();
+  if (state.value.loaded) return;
+
+  const cached = loadCachedApplications();
+  if (cached) {
+    updateState(cached);
+    store.setProductYears(cached.peryear.sort());
+    return;
   }
+
+  await getApplications();
 });
 </script>
 

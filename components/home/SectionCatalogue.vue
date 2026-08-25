@@ -23,26 +23,29 @@
 
       <div class="font-open-sans">
         <label class="mb-1 ml-1 text-[10px] font-bold uppercase tracking-widest"
-          >Model</label
-        >
-        <v-text-field
-          :readonly="true"
-          type="text"
-          density="compact"
-          variant="outlined"
-          value="MUSTANG VI"
-        />
-      </div>
-      <div class="font-open-sans">
-        <label class="mb-1 ml-1 text-[10px] font-bold uppercase tracking-widest"
           >Year</label
         >
         <v-select
           type="text"
           density="compact"
           variant="outlined"
+          @update:modelValue="onYearChange"
           v-model="state.selectedYear"
           :items="store.getProductYears()"
+        />
+      </div>
+      <div class="font-open-sans">
+        <label class="mb-1 ml-1 text-[10px] font-bold uppercase tracking-widest"
+          >Model</label
+        >
+        <v-select
+          type="text"
+          :disabled="!state.selectedYear"
+          density="compact"
+          variant="outlined"
+          @update:modelValue="(model) => getVariants(model)"
+          v-model="state.selectedModel"
+          :items="Models"
         />
       </div>
       <div class="font-open-sans">
@@ -51,7 +54,7 @@
         >
         <v-select
           type="text"
-          :disabled="!state.selectedYear"
+          :disabled="!state.selectedModel"
           density="compact"
           variant="outlined"
           v-model="state.selectedVariant"
@@ -75,30 +78,39 @@
 </template>
 
 <script setup>
+import { Models } from "~/vars/index";
+
 const store = useStore();
 
 const state = reactive({
-  selectedVariant: "",
   selectedYear: "",
+  selectedModel: "",
+  selectedVariant: "",
   variants: [],
 });
 
-watch(
-  () => state.selectedYear,
+const onYearChange = () => {
+  state.selectedModel = "";
+  state.selectedVariant = "";
+  state.variants = [];
+};
 
-  async () => {
-    state.selectedVariant = "";
-    const { options } = await useGetProductsToCatalogue(
-      state.selectedYear,
-      false
-    );
-    state.variants = options.variant.sort();
-  }
-);
+const getVariants = async (model) => {
+  state.selectedVariant = "";
+  const { options } = await useGetProductsToCatalogue(
+    state.selectedYear,
+    false,
+    undefined,
+    model
+  );
+  state.variants = options.variant.sort();
+};
 
 const search = () => {
   navigateTo(
-    `/catalogue/?year=${state.selectedYear}&variant=${state.selectedVariant}`
+    `/catalogue/?year=${state.selectedYear}&variant=${
+      state.selectedVariant
+    }&model=${encodeURIComponent(state.selectedModel)}`
   );
 };
 </script>
