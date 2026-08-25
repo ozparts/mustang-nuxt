@@ -45,93 +45,67 @@
         }"
         :slidesPerView="1"
       >
-        <SwiperSlide v-for="variant in variantsWithHorsepower" class="pb-7">
-          <nuxt-link :to="`/catalogue/${variant.variant}`">
-            <div class="flex items-center justify-center mb-2">
-              <figure class="relative h-max-200px">
-                <nuxt-img
-                  v-if="!imageErrors.has(variant.variant)"
-                  :src="`/mustang/variants/${variant.variant
-                    .replace(' ', '-')
-                    .replace(' ', '-')}`"
-                  width="200px"
-                  height="130px"
-                  fit="contain"
-                  format="webp"
-                  provider="cloudinary"
-                  loading="lazy"
-                  :alt="`Mustang variant ${variant.variant
-                    .replace(' ', '-')
-                    .replace(' ', '-')}`"
-                  @error="imageErrors.add(variant.variant)"
+        <SwiperSlide
+          v-for="variant in variantsWithHorsepower"
+          :key="variant.variant"
+          class="pb-7"
+        >
+          <nuxt-link
+            :to="`/catalogue/${variant.variant}`"
+            class="group mx-auto flex w-[200px] flex-col overflow-hidden rounded-lg border border-mustangLightGrey bg-white text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+          >
+            <figure
+              class="flex h-[140px] items-center justify-center bg-mustangLightGrey"
+            >
+              <nuxt-img
+                v-if="
+                  getVariantImage(variant.variant) &&
+                  !imageErrors.has(variant.variant)
+                "
+                :src="`/images/variants/${getVariantImage(variant.variant)}`"
+                width="200px"
+                height="140px"
+                fit="cover"
+                format="webp"
+                loading="lazy"
+                :alt="`Mustang variant ${variant.variant}`"
+                @error="imageErrors.add(variant.variant)"
+                class="object-contain w-full h-full"
+              />
+              <div
+                v-else
+                class="flex flex-col items-center justify-center w-full h-full gap-1 text-gray-400"
+              >
+                <Icon
+                  name="material-symbols:image-not-supported-outline"
+                  size="24px"
                 />
-                <div
-                  v-else
-                  class="flex h-[130px] w-[200px] flex-col items-center justify-center gap-1 bg-gray-100 text-gray-400"
-                >
-                  <Icon
-                    name="material-symbols:image-not-supported-outline"
-                    size="24px"
-                  />
-                  <p class="text-xs normal-case">No image available</p>
-                </div>
-                <div
-                  class="absolute bottom-0 left-0 right-0 top-[55%] flex overflow-hidden font-roboto"
-                >
-                  <div
-                    class="ml-[-50px] flex w-[calc(50%+50px)] skew-x-[31deg] items-center justify-center bg-black text-white"
-                  >
-                    <div
-                      v-if="variant.variant.split(' ').length === 1"
-                      class="w-full skew-x-[-31deg] text-2xl font-bold"
-                    >
-                      {{ variant.variant }}
-                    </div>
-                    <div
-                      v-else-if="variant.variant.split(' ').length === 2"
-                      class="flex w-full skew-x-[-31deg] flex-col"
-                    >
-                      <span class="text-2xl font-bold text-center">
-                        {{ variant.variant.split(" ")[0] }}
-                      </span>
-                      <span class="pl-6 font-bold text-center uppercase">
-                        {{ variant.variant.split(" ")[1] }}
-                      </span>
-                    </div>
-                    <div v-else class="flex skew-x-[-31deg] flex-col">
-                      <span class="text-2xl font-bold text-center">{{
-                        variant.variant.split(" ")[0]
-                      }}</span>
-                      <span class="pl-12 font-bold text-center uppercase">
-                        {{ variant.variant.split(" ")[1] }}
-                        {{ variant.variant.split(" ")[2] }}
-                      </span>
-                    </div>
-                    <!-- <p class="skew-x-[-31deg] text-2xl font-semibold">
-                      {{ variant.variant.split(" ")[1] }}
-                    </p> -->
-                  </div>
-                  <div
-                    class="absolute bottom-0 left-[55%] right-[3%] skew-x-[31deg] bg-[#fff101] opacity-90"
-                  >
-                    <p class="skew-x-[-31deg]">
-                      <Icon
-                        name="mingcute:arrows-right-line"
-                        color="white"
-                        size="24px"
-                      />
-                    </p>
-                  </div>
-                </div>
-              </figure>
+                <p class="text-xs normal-case">No image available</p>
+              </div>
+            </figure>
+            <div
+              class="flex items-center justify-between gap-2 px-3 py-2 border-t border-mustangLightGrey"
+            >
+              <h3
+                class="truncate font-roboto text-sm font-bold uppercase text-[#040503]"
+              >
+                {{ variant.variant }}
+              </h3>
+              <Icon
+                name="mingcute:arrows-right-line"
+                size="18px"
+                class="transition-transform duration-200 shrink-0 text-mustangRed group-hover:translate-x-1"
+              />
             </div>
-            <!-- <p class="pb-4 text-xl font-semibold font-open-sans">
-              Variant: {{ variant.variant }}
-            </p> -->
-            <p class="p-1 text-sm font-normal text-start font-open-sans">
-              <span class="font-bold">Engine power:</span>
-              {{ variant.horsePorwer?.join(", ") }}
-            </p>
+            <!-- <div class="flex flex-wrap gap-1 px-3 pb-3 font-open-sans">
+              <span
+                v-for="hp in variant.horsePorwer"
+                :key="hp"
+                class="rounded-full bg-mustangLightGrey px-2 py-0.5 text-[11px] font-medium text-gray-600"
+              >
+                {{ hp }}
+              </span>
+            </div> -->
           </nuxt-link>
         </SwiperSlide>
       </Swiper>
@@ -165,6 +139,17 @@ const props = defineProps({
 });
 
 const imageErrors = reactive(new Set());
+
+const variantImages = {
+  "2.3 EcoBoost": "mustang-performance-2.3-ecoboost.jpg",
+  "3.7 V6": "mustang-performance-3.7-v6.jpg",
+  "5.0 Bullitt": "mustang-performance-5.0-bullitt.jpg",
+  "5.0 GT": "mustang-performance-5.0-gt.jpg",
+  "5.0": "mustang-performance-5.0.jpg",
+  "5.2 Shelby GT500": "mustang-performance-5.2-v8-shelby.jpg",
+};
+
+const getVariantImage = (variant) => variantImages[variant];
 
 const checkVariant = (variant) => {
   const split = variant.split(" ");
