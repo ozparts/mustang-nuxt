@@ -4,6 +4,7 @@
       <div class="flex items-center justify-center mb-2">
         <figure class="relative h-max-200px">
           <nuxt-img
+            v-if="!imageError"
             :src="`/mustang/variants/${data.variant
               .replace(' ', '-')
               .replace(' ', '-')}`"
@@ -16,7 +17,18 @@
             :alt="`Mustang variant ${data.variant
               .replace(' ', '-')
               .replace(' ', '-')}`"
+            @error="imageError = true"
           />
+          <div
+            v-else
+            class="flex h-[150px] w-[250px] flex-col items-center justify-center gap-1 bg-gray-100 text-gray-400"
+          >
+            <Icon
+              name="material-symbols:image-not-supported-outline"
+              size="24px"
+            />
+            <p class="text-xs normal-case">No image available</p>
+          </div>
           <div
             class="absolute bottom-0 left-0 right-0 top-[55%] flex overflow-hidden font-roboto"
           >
@@ -104,4 +116,6 @@
 
 <script setup>
 const props = defineProps(["data"]);
+
+const imageError = ref(false);
 </script>

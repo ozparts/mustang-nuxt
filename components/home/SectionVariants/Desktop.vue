@@ -50,6 +50,7 @@
             <div class="flex items-center justify-center mb-2">
               <figure class="relative h-max-200px">
                 <nuxt-img
+                  v-if="!imageErrors.has(variant.variant)"
                   :src="`/mustang/variants/${variant.variant
                     .replace(' ', '-')
                     .replace(' ', '-')}`"
@@ -62,7 +63,18 @@
                   :alt="`Mustang variant ${variant.variant
                     .replace(' ', '-')
                     .replace(' ', '-')}`"
+                  @error="imageErrors.add(variant.variant)"
                 />
+                <div
+                  v-else
+                  class="flex h-[130px] w-[200px] flex-col items-center justify-center gap-1 bg-gray-100 text-gray-400"
+                >
+                  <Icon
+                    name="material-symbols:image-not-supported-outline"
+                    size="24px"
+                  />
+                  <p class="text-xs normal-case">No image available</p>
+                </div>
                 <div
                   class="absolute bottom-0 left-0 right-0 top-[55%] flex overflow-hidden font-roboto"
                 >
@@ -151,6 +163,8 @@
 const props = defineProps({
   variantsWithHorsepower: Array,
 });
+
+const imageErrors = reactive(new Set());
 
 const checkVariant = (variant) => {
   const split = variant.split(" ");
