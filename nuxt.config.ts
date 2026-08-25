@@ -107,9 +107,9 @@ export default defineNuxtConfig({
       autoImport: false,
     },
   },
-  typescript: {
-    typeCheck: true,
-  },
+  // typescript: {
+  //   typeCheck: true,
+  // },
   modules: [
     [
       "@nuxtjs/google-fonts",
