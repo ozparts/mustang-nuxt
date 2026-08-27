@@ -33,8 +33,13 @@
             <nuxt-link to="/brands">Our brands</nuxt-link>
           </li>
           <li @click="toogleBar">
-            <nuxt-link to="/contact" class="gtm_btn_contactus"
-              >Contact</nuxt-link
+            <nuxt-link to="/become-our-distributor" class="gtm_btn_contactus"
+              >Become our distributor</nuxt-link
+            >
+          </li>
+          <li @click="toogleBar">
+            <nuxt-link to="/contact-us" class="gtm_btn_generalenquiries"
+              >Contact us</nuxt-link
             >
           </li>
         </ul>

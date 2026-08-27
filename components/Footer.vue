@@ -1,11 +1,10 @@
 <template>
-  <hr />
   <section class="bg-gradient-to-t from-gray-300 to-white px-[15px]">
     <div
-      class="flex flex-col flex-wrap px-[15px] py-20 mx-auto md:!items-center lg:!items-start md:!flex-row md:!flex-nowrap"
+      class="container mx-auto flex flex-col flex-wrap px-[15px] pb-4 pt-10 md:!items-start md:!flex-row md:!flex-nowrap sm:max-w-[540px] md:max-w-[720px] lg:max-w-[980px] xl:max-w-[1140px]"
     >
       <div
-        class="w-64 flex justify-center mx-auto text-center md:!mx-0 md:!text-left"
+        class="w-64 flex flex-col items-center mx-auto text-center md:!mx-0 md:!items-start md:!text-left"
       >
         <nuxt-link to="/">
           <NuxtImg
@@ -18,132 +17,107 @@
         </nuxt-link>
       </div>
       <div
-        class="flex flex-wrap flex-grow mt-10 -mb-10 text-center md:!pl-20 md:!mt-0 md:!text-left"
+        class="grid flex-grow grid-cols-1 gap-6 mt-6 text-center sm:grid-cols-3 md:!pl-16 md:!mt-0 md:!text-left"
       >
-        <div class="w-full px-4 lg:w-1/3 md:w-1/2">
+        <div>
           <div
-            class="mb-3 text-sm font-bold tracking-wide uppercase font-nunito-sans"
+            class="mb-2 text-sm font-bold tracking-wide uppercase font-nunito-sans"
           >
             Our Policies
           </div>
-          <nav class="mb-10 text-[15px] list-none font-nunito h-full">
+          <nav class="text-[15px] list-none font-nunito">
             <ul>
               <li>
                 <nuxt-link
                   to="/privacy-policy"
-                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
+                  class="py-1.5 md:!py-0.5 daisy-link-hover daisy-link block"
                   >Privacy Policy</nuxt-link
                 >
               </li>
               <li>
                 <nuxt-link
                   to="/cookie-policy"
-                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block"
+                  class="py-1.5 md:!py-0.5 daisy-link-hover daisy-link block"
                   >Cookie Policy</nuxt-link
                 >
               </li>
               <li>
                 <nuxt-link
                   to="/terms"
-                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block gtm_btn_termsandconditions"
+                  class="py-1.5 md:!py-0.5 daisy-link-hover daisy-link block gtm_btn_termsandconditions"
                   >Terms&Conditions</nuxt-link
                 >
               </li>
             </ul>
           </nav>
         </div>
-        <div class="w-full px-4 lg:w-1/3 md:w-1/2">
+        <div>
           <div
-            class="mb-3 text-sm font-bold tracking-wide uppercase font-nunito-sans"
+            class="mb-2 text-sm font-bold tracking-wide uppercase font-nunito-sans"
           >
             useful links
           </div>
-          <nav class="mb-10 text-[15px] list-none font-nunito">
+          <nav class="text-[15px] list-none font-nunito">
             <ul>
               <li>
                 <nuxt-link
-                  to="/contact"
-                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block gtm_btn_contactus"
-                  >Contact</nuxt-link
-                >
-              </li>
-              <li>
-                <nuxt-link
                   @click="openCookieSettings"
-                  class="py-2.5 md:!py-0 daisy-link-hover daisy-link block gtm_btn_contactus"
+                  class="py-1.5 md:!py-0.5 daisy-link-hover daisy-link block gtm_btn_contactus"
                   >Cookies manager</nuxt-link
                 >
               </li>
               <li>
                 <nuxt-link
                   to="/shipping"
-                  class="py-2.5 block md:!py-0 daisy-link-hover daisy-link gtm_btn_shippingoptions"
+                  class="py-1.5 block md:!py-0.5 daisy-link-hover daisy-link gtm_btn_shippingoptions"
                   >Shipping options</nuxt-link
                 >
               </li>
               <li>
                 <nuxt-link
                   to="/warranties"
-                  class="py-2.5 block md:!py-0 daisy-link-hover"
+                  class="py-1.5 block md:!py-0.5 daisy-link-hover"
                   >Warranties</nuxt-link
                 >
               </li>
             </ul>
           </nav>
         </div>
-        <div class="w-full px-4 lg:w-1/3 md:w-1/2">
+        <div>
           <div
-            class="mb-3 text-sm font-bold tracking-wide uppercase font-nunito-sans"
+            class="mb-2 text-sm font-bold tracking-wide uppercase font-nunito-sans"
           >
             contact
           </div>
-          <nav
-            v-if="store.userRegionData?.location"
-            class="mb-10 text-[15px] list-none font-nunito"
-          >
-            <ul v-if="currentRegionData === 'EU'">
+          <nav class="text-[15px] list-none font-nunito">
+            <ul>
               <li>
-                <p class="py-2 md:!py-0">Ozparts PL sp. z o.o.</p>
+                <nuxt-link
+                  to="/become-our-distributor"
+                  class="py-1.5 md:!py-0.5 daisy-link-hover daisy-link block gtm_btn_contactus"
+                  >Become our distributor</nuxt-link
+                >
               </li>
               <li>
-                <p class="py-2 md:!py-0">
-                  ul. Mazowiecka 46-48, 87-100, Toruń, Poland
-                </p>
+                <nuxt-link
+                  to="/contact-us"
+                  class="py-1.5 md:!py-0.5 daisy-link-hover daisy-link block gtm_btn_generalenquiries"
+                  >Contact us</nuxt-link
+                >
               </li>
-              <li>
-                <a class="py-2 md:!py-0" href="mailto:info@ozparts.eu"
+              <li v-if="currentRegionData === 'EU'">
+                <a
+                  class="py-1.5 block md:!py-0.5 daisy-link-hover daisy-link"
+                  href="mailto:info@ozparts.eu"
                   >info@ozparts.eu</a
                 >
               </li>
-            </ul>
-            <ul v-if="currentRegionData === 'NL'">
-              <li>
-                <p class="py-2 md:!py-0">Ozparts B.V.</p>
-              </li>
-              <li>
-                <p class="py-2 md:!py-0">Geloërveld, Blauwwater 15D,</p>
-              </li>
-              <li>
-                <p class="py-2 md:!py-0">5951 DB Belfeld, Netherlands</p>
-              </li>
-            </ul>
-            <ul v-if="currentRegionData === 'UK'">
-              <li>
-                <p class="py-2 md:!py-0">Ozparts UK Ltd</p>
-              </li>
-              <li>
-                <p class="py-2 md:!py-0">Ricketts Close,</p>
-              </li>
-              <li>
-                <p class="py-2 md:!py-0">
-                  Firs Industrial Estate, Kidderminster,
-                </p>
-              </li>
-              <li>
-                <p class="py-2 md:!py-0">DY11 7QN, UK</p>
-              </li>
-              <li>
-                <p class="py-2 md:!py-0">Tel: 01296711044</p>
+              <li v-if="currentRegionData === 'UK'">
+                <a
+                  class="py-1.5 block md:!py-0.5 daisy-link-hover daisy-link"
+                  href="tel:01296711044"
+                  >Tel: 01296711044</a
+                >
               </li>
             </ul>
           </nav>
@@ -151,7 +125,15 @@
       </div>
     </div>
 
-    <div class="py-4 font-nunito-sans">
+    <div
+      class="container mx-auto px-[15px] sm:max-w-[540px] md:max-w-[720px] lg:max-w-[980px] xl:max-w-[1140px]"
+    >
+      <div class="m-0 daisy-divider"></div>
+    </div>
+
+    <div
+      class="container mx-auto px-[15px] pb-3 font-nunito-sans sm:max-w-[540px] md:max-w-[720px] lg:max-w-[980px] xl:max-w-[1140px]"
+    >
       <p class="text-sm text-center text-gray-500">
         OZPARTS PL sp. z o.o. © 2023 for website design and development | All
         Rights Reserved
@@ -165,8 +147,8 @@ import { WAREHOUSE_LOCATION } from "./../vars/index";
 const store = useStore();
 
 const currentRegionData = computed(() => {
-  const locationId = store.userRegionData.location._id;
-  return findWarehouseById(locationId);
+  const locationId = store.userRegionData?.location?._id;
+  return locationId ? findWarehouseById(locationId) : null;
 });
 
 const findWarehouseById = (value) => {

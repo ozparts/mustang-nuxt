@@ -23,9 +23,7 @@
               </nuxt-link>
             </div>
           </li>
-          <li>
-            <nuxt-link class="hover:text-mustangBlue" to="/">Home</nuxt-link>
-          </li>
+
           <li>
             <nuxt-link class="hover:text-mustangBlue" to="/catalogue"
               >Catalogue</nuxt-link
@@ -36,11 +34,12 @@
               >Our brands</nuxt-link
             >
           </li>
+
           <li>
             <nuxt-link
-              class="hover:text-mustangBlue gtm_btn_contactus"
-              to="/contact"
-              >Contact Us</nuxt-link
+              class="hover:text-mustangBlue gtm_btn_generalenquiries"
+              to="/contact-us"
+              >Contact us</nuxt-link
             >
           </li>
           <li>
