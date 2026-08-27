@@ -1,29 +1,63 @@
 <template>
-  <div class="py-5 md:grid md:grid-cols-4 md:gap-4 font-nunito-sans">
-    <div class="text-sm font-medium text-left md:text-base mb-7">
-      <p class="text-lg md:text-xl">Registered Office:</p>
-      <p class="mb-4 text-xs md:text-sm">(billing purposes)</p>
-      <p>
-        <b class="mb-1 text-base md:text-lg">Ozparts PL sp. z o.o.</b>
-        <br />ul. Słowackiego 32/5
-        <br />
-        87-100, Toruń, Poland <br />VAT: PL 956 223 01 29
+  <div class="grid grid-cols-1 gap-4 py-2 font-nunito-sans md:grid-cols-4">
+    <div
+      class="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm transition-shadow hover:shadow-md"
+    >
+      <div class="flex items-center gap-2 mb-1">
+        <Icon
+          name="solar:document-text-outline"
+          size="18px"
+          class="shrink-0 text-mustangRed"
+        />
+        <p class="text-xs font-bold tracking-wide uppercase text-base-content/70">
+          Registered office
+        </p>
+      </div>
+      <p class="mb-3 text-xs text-base-content/50">(billing purposes)</p>
+      <p class="text-sm leading-relaxed">
+        <b class="block mb-1 text-base">Ozparts PL sp. z o.o.</b>
+        ul. Słowackiego 32/5<br />
+        87-100, Toruń, Poland<br />
+        VAT: PL 956 223 01 29
       </p>
     </div>
-    <div class="text-sm font-medium text-left md:text-base mb-7">
-      <p class="text-lg md:text-xl">Office & Warehouse:</p>
-      <p class="invisible mb-4">_</p>
-      <p>
-        <b class="text-base md:text-lg">Ozparts PL sp. z o.o.</b>
-        <br />ul. Mazowiecka 46-48
-        <br />
+
+    <div
+      class="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm transition-shadow hover:shadow-md"
+    >
+      <div class="flex items-center gap-2 mb-1">
+        <Icon
+          name="solar:buildings-2-outline"
+          size="18px"
+          class="shrink-0 text-mustangRed"
+        />
+        <p class="text-xs font-bold tracking-wide uppercase text-base-content/70">
+          Office & warehouse
+        </p>
+      </div>
+      <p class="mb-3 invisible text-xs">_</p>
+      <p class="text-sm leading-relaxed">
+        <b class="block mb-1 text-base">Ozparts PL sp. z o.o.</b>
+        ul. Mazowiecka 46-48<br />
         87-100, Toruń, Poland
       </p>
     </div>
-    <div class="col-span-2 text-sm font-medium text-left md:text-base mb-7">
-      <p class="text-lg md:text-xl">Opening Hours:</p>
-      <p class="invisible mb-4">_</p>
-      <p>
+
+    <div
+      class="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm transition-shadow hover:shadow-md md:col-span-2"
+    >
+      <div class="flex items-center gap-2 mb-1">
+        <Icon
+          name="solar:clock-circle-outline"
+          size="18px"
+          class="shrink-0 text-mustangRed"
+        />
+        <p class="text-xs font-bold tracking-wide uppercase text-base-content/70">
+          Opening hours
+        </p>
+      </div>
+      <p class="mb-3 invisible text-xs">_</p>
+      <p class="text-sm leading-relaxed">
         The office is opened between 8:00 – 16:00 (CEST/CET), Mo-Fr.
         <br />
         <br />
