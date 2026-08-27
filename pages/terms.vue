@@ -200,6 +200,7 @@
         provided at the end of the online return form process.
       </li>
     </ol>
+    <WithdrawFromContract class="mb-3" />
     <h3 class="mt-3 mb-1 text-sm font-bold sm:text-lg">11. Shipping Options</h3>
     <div>
       <div class="container mx-auto max-w-[1200px]">

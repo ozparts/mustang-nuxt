@@ -3,10 +3,10 @@
 
   <div
     v-if="state.order"
-    class="my-6 sm:!my-10 w-full max-w-[400px] m-auto flex flex-col"
+    class="my-6 sm:!my-10 w-full max-w-[550px] m-auto flex flex-col"
   >
     <h2
-      class="text-xl sm:text-2xl my-6 sm:my-8 font-bold text-center uppercase font-nunito max-w-[400px] rounded-lg p-2"
+      class="p-2 my-6 text-xl font-bold text-center uppercase rounded-lg sm:text-2xl sm:my-8 font-nunito"
       :class="
         state.order.paymentstatus ? 'bg-[#A6F1A6]' : 'bg-white my-6 sm:my-8'
       "
@@ -20,7 +20,7 @@
     </h2>
 
     <div
-      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mb-5"
+      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito mb-5"
     >
       <h3
         class="py-3 text-xl italic font-bold tracking-tighter text-center border-b-[1px] sm:text-2xl border-mustangRed"
@@ -117,7 +117,7 @@
       </div>
     </div>
     <div
-      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito max-w-[400px] mb-5"
+      class="!border !border-mustangRed bg-gradient-to-tl from-gray-200 via-white to-gray-200 font-nunito mb-5"
     >
       <div v-if="state.order">
         <h3
@@ -145,6 +145,7 @@
         </div>
       </div>
     </div>
+    <WithdrawFromContract class="mb-5" />
     <div
       v-show="!state.order.paymentstatus && state.order.status._id !== 'closed'"
     >

@@ -48,6 +48,13 @@
                   >Terms&Conditions</nuxt-link
                 >
               </li>
+              <li>
+                <nuxt-link
+                  to="/returns"
+                  class="py-1.5 block md:!py-0.5 daisy-link-hover"
+                  >Returns</nuxt-link
+                >
+              </li>
             </ul>
           </nav>
         </div>
@@ -78,6 +85,14 @@
                   to="/warranties"
                   class="py-1.5 block md:!py-0.5 daisy-link-hover"
                   >Warranties</nuxt-link
+                >
+              </li>
+              <li>
+                <a
+                  href="https://dba4x4.home.pl/returns/?source=mustangperformanceeu"
+                  target="_blank"
+                  class="py-1.5 block md:!py-0.5 daisy-link-hover"
+                  >Withdraw from contract</a
                 >
               </li>
             </ul>
