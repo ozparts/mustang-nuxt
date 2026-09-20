@@ -2,13 +2,13 @@ export const getAvailability = (
   part,
   quantity,
   quantityInBasket,
-  MANUFACTURER
+  MANUFACTURER,
 ) => {
   const defaultStock = part.available.find((e) => e.default);
   const dropshipStock = part.available.find((e) => e.dropship);
   const alternativeStock = part.available.find((e) => e.alternative);
   const manufacturerStock = part.available.find(
-    (e) => e.location === "manufacturer"
+    (e) => e.location === "manufacturer",
   );
 
   const isAirFreight = !part.custombox;
@@ -43,11 +43,13 @@ export const getAvailability = (
     inTransitPast3Weeks: avSettings[MANUFACTURER].transit
       ? countTransit(part.deliveries?.[defaultStock.location], 28, "up")
       : 0,
-    inManufacturer:
+    inManufacturer: Math.max(
+      0,
       (avSettings[MANUFACTURER]?.airFreight &&
         isAirFreight &&
         (manufacturerStock.quantityavailable || part.manufacturerstock)) ||
-      0,
+        0,
+    ),
   };
 
   const {
@@ -85,7 +87,7 @@ export const getAvailability = (
   ) {
     const days = setDays(
       quantity - (inStock + inDropshipStock + inAlternativeStock),
-      part.deliveries[defaultStock.location]
+      part.deliveries[defaultStock.location],
     );
     av = deliverySettings("intransit", days);
   } else if (
@@ -110,7 +112,7 @@ export const getAvailability = (
       quantity +
         quantityInBasket -
         (inStock + inDropshipStock + inAlternativeStock + inManufacturer),
-      part.deliveries[defaultStock.location]
+      part.deliveries[defaultStock.location],
     );
     av = deliverySettings("intransit", days);
   } else {
@@ -131,7 +133,7 @@ const setDays = (quantity, deliveries) => {
         quantity: data.quantity,
         days: Math.ceil(
           (new Date(data.eta).getTime() - today.getTime()) /
-            (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24),
         ),
       });
     }
@@ -166,7 +168,7 @@ function setTransit(deliveries) {
         quantity: data.quantity,
         days: Math.ceil(
           (new Date(data.eta).getTime() - today.getTime()) /
-            (1000 * 60 * 60 * 24)
+            (1000 * 60 * 60 * 24),
         ),
       });
     }
@@ -178,7 +180,7 @@ function countTransit(deliveries, days, direction) {
     const transit = setTransit(deliveries);
     if (transit) {
       const arr = transit.filter((e) =>
-        direction === "up" ? e.days > days : e.days <= days
+        direction === "up" ? e.days > days : e.days <= days,
       );
       const totalQuantity = arr.reduce((sum, item) => {
         return sum + (item.quantity || 0);
